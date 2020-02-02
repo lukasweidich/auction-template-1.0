@@ -5,7 +5,7 @@ const Preview = (props) => {
         container: {
             margin: "24.3px",
             display: "inline-block",
-            flex: "1",
+            flex: "1"
         },
         heading: {
             border: "1px solid lightcoral",

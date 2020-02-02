@@ -3,34 +3,50 @@ import './App.css';
 import SearchBar from "./Components/SearchBar"
 import PreviewContainer from "./Components/PreviewContainer"
 import Texts from "./Constants/Texts"
-import Misc from "./Constants/Misc"
 import Colors from "./Constants/Colors"
+
+const fetch = require('node-fetch');
 
 const app = (props) => {
 
-  let [articelId, setArticleId] = new useState();
+  let [itemId, setItemId] = new useState();
   let [htmlCode, setHtmlCode] = new useState();
 
   let onChangeHandler = (event) => {
-    setArticleId(event.target.value);
+    setItemId(event.target.value);
   }
 
-  let onClickHandler = (articelId) => {
-    setHtmlCode("<h1>Das ist ein Test</h1><h2>h2test</h2><img style='max-height: 100px; max-width: 100px;'src='https://i.ebayimg.com/images/g/JGIAAOSwgPReGHy0/s-l1600.jpg'/>");
-    if (Misc.articleIdRegEx.test(articelId)) {
-      // window.open(Texts.ebayDeURL + articelId, "_blank");
-    } else {
-      // alert(Texts.articleIdIsNotANumber)
-    }
+  let getItemFromItemId = async (itemId) => {
+    var url = `${Texts.eBaySandboxApi}${itemId}`;
+    var auth = "Bearer " + "oauth token here :)"
+    let item = await fetch(url, {
+      headers: {
+        "Authorization": auth
+      }
+    })
+    return item.json();
+  }
+
+  let createHtmlFromItem = (item) => {
+    return `<p>${item.title}</p>
+    <div>
+    <span>${item.price.value}${item.price.currency}</span>
+    </div>
+    <img src='${item.image.imageUrl}'/>`
+  }
+
+  let onClickHandler = async (itemId) => {
+    let item = await getItemFromItemId(itemId);
+    setHtmlCode(createHtmlFromItem(item));
   }
 
   return (
-    <div style={{ margin: "2%" }}>
+    <div style={{ margin: "24px" }}>
       <SearchBar
         colors={Colors}
-        labelText={Texts.articleNumber}
-        placeholderText={Texts.articleNumber}
-        buttonText={Texts.search} click={() => onClickHandler(articelId)}
+        labelText={Texts.itemIdText}
+        placeholderText={Texts.itemIdText}
+        buttonText={Texts.magnifyingGlass} click={() => onClickHandler(itemId)}
         change={onChangeHandler} />
       <PreviewContainer
         text={htmlCode}

@@ -1,7 +1,7 @@
 const texts = {
-    articleNumber: "ebay Artikelnummer",
-    search: " 	🔍 ",
-    ebayDeURL: "https://www.ebay.de/itm/",
+    itemIdText: "eBay Artikelnummer",
+    magnifyingGlass: " 	🔍 ",
+    eBaySandboxApi: "https://api.sandbox.ebay.com/buy/browse/v1/item/",
     articleIdIsNotANumber: "Die Artikelnummer muss eine zwölfstellige Zahl sein."
 }
 

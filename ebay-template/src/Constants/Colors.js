@@ -3,7 +3,8 @@ const colors = {
     secondary: "lightblue",
     border: "black",
     fill: "white",
-    text: "black"
+    text: "black",
+    demITgrey: "#222625"
 }
 
 export default colors;

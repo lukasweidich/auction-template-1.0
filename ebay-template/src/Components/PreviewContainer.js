@@ -1,7 +1,6 @@
 import React from "react"
 import Preview from "./Preview"
 
-
 const PreviewContainer = (props) => {
     let styles = {
         container: {
@@ -14,8 +13,8 @@ const PreviewContainer = (props) => {
 
     return (
         <div style={styles.container}>
-            <Preview style={styles.preview} title={"VORSCHAU"} content={<div dangerouslySetInnerHTML={{ __html: props.text }} />} />
-            <Preview style={styles.preview} title={"HTML"} content={<span>{props.text}</span>} />
+            <Preview title={"VORSCHAU"} content={<div dangerouslySetInnerHTML={{ __html: props.text }} />} />
+            <Preview title={"HTML"} content={<span style={{ fontFamily: '"Courier New", Courier, monospace' }}>{props.text}</span>} />
         </div>
     )
 }
