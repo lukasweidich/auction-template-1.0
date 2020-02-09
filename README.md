@@ -1,4 +1,4 @@
-# DemIT eBay Template Generator
+# DemIT eBay Description Generator
 Generate Descriptions for your eBay Products
 
 1. clone repo
