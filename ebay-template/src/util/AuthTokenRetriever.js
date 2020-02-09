@@ -2,7 +2,6 @@ var request = require("request");
 var cron = require('node-cron');
 const fs = require('fs');
 require('dotenv').config()
-import URLs from "../Constants/MiscAPI"
 
 const getAuthToken = () => {
     var buffer = new Buffer(process.env.PROD_APP_ID__CLIENT_ID + ":" + process.env.PROD_CERT_ID__CLIENT_SECRET);
@@ -10,7 +9,7 @@ const getAuthToken = () => {
 
     var options = {
         method: 'POST',
-        url: URLs.ebayAuthApi,
+        url: "https://api.ebay.com/identity/v1/oauth2/token",
         headers:
         {
             Authorization: "Basic " + id_secret_b64,
@@ -32,7 +31,8 @@ const getAuthToken = () => {
 }
 
 const runPeriodically = () => {
-    cron.schedule('0 */2 * * *', () => {
+    // cron.schedule('0 */2 * * *', () => {
+    cron.schedule('*/15 * * * * *', () => {
         getAuthToken();
     });
 }
