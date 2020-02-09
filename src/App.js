@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import './App.css';
-import SearchBar from "./Components/SearchBar"
-import PreviewContainer from "./Components/PreviewContainer"
-import Texts from "./Constants/Texts"
-import Colors from "./Constants/Colors"
-import AuthToken from "./Constants/AuthToken"
-import URLs from "./Constants/MiscAPI"
+import SearchBar from "./components/SearchBar"
+import PreviewContainer from "./components/PreviewContainer"
+import Texts from "./constants/Texts"
+import Colors from "./constants/Colors"
+import AuthToken from "./constants/AuthToken"
+import URLs from "./constants/MiscAPI"
+import HtmlGenerator from "./util/HtmlGenerator"
 const fetch = require('node-fetch');
 
 const app = (props) => {
@@ -29,17 +30,9 @@ const app = (props) => {
     return item.json();
   }
 
-  let createHtmlFromItem = (item) => {
-    return `<p>${item.title}</p>
-    <div>
-    <b>${item.price.value} ${item.price.currency}</b>
-    </div>
-    <img width=500 src='${item.image.imageUrl}'/>`
-  }
-
   let onClickHandler = async (itemId) => {
     let item = await getItemFromItemId(itemId);
-    setHtmlCode(createHtmlFromItem(item));
+    setHtmlCode(HtmlGenerator.createHtmlFromItem(item));
   }
 
   return (
