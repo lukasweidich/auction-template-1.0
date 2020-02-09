@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import './App.css';
 import SearchBar from "./components/SearchBar"
 import PreviewContainer from "./components/PreviewContainer"
+import Footer from "./components/Footer"
 import Texts from "./constants/Texts"
 import Colors from "./constants/Colors"
 import AuthToken from "./constants/AuthToken"
 import URLs from "./constants/MiscAPI"
 import HtmlGenerator from "./util/HtmlGenerator"
+import Content from './components/Content';
 const fetch = require('node-fetch');
 
 const app = (props) => {
@@ -37,15 +39,18 @@ const app = (props) => {
 
   return (
     <div style={{ margin: "24px" }}>
-      <SearchBar
-        colors={Colors}
-        labelText={Texts.itemIdText}
-        placeholderText={Texts.itemIdText}
-        buttonText={Texts.magnifyingGlass} click={() => onClickHandler(itemId)}
-        change={onChangeHandler} />
-      <PreviewContainer
-        text={htmlCode}
-        colors={Colors} />
+      <Content>
+        <SearchBar
+          colors={Colors}
+          labelText={Texts.itemIdText}
+          placeholderText={Texts.itemIdText}
+          buttonText={Texts.magnifyingGlass} click={() => onClickHandler(itemId)}
+          change={onChangeHandler} />
+        <PreviewContainer
+          text={htmlCode}
+          colors={Colors} />
+      </Content>
+      <Footer />
     </div>
   );
 }

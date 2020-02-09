@@ -16,7 +16,8 @@ const SearchBar = (props) => {
             backgroundColor: props.colors.fill,
             borderColor: props.colors.border
 
-        }, button: {
+        },
+        button: {
             margin: "2px",
             backgroundColor: props.colors.fill,
             borderColor: props.colors.border,
