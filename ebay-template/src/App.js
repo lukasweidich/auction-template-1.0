@@ -4,11 +4,11 @@ import SearchBar from "./Components/SearchBar"
 import PreviewContainer from "./Components/PreviewContainer"
 import Texts from "./Constants/Texts"
 import Colors from "./Constants/Colors"
-
+import AuthToken from "./Constants/AuthToken"
+import URLs from "./Constants/MiscAPI"
 const fetch = require('node-fetch');
 
 const app = (props) => {
-
   let [itemId, setItemId] = new useState();
   let [htmlCode, setHtmlCode] = new useState();
 
@@ -17,8 +17,10 @@ const app = (props) => {
   }
 
   let getItemFromItemId = async (itemId) => {
-    var url = `${Texts.eBaySandboxApi}${itemId}`;
-    var auth = "Bearer " + "oauth token here :)"
+    console.log(process.env.PROD_APP_ID__CLIENT_ID)
+    itemId = "v1|" + itemId + "|0"
+    var url = `${URLs.eBayApi}${itemId}`;
+    var auth = "Bearer " + AuthToken.access_token;
     let item = await fetch(url, {
       headers: {
         "Authorization": auth
@@ -30,9 +32,9 @@ const app = (props) => {
   let createHtmlFromItem = (item) => {
     return `<p>${item.title}</p>
     <div>
-    <span>${item.price.value}${item.price.currency}</span>
+    <b>${item.price.value} ${item.price.currency}</b>
     </div>
-    <img src='${item.image.imageUrl}'/>`
+    <img width=500 src='${item.image.imageUrl}'/>`
   }
 
   let onClickHandler = async (itemId) => {
