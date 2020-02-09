@@ -1,5 +1,5 @@
-# ebay-template
-Template for generating eBay descriptions
+# DemIT eBay Template Generator
+Generate Descriptions for your eBay Products
 
 1. clone repo
 2. go to `repo directory`
