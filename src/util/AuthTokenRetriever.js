@@ -25,7 +25,11 @@ const getAuthToken = () => {
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
         fs.writeFile('./src/constants/AuthToken.js', "const token = " + body + "\nexport default token", (err) => {
-            if (err) throw err;
+            if (err) {
+                throw err;
+            } else {
+                console.log("AuthToken successfully retrieved.")
+            }
         });
     });
 }
