@@ -24,8 +24,8 @@ const createReactFromItem = (props) => {
     const price = <p>{price_value} {price_currency}</p>
     const description = <p>{props.item.shortDescription}</p>
     const image = <img style={style.img} src={props.item.image.imageUrl} alt="" />;
-    const additionalImages = props.item.additionalImages.map((image) => <li><img style={style.additionalImg} src={image.imageUrl} alt="" /></li>);
-    const localizedAspects = props.item.localizedAspects.map((aspect) => <li><span style={style.boldText}>{aspect.name}:</span> {aspect.value}</li>);
+    const additionalImages = props.item.additionalImages.map((image, i) => <li key={i}><img style={style.additionalImg} src={image.imageUrl} alt="" /></li>);
+    const localizedAspects = props.item.localizedAspects.map((aspect, i) => <li key={i}><span style={style.boldText}>{aspect.name}:</span> {aspect.value}</li>);
 
     if (props.typus === "test") {
         return (
@@ -41,7 +41,9 @@ const createReactFromItem = (props) => {
         return (
             <div>
                 {title}
-                {price}
+                <div onClick={() => console.log("test")}>
+                 {price}
+                </div>
                 {description}
                 {image}
                 <ul style={style.listWithoutDots}>{additionalImages}</ul>

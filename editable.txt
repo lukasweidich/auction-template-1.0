@@ -1,0 +1,5 @@
+wrap element with div, define: onClick= { () => ... }
+on click: create editable text box with children as element
+when pressing enter or losing focus, store the updated value in old element
+
+react-editext
