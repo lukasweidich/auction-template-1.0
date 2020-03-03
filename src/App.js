@@ -10,8 +10,8 @@ import AuthToken from "./constants/AuthToken"
 import URLs from "./constants/MiscAPI"
 import HtmlGenerator from "./util/HtmlGenerator"
 import ReactGenerator from "./util/ReactGenerator"
-import Editable from "./components/Editable"
 import Content from './components/Content';
+import Editable from './components/Editable';
 const fetch = require('node-fetch');
 
 const app = (props) => {
@@ -53,16 +53,12 @@ const app = (props) => {
           text={htmlCode}
           colors={Colors} />
       </Content>
-      <ReactGenerator item={Misc.testItem} typus={"demIT"} />
 
-
-
-      <Editable>
-        <p>text1</p>
-        <p>text2</p>
+      <span>Email:</span><Editable>
+        <span style={{ fontWeight: 700 }}>mail@example.com</span>
       </Editable>
 
-
+      <ReactGenerator item={Misc.testItem} typus={"demIT"} />
 
       <Footer />
     </div>
