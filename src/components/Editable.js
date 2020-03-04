@@ -38,16 +38,13 @@ const MyEditable = (props) => {
         }
     }
 
-    return (
-        <div>
-            {
+    return (            
                 isEditing
                     ?
-                    <div><input onKeyUp={keyUpHandler.bind(this)} onBlur={acceptChangesHandler} onChange={inputChangeHandler} value={currentValue} /></div>
+                    <input style={{width:"300"}} onKeyUp={keyUpHandler.bind(this)} onBlur={acceptChangesHandler} onChange={inputChangeHandler} value={currentValue} />
                     :
-                    <div onClick={editOnClickHandler}>{React.cloneElement(props.children, [], currentValue || props.children.props.children)}</div>
-            }
-        </div>
+                    <span onClick={editOnClickHandler}>{React.cloneElement(props.children, [], currentValue || props.children.props.children)}</span> 
     )
 }
+
 export default MyEditable
