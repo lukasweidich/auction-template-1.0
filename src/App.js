@@ -54,10 +54,11 @@ const app = (props) => {
           colors={Colors} />
       </Content>
 
+<div>
       <span>Email:</span><Editable>
         <span style={{ fontWeight: 700 }}>mail@example.com</span>
       </Editable>
-
+      </div>
       <ReactGenerator item={Misc.testItem} typus={"demIT"} />
 
       <Footer />

@@ -4,11 +4,11 @@ const MyEditable = (props) => {
     const KEYCODE_ENTER = 13;
     const KEYCODE_ESC = 27;
     const [isEditing, setEditing] = useState(false);
-    const [value, setValue] = useState("");
+    const [currentValue, setCurrentValue] = useState("");
     const [initialValue, setInitialValue] = useState("");
 
     const inputChangeHandler = event => {
-        setValue(event.target.value);
+        setCurrentValue(event.target.value);
     }
 
     const acceptChangesHandler = () => {
@@ -16,14 +16,14 @@ const MyEditable = (props) => {
     }
 
     const rejectChangesHandler = () => {
-        setValue(initialValue)
+        setCurrentValue(initialValue)
         setEditing(false);
     }
 
-    const divOnClickHandler = () => {
-        setEditing(!isEditing);
-        setValue(value || props.children.props.children);
-        setInitialValue(value || props.children.props.children)
+    const editOnClickHandler = () => {
+        setEditing(true);
+        setInitialValue(currentValue || props.children.props.children);
+        setCurrentValue(currentValue || props.children.props.children);
     }
 
     const keyUpHandler = (event) => {
@@ -43,9 +43,9 @@ const MyEditable = (props) => {
             {
                 isEditing
                     ?
-                    <div><input onKeyUp={keyUpHandler.bind(this)} onBlur={acceptChangesHandler} onChange={inputChangeHandler} value={value} /></div>
+                    <div><input onKeyUp={keyUpHandler.bind(this)} onBlur={acceptChangesHandler} onChange={inputChangeHandler} value={currentValue} /></div>
                     :
-                    <div onClick={divOnClickHandler}>{React.cloneElement(props.children, [], value || props.children.props.children)}</div>
+                    <div onClick={editOnClickHandler}>{React.cloneElement(props.children, [], currentValue || props.children.props.children)}</div>
             }
         </div>
     )
