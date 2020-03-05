@@ -14,7 +14,6 @@ const PreviewContainer = (props) => {
     return (
         <div style={styles.container}>
             <Preview title={"VORSCHAU"} content={<div dangerouslySetInnerHTML={{ __html: props.text }} />} />
-            <Preview title={"HTML"} content={<span style={{ fontFamily: '"Courier New", Courier, monospace' }}>{props.text}</span>} />
         </div>
     )
 }

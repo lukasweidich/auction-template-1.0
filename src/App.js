@@ -12,6 +12,10 @@ import HtmlGenerator from "./util/HtmlGenerator"
 import ReactGenerator from "./util/ReactGenerator"
 import Content from './components/Content';
 import Editable from './components/Editable';
+import Combobox from "./components/Combobox"
+import Removable from "./components/Removable"
+require('dotenv').config()
+
 const fetch = require('node-fetch');
 
 const app = (props) => {
@@ -45,22 +49,30 @@ const app = (props) => {
       <Content>
         <SearchBar
           colors={Colors}
-          labelText={Texts.itemIdText}
-          placeholderText={Texts.itemIdText}
-          buttonText={Texts.magnifyingGlass} click={() => onClickHandler(itemId)}
+          labelText={"eBay Nutzername"}
+          buttonText={Texts.magnifyingGlass}
+          click={() => onClickHandler(itemId)}
           change={onChangeHandler} />
+        <div>
+          <Combobox items={[{ value: "1", text: "123456789 - Apple Mac Book Pro" }, { value: "2", text: "007007007 - Logitech MX Keys" }]} />
+          <button>Auswählen</button>
+        </div>
         <PreviewContainer
           text={htmlCode}
           colors={Colors} />
       </Content>
 
-<div>
-      <span>Email:</span><Editable>
-        <span style={{ fontWeight: 700 }}>mail@example.com</span>
-      </Editable>
-      </div>
-      <ReactGenerator item={Misc.testItem} typus={"demIT"} />
+      <div>
 
+        <Removable>
+          <span>Email:</span>
+        </Removable>
+        <Editable>
+          <span style={{ fontWeight: 700 }}>mail@example.com</span>
+        </Editable>
+      </div>
+
+      <ReactGenerator item={Misc.testItem} typus={"demIT"} />
       <Footer />
     </div>
   );
