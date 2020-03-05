@@ -54,8 +54,7 @@ const app = (props) => {
           click={() => onClickHandler(itemId)}
           change={onChangeHandler} />
         <div>
-          <Combobox items={[{ value: "1", text: "123456789 - Apple Mac Book Pro" }, { value: "2", text: "007007007 - Logitech MX Keys" }]} />
-          <button>Auswählen</button>
+          <Combobox items={[{ value: "233441737515", text: "Apple MacBook Pro 13 2016 Touch Bar BTO i7 3,3Ghz 16Gb 256Gb SSD OVP A-Ware N199" }, { value: "233487098421", text: "Apple MacBook Pro 15 A1398 2014 BTO i7 2,5 16Gb -SSD 512Gb GT750 2Gb 19% #S-53" }]} />
         </div>
         <PreviewContainer
           text={htmlCode}
