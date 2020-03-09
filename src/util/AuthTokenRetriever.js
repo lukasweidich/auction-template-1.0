@@ -4,6 +4,7 @@ const fs = require('fs');
 require('dotenv').config()
 
 const getAuthToken = () => {
+    console.log(process.env.PROD_APP_ID__CLIENT_ID + ":" + process.env.PROD_CERT_ID__CLIENT_SECRET)
     var buffer = new Buffer(process.env.PROD_APP_ID__CLIENT_ID + ":" + process.env.PROD_CERT_ID__CLIENT_SECRET);
     var id_secret_b64 = buffer.toString('base64');
 
@@ -24,7 +25,7 @@ const getAuthToken = () => {
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
-        fs.writeFile('./src/constants/AuthToken.js', "const token = " + body + "\nexport default token", (err) => {
+        fs.writeFile('../constants/AuthToken.js', "const token = " + body + "\nexport default token", (err) => {
             if (err) {
                 throw err;
             } else {
