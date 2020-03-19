@@ -1,5 +1,5 @@
 const createHtmlFromItem = (item) => {
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
         <html lang="de" dir="ltr">
 
         <head>

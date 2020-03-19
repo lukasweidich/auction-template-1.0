@@ -13,7 +13,7 @@ const PreviewContainer = (props) => {
 
     return (
         <div style={styles.container}>
-            <Preview title={"VORSCHAU"} content={<div dangerouslySetInnerHTML={{ __html: props.text }} />} />
+            <Preview title={"VORSCHAU"} content={props.productDescription} />
         </div>
     )
 }

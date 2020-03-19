@@ -4,7 +4,7 @@ const fs = require('fs');
 require('dotenv').config()
 
 const getAuthToken = () => {
-    console.log(process.env.PROD_APP_ID__CLIENT_ID + ":" + process.env.PROD_CERT_ID__CLIENT_SECRET)
+    // console.log("++++++++++++++++++++++++++++++++++\n" + process.env.PROD_APP_ID__CLIENT_ID + ":" + process.env.PROD_CERT_ID__CLIENT_SECRET)
     var buffer = new Buffer(process.env.PROD_APP_ID__CLIENT_ID + ":" + process.env.PROD_CERT_ID__CLIENT_SECRET);
     var id_secret_b64 = buffer.toString('base64');
 
@@ -29,7 +29,7 @@ const getAuthToken = () => {
             if (err) {
                 throw err;
             } else {
-                console.log("AuthToken successfully retrieved.")
+                console.log(body + " retrieved.")
             }
         });
     });
