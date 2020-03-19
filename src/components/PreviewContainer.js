@@ -4,6 +4,7 @@ import Preview from "./Preview"
 const PreviewContainer = (props) => {
     let styles = {
         container: {
+            height: "auto", width: "auto",
             display: "flex",
             flex: "1",
             flexDirection: "row",
