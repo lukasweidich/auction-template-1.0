@@ -6,8 +6,7 @@ const Content = (props) => {
             minHeight: "80vh",
             overflow: "hidden",
             display: "block",
-            position: "relative",
-            paddingBottom: "100px"
+            position: "relative"
         }
     }
 

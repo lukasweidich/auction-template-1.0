@@ -1,12 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import PreviewContainer from "./components/PreviewContainer"
 import URLs from "./constants/MiscAPI"
 import ReactGenerator from "./util/ReactGenerator"
 import Content from './components/Content';
-import Combobox from "./components/new_Combobox"
-import SearchBar from "./components/new_SearchBar"
-import Switch from '@material-ui/core/Switch';
+import { Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, Card, AppBar, Paper } from '@material-ui/core/';
 require('dotenv').config()
 const fetch = require('node-fetch');
 const convert = require('xml-js');
@@ -15,7 +13,7 @@ const app = (props) => {
   const [seller, setSeller] = new useState("");
   const [sellersItems, setSellersItems] = new useState();
   const [prodDesc, setProdDesc] = new useState();
-  const [itemId, setItemId] = new useState("");
+  const [itemId, setItemId] = new useState("0");
   const [checked, setChecked] = new useState(false);
   const [itemIdForDirectInput, setItemIdForDirectInput] = new useState("");
 
@@ -28,7 +26,7 @@ const app = (props) => {
   }
 
   const getAuthToken = () => {
-    return "v^1.1#i^1#p^1#f^0#r^0#I^3#t^H4sIAAAAAAAAAOVYW2wUVRjuttslpGATI5cQjNsBvOHMnNn7TLobt7SFBXqh25sliGdnzrRDd2eGOWdo96GlqQqaGOslvKDBKkYRkWgUxQsPGDRpfEF8gJhIjAlKCPUSY7wE0ZnZpWwraZFusIn7spn//Oc/3/99/3/OmQFDnvn37lq369eFrnmlo0NgqNTl4irAfE/56lvKSpeVl4ACB9fo0Moh93DZ+WoMM2ldaEFY11SMvP2ZtIoFxxilTEMVNIgVLKgwg7BARCEZb9go+Bgg6IZGNFFLU95EbZQKS2G/KAV5yR9KIchFLKt6JWarFqVkHw84MeCLRIKpQCQFrHGMTZRQMYEqiVI+4AM08NMc38qFBH9AAIAJhYJdlLcdGVjRVMuFAVTMgSs4c40CrNNDhRgjg1hBqFgiXp9siidq6xpbq9mCWLE8D0kCiYknP63RJORth2kTTb8MdryFpCmKCGOKjeVWmBxUiF8BcwPwHar9QX8wKIk+CXIhP5D9RaGyXjMykEyPw7YoEi07rgJSiUKyMzFqsZHahkSSf2q0QiRqvfbfJhOmFVlBRpSqq4k/EG9upmIbzV6IO5BCt6KMnoYE0c0ttbQswrDER5BEpyDywUiYzy+Ui5anecpKazRVUmzSsLdRIzXIQo2mcuMr4MZyalKbjLhMbESFfpEJDrkuW9SciibpUW1dUcYiwus8zqzAxGxCDCVlEjQRYeqAQ1GUgrquSNTUQacW8+XTj6NUDyG6wLJ9fX1Mn5/RjG7WBwDHdjZsTIo9KAMpy9fu9Zy/MvMEWnFSEZE1EysCyeoWln6rVi0AajcVC4AQH47keZ8MKzbV+g9DQc7s5I4oVoeEUVhEQSCLEuIDgVBROiSWL1LWxoFSMEtnoNGLiFWmIqJFq87MDDIUSfAHZZ8/IiNaCvEyHeBlmU4FpRDNyQgBhFIpkY/8nxrleks9iUQDkaLUetHqXNaauA6gyw0buvgabXunKTaEtnVv6lnd3Ztdn1XCMLC2ZcP67eGWQHf0ervh2smLmo6atbQiZovAgN3rRWTBb0jN0CDZJEqnLcOsEsV2onNLZHs+tgJAXWHsxmZELcNq0NrRbdNWB/Gsco7reiKTMQlMpVGiOLv5f7STXzM9xbrrzKmcLP1yQipS7pLCOGoyeIfIGAhrpmHdz5gm+8xu1XqRau2AxNDSaWS0c7MW+mbra/f6DHz8y8PixnIv3k1lLtW2mFasEto61zK7KYoqcI6dxlwwYl3mgqEAmFVeaxxNW7Nz7Rxap2GCpOlSc6+9wWs1O/klP1bi/Lhh1xEw7Hqr1OUCLFjFrQBVnrI2d9mCZVghiFGgzGClW7XeXQ3E9KKsDhWj1OPS2+CFVQWfFUa3gKUTHxbml3EVBV8ZwPKrI+Vc5ZKFFiV+jrdeXAMAdIEVV0fd3GL3baLr4Om7tJLkz++U7V9dvYg/RT3xEFg44eRylZe4h10lwtIDnm3j4IuazaUvPbZXHqtsHN9y+tRR2Rj5q3L4tRNP7fnpq8DX9d73Lhxc5roz+t05T8Xj3IvxTw99krh1gD1K9OWXt5xtHlnx8pv6g2/EfuerDmxWPqytH/ptX1DsEy8Pek/ueqGkzj3Qdkl/bvDCPWceKf8Yc+8uGf/FvLjn0du/OXe8//OK4F5cwR7fvfPH0bOdZw9X3TE2MPzsvs77Q2MdldUdjceC7x8aDH1Zt+j1z+5+Zf/KtZfb2iOnL7Encd0ZcfTo2yPfnlhZR5me0Kkd8xbc+cGRfWZ91U5zoOXJp4/Rev35jzaPjb/6Z8n+kYux2Pfr2jyH/8j+0DC4+Pk2NXNf4pndTQ/n5PsbtCvP/fARAAA="
+    return "v^1.1#i^1#r^0#f^0#p^1#I^3#t^H4sIAAAAAAAAAOVYfWwURRTv9a4lUFoNGK0EsS6FKHX3Zm+v97HhzhyUQr9Lr7RYNDC3O3tdure73Z2zPTXhbJAEozFqRJEPiSnEEDWIgFUTEA0BY2qIIZEYxT8UU4hGQIhGBJ3dlnKtpCC9YBPvn8u+efPm936/92ZmF6TzJ89bt2Tdb4WOSbnb0iCd63CwBWByfl5ZkTN3Rl4OyHBwbEuXpl09zoH5JkwoOt+ETF1TTVTSnVBUk7eNISppqLwGTdnkVZhAJo8FPhqpq+U9DOB1Q8OaoClUSVVFiPJyHjHA+oSgKCIEOWJUr4Rs1kIUy3mQKCAyLkkB1gPJuGkmUZVqYqjiEOUBHkADjmaDzWyA9wKeA4zPV95GlbQgw5Q1lbgwgArbaHl7rpEBdWyk0DSRgUkQKlwVqYw2RKoqFtU3z3dnxAoP0RDFECfNkU8LNRGVtEAlicZexrS9+WhSEJBpUu7w4Aojg/KRK2BuAr7NtD/AiqIfAsDGOOSNgaxQWakZCYjHxmFZZJGWbFceqVjGqesxStiIrUYCHnqqJyGqKkqsv6VJqMiSjIwQtWhB5OFIYyMVrk12QLMVyXQzSugKxIhubKqgJQH6xWAAiXQMIg8M+INDCw1GG6J51EoLNVWULdLMknoNL0AENRrNDZfBDXFqUBuMiIQtRBl+HnCFw/JAmyXqoIpJ3K5auqIEIaLEfry+AsOzMTbkWBKj4QijB2yKQhTUdVmkRg/atThUPt1miGrHWOfd7q6uLqaLYzQj7vaQ6nAvr6uNCu0oQZqN+Fq9bvvL159Ay3YqAiIzTZnHKZ1g6Sa1SgCocSrsBb6gPzDE+0hY4dHWfxgycnaP7IhsdYjPj1gP5wP+AFdOCicbDRIeqlG3BQPFYIpOQKMDYVKlAqIFUmbJBDJkkefKJQ8XkBAt+oIS7SXbHR0rF300KyEEEIrFhGDg/9QnN1rpUSQYCGen1LNV5pLWwLYCXaqraQsu0DqXJ4U63+r40vayeEeqOiX7oXdxU011p7/JGw/daDNcO3lB01GjpshCKisMWL2eNRY4Q2yEBk5FkaIQw7gSNa1EJ5bI1nyTBIC6zFiNzQhawq1BsqFbppU24nHlHNH1qkQiiWFMQVVZ2sz/m438munJ5KozoXIi+g0KKYuDdxTGVpMxHxMYA5la0iDXM6bBOrKbtQ6kkh0QG5qiIKOFHbfQt15fq9fH5ONfHhY3l3sWLyoTqLYFRSYltHKiZXZLFJXhBDuN2fKA10deMzkwrrwW2po2pybaObREMzESx07NteimbtXuka/44Rz7x/Y49oIex7u5DgdwgznsbHBfvnOZyzl1hiljxMhQYkw5rpJXVwMxHSilQ9nIzXfoy+DpORkfFbY9CoqHPytMdrIFGd8YwMyrI3nsbXcVEko4NsgGvIADbWD21VEXe6frjhxUnrfVU/fkmr4d7dNOzn3k6Ikjl0HhsJPDkZfj6nHk5Ep7Zp1Ln1pc8PTB7c/fPuUe5cSDB2b2FR7QXnJuWMtx/f1lZ85VFp9avats49G9LW8d/2xf76SHLvl9Uaa6c8XPrk2S3P7TU7v3f4PCxaVnzn11sMD53cX503K2TC2q+egF5/K5+y48U7zq9/v79+/euZU+9kD9DzVHWs+mD7EHeg//cnzz2t4Tn76ZjnYefkZ4hT32eSl7uffDvPjcuPDBir7enaumn2TB+o+/r/nz9Zd/DRRufm9q17wLA69+cuQduGGge+PdtP7211P6W+pWVL9fe/74ptf6ik5vuZjfeOiv9ef3fDv9EFO6/fEnvnx2145Lk6hZ54u2/6hcqHxuzb07462lc178A58deOOLKacH5fsb+hlOiO4RAAA="
   }
 
   const getItemsFromSeller = async (seller) => {
@@ -64,9 +62,11 @@ const app = (props) => {
     setProdDesc(<ReactGenerator item={item} />);
   }
 
-  const onClickHandlerSeller = async (seller) => {
+  const onClickHandlerSeller = async () => {
     if (seller) {
+      console.log(seller)
       let allItems = await getItemsFromSeller(seller);
+      console.log(allItems)
       let comboboxItems = mapItemsFromSellerToComboboxFormat(allItems);
       setSellersItems(comboboxItems)
       alert(`Es konnten erfolgreich ${comboboxItems.length} Produkte geladen werden.`)
@@ -96,69 +96,95 @@ const app = (props) => {
   }
 
   let searchBar = null;
-  if (checked) {
+  if (!checked) {
     searchBar =
       <div>
-        <SearchBar
-          button={true}
-          value={seller}
-          placeholder={"eBay Nutzernamen eigeben..."}
-          iconURL="https://www.materialui.co/materialIcons/action/store_black_144x144.png"
-          search_onKeyDown={onKeyDownHandler}
-          search_onChange={onChangeHandler}
-          search_onClick={() => onClickHandlerSeller(seller)}
-        />
-        <Combobox
-          iconURL="https://www.materialui.co/materialIcons/action/list_black_144x144.png"
-          items={sellersItems}
-          onChange={onComboBoxChange}
-        />
+        <Grid container spacing={1} alignItems="flex-end">
+          <Grid item>
+            <span class="material-icons">account_circle</span>
+          </Grid>
+          <Grid item>
+            <TextField onKeyDown={onKeyDownHandler} value={seller} onChange={onChangeHandler} label="eBay Nutzername" />
+          </Grid>
+          <Grid item>
+            <Button onClick={onClickHandlerSeller} color="secondary">Eingeben</Button>
+          </Grid>
+          <Grid item>
+            <span class="material-icons">list</span>
+          </Grid>
+          <Grid item>
+            <Select labelId="label" id="select" defaultValue={sellersItems ? sellersItems[0].value : "0"} onChange={onComboBoxChange} >
+              <MenuItem value="0"></MenuItem>
+              {
+                sellersItems ?
+                  sellersItems.map(item => {
+                    return <MenuItem value={item.value}>{item.value} - {item.text}</MenuItem>
+                  }) :
+                  null
+              }
+            </Select>
+          </Grid>
+        </Grid>
+        <Button onClick={() => onClickHandler(itemId)} style={{ margin: "5px" }} variant="contained" color="primary">
+          Produktbeschreibung generieren
+  </Button>
       </div>
   } else {
     searchBar = <div>
-      <SearchBar
-        button={false}
-        value={itemIdForDirectInput}
-        placeholder={"eBay Artikelnummer eingeben..."}
-        iconURL="https://www.materialui.co/materialIcons/action/search_black_144x144.png"
-        search_onKeyDown={onItemIdKeyDown}
-        search_onChange={onItemIdChange}
-      />
+      <Grid container spacing={1} alignItems="flex-end">
+        <Grid item>
+          <span class="material-icons">search</span>
+        </Grid>
+        <Grid item>
+          <TextField onKeyDown={onItemIdKeyDown} value={itemIdForDirectInput} onChange={onItemIdChange} label="eBay Artikelnummer" />
+        </Grid>
+      </Grid>
+      <Button onClick={() => onClickHandler(itemIdForDirectInput)} style={{ margin: "5px" }} variant="contained" color="primary">
+        Produktbeschreibung generieren
+  </Button>
     </div>
   }
 
+
+  let toggleSearchbar = (
+    <FormControlLabel
+      control={<Switch
+        color="primary"
+        checked={checked}
+        onChange={handleChange}
+      />}
+      label="Ich kenne die eBay Artikelnummer meines Artikels"
+    />
+  )
+
   return (
-    <div style={{ margin: "24px" }}>
-      <Content>
-        <Switch
-          color="primary"
-          checked={checked}
-          onChange={handleChange}
-        />
-        <div style={{ height: "auto", width: "auto", margin: "5px 25% 5px 25%" }}>
-          {searchBar}
-          <div style={{ textAlign: "center" }}>
-            <button onClick={() => onClickHandler(itemId)} style={{ margin: "5px 0 5px 0" }}>
-              Produktbeschreibung generieren
-          </button>
-          </div>
+    <html>
+      <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+      </head>
+      <body>
+        <div style={{ margin: "24px" }}>
+          <Content>
+            <div style={{ height: "auto", width: "auto", margin: "5px 5% 0px 5%" }}>
+              {toggleSearchbar}
+              {searchBar}
+            </div>
+            {/* <PreviewContainer
+              productDescription={prodDesc} /> */}
+
+            <Card>
+              <AppBar variant={"contained"} color={"secondary"} position="static">
+                <Button color="inherit">Kopieren</Button>
+              </AppBar>
+              <Paper>
+                <PreviewContainer
+                  productDescription={prodDesc} />
+              </Paper>
+            </Card>
+          </Content>
         </div>
-        {/* <SearchBar
-          colors={Colors}
-          labelText={"eBay Nutzername"}
-          buttonText={Texts.magnifyingGlass}
-          click={() => onClickHandlerSeller(seller)}
-          change={onChangeHandler} /> 
-        <div>
-          <Combobox
-            items={sellersItems}
-            onClick={onClickHandler}
-          />
-        </div>*/}
-        <PreviewContainer
-          productDescription={prodDesc} />
-      </Content>
-    </div>
+      </body>
+    </html>
   );
 }
 
