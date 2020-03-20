@@ -4,7 +4,7 @@ import PreviewContainer from "./components/PreviewContainer"
 import URLs from "./constants/MiscAPI"
 import ReactGenerator from "./util/ReactGenerator"
 import Content from './components/Content';
-import { Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, Card, AppBar, Paper } from '@material-ui/core/';
+import { Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, Card, AppBar, Paper, Toolbar, Typography } from '@material-ui/core/';
 require('dotenv').config()
 const fetch = require('node-fetch');
 const convert = require('xml-js');
@@ -13,9 +13,18 @@ const app = (props) => {
   const [seller, setSeller] = new useState("");
   const [sellersItems, setSellersItems] = new useState();
   const [prodDesc, setProdDesc] = new useState();
-  const [itemId, setItemId] = new useState("0");
+  const [itemId, setItemId] = new useState("");
   const [checked, setChecked] = new useState(false);
   const [itemIdForDirectInput, setItemIdForDirectInput] = new useState("");
+
+  const copyToClipboard = str => {
+    const el = document.createElement('textarea');
+    el.value = "" + str + "";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  };
 
   const onChangeHandler = (event) => {
     setSeller(event.target.value);
@@ -26,7 +35,7 @@ const app = (props) => {
   }
 
   const getAuthToken = () => {
-    return "v^1.1#i^1#r^0#f^0#p^1#I^3#t^H4sIAAAAAAAAAOVYfWwURRTv9a4lUFoNGK0EsS6FKHX3Zm+v97HhzhyUQr9Lr7RYNDC3O3tdure73Z2zPTXhbJAEozFqRJEPiSnEEDWIgFUTEA0BY2qIIZEYxT8UU4hGQIhGBJ3dlnKtpCC9YBPvn8u+efPm936/92ZmF6TzJ89bt2Tdb4WOSbnb0iCd63CwBWByfl5ZkTN3Rl4OyHBwbEuXpl09zoH5JkwoOt+ETF1TTVTSnVBUk7eNISppqLwGTdnkVZhAJo8FPhqpq+U9DOB1Q8OaoClUSVVFiPJyHjHA+oSgKCIEOWJUr4Rs1kIUy3mQKCAyLkkB1gPJuGkmUZVqYqjiEOUBHkADjmaDzWyA9wKeA4zPV95GlbQgw5Q1lbgwgArbaHl7rpEBdWyk0DSRgUkQKlwVqYw2RKoqFtU3z3dnxAoP0RDFECfNkU8LNRGVtEAlicZexrS9+WhSEJBpUu7w4Aojg/KRK2BuAr7NtD/AiqIfAsDGOOSNgaxQWakZCYjHxmFZZJGWbFceqVjGqesxStiIrUYCHnqqJyGqKkqsv6VJqMiSjIwQtWhB5OFIYyMVrk12QLMVyXQzSugKxIhubKqgJQH6xWAAiXQMIg8M+INDCw1GG6J51EoLNVWULdLMknoNL0AENRrNDZfBDXFqUBuMiIQtRBl+HnCFw/JAmyXqoIpJ3K5auqIEIaLEfry+AsOzMTbkWBKj4QijB2yKQhTUdVmkRg/atThUPt1miGrHWOfd7q6uLqaLYzQj7vaQ6nAvr6uNCu0oQZqN+Fq9bvvL159Ay3YqAiIzTZnHKZ1g6Sa1SgCocSrsBb6gPzDE+0hY4dHWfxgycnaP7IhsdYjPj1gP5wP+AFdOCicbDRIeqlG3BQPFYIpOQKMDYVKlAqIFUmbJBDJkkefKJQ8XkBAt+oIS7SXbHR0rF300KyEEEIrFhGDg/9QnN1rpUSQYCGen1LNV5pLWwLYCXaqraQsu0DqXJ4U63+r40vayeEeqOiX7oXdxU011p7/JGw/daDNcO3lB01GjpshCKisMWL2eNRY4Q2yEBk5FkaIQw7gSNa1EJ5bI1nyTBIC6zFiNzQhawq1BsqFbppU24nHlHNH1qkQiiWFMQVVZ2sz/m438munJ5KozoXIi+g0KKYuDdxTGVpMxHxMYA5la0iDXM6bBOrKbtQ6kkh0QG5qiIKOFHbfQt15fq9fH5ONfHhY3l3sWLyoTqLYFRSYltHKiZXZLFJXhBDuN2fKA10deMzkwrrwW2po2pybaObREMzESx07NteimbtXuka/44Rz7x/Y49oIex7u5DgdwgznsbHBfvnOZyzl1hiljxMhQYkw5rpJXVwMxHSilQ9nIzXfoy+DpORkfFbY9CoqHPytMdrIFGd8YwMyrI3nsbXcVEko4NsgGvIADbWD21VEXe6frjhxUnrfVU/fkmr4d7dNOzn3k6Ikjl0HhsJPDkZfj6nHk5Ep7Zp1Ln1pc8PTB7c/fPuUe5cSDB2b2FR7QXnJuWMtx/f1lZ85VFp9avats49G9LW8d/2xf76SHLvl9Uaa6c8XPrk2S3P7TU7v3f4PCxaVnzn11sMD53cX503K2TC2q+egF5/K5+y48U7zq9/v79+/euZU+9kD9DzVHWs+mD7EHeg//cnzz2t4Tn76ZjnYefkZ4hT32eSl7uffDvPjcuPDBir7enaumn2TB+o+/r/nz9Zd/DRRufm9q17wLA69+cuQduGGge+PdtP7211P6W+pWVL9fe/74ptf6ik5vuZjfeOiv9ef3fDv9EFO6/fEnvnx2145Lk6hZ54u2/6hcqHxuzb07462lc178A58deOOLKacH5fsb+hlOiO4RAAA="
+    return "v^1.1#i^1#f^0#I^3#p^1#r^0#t^H4sIAAAAAAAAAOVYa2wUVRTutttibUtJIFVINXUKAcGZvbO73dkduhsW2tot9LkLxfJo7s7c2Q7dnRnmztBuoqHWBHxQElKDwUcsEfHxA0HkkfDDaDQSohIfERITNBqNEg0SJJDgD+/MlrKtpCDdYBM32Wzm3HPP/c73nXPv3QEDRcWLtzVuu1LmmJE/MgAG8h0OtgQUFxUumVmQP68wD2Q5OEYG5g84Bwt+qcUwldT4DoQ1VcGoqj+VVDBvG4OUqSu8CrGMeQWmEOYNgY+Gm1fxbgbwmq4aqqAmqapIXZBCol8EvnjA7/X6pIAoEKtyPWZMDVJsAHkDEvRAGOcQ5MgwxiaKKNiAihGk3MANaOCh3SDG1vAewLM1jM/LdVFVa5COZVUhLgygQjZa3p6rZ0GdHCnEGOkGCUKFIuGGaGs4UlffEqt1ZcUKjdIQNaBh4vFPK1QRVa2BSRNNvgy2vfmoKQgIY8oVyqwwPigfvg7mDuDbTEPocSOAvFzc6/YKgi8nVDaoegoak+OwLLJIS7YrjxRDNtK3YpSwEd+EBGP0qYWEiNRVWT/tJkzKkoz0IFW/PPxYuK2NCq0yeyHuRDIdQyktCQ1Et3XU0ZIAOTHgRyIdh8gN/VxgdKFMtFGaJ6y0QlVE2SINV7WoxnJEUKOJ3LizuCFOrUqrHpYMC1G2HzfGoafLEjWjomn0KJauKEWIqLIfb63A2GzD0OW4aaCxCBMHbIqI1pomi9TEQbsWR8unHwepHsPQeJerr6+P6fMwqp5wuQFgXWubV0WFHpSClOVr9brtL996Ai3bqQiIzMQyb6Q1gqWf1CoBoCSokBf4Apx/lPfxsEITrf8wZOXsGt8ROesQzufmBFIyHHALHsmfiw4JjRapy8KB4jBNp6DeiwxSpgKiBVJnZgrpssh7aiS3xy8hWvQFJJrseRIdrxF9NCsh0rUoHhcC/v9To9xuqUeRoCMjN7WeqzqX1Fa2E2hS88quwHJ181pTaPZtSrT3LEn0ppvSMge9j3asbNrMdXgTwdvthpsnL6gaalOTspDOBQNWr+eOBY8utkHdSEdRMkkMU0oUW4lOL5Gt+ZgEgJrMWI3NCGrKpUKyo1umbhvxlHIOa1oklTINGE+iSI528/9mJ79pejK560yrnIh+GSFlMXNJYWw1GbxFYHSEVVMn9zOm1TqzY2ovUsgOaOhqMon0NeyUhb7r+mbO9cn4+JeHxZ3lnsObyjSqbSEpkxLqnm6Z3RVFZTjNTmO2xu/lWL+brZlSXitsTWPp6XYONarYQOKkqTkb7uxa7Rr/Hz+UZ3/YQccRMOg4lO9wABdYwFaDh4oKVjsLSudh2UCMDCUGywmF/HfVEdOL0hqU9fwih7Yanl+Q9VZhZAO4f+y9QnEBW5L1kgFU3hgpZMvvKyOUeNyArfGQbxeovjHqZCucc6hH6P0P/7b1aCxSeu500Qdl62eHKkDZmJPDUZjnHHTkhWe/puwYpI5efe/prx5MFz5QXrpl+MzcvUtTZ4fZ4XvbudW7r14ofaPk5LKCDfH+yOUvvAmfOWvj4Ft99dHLT+6s/LLR1/DX7z9/fQhdXPTOzp7yb9/f89LT/IuHl22ctWv79pY/xU2138Sf23PmnnPgxCJm5of0d/vnvH2g9acXhrd+dOmzup6dC0/uW3/uk+PFDrRw3bqOtqci5y8Huio6T+xuurLX+Wb1s75jP+y42jzjj/buWGni1NDnB2vloVNDB44/Lnnn7vv0+5cBc3jX9oZnDpzpXHz2+ZnHDy691tdd8W61a8bcvHUXXm185WR9Ob72qzkyFDw9v3JWSbRs3xOvX/r40o+Vx0T2SNPaixn5/gZYgyIM7xEAAA=="
   }
 
   const getItemsFromSeller = async (seller) => {
@@ -51,7 +60,9 @@ const app = (props) => {
     var auth = "Bearer " + getAuthToken();
     let item = await fetch(url, {
       headers: {
-        "Authorization": auth
+        "Authorization": auth,
+        // "SiteId": "77",
+        // "ErrorLanguage": "de_DE"
       }
     })
     return item.json();
@@ -64,6 +75,7 @@ const app = (props) => {
 
   const onClickHandlerSeller = async () => {
     if (seller) {
+      setItemId("");
       console.log(seller)
       let allItems = await getItemsFromSeller(seller);
       console.log(allItems)
@@ -109,23 +121,32 @@ const app = (props) => {
           <Grid item>
             <Button onClick={onClickHandlerSeller} color="secondary">Eingeben</Button>
           </Grid>
+        </Grid>
+        <Grid container spacing={1} alignItems="flex-end">
           <Grid item>
-            <span class="material-icons">list</span>
+            {
+              itemId > "0" ?
+                <span class="material-icons">local_offer</span> :
+                <span class="material-icons">label</span>
+            }
           </Grid>
           <Grid item>
-            <Select labelId="label" id="select" defaultValue={sellersItems ? sellersItems[0].value : "0"} onChange={onComboBoxChange} >
-              <MenuItem value="0"></MenuItem>
+            <Select labelId="label" id="select" value={itemId || "0"} onChange={onComboBoxChange} >
+              {!itemId && sellersItems ?
+                <MenuItem value="0">Bitte ein Produkt auswählen</MenuItem> : null}
+
               {
                 sellersItems ?
                   sellersItems.map(item => {
                     return <MenuItem value={item.value}>{item.value} - {item.text}</MenuItem>
-                  }) :
-                  null
+                  })
+                  :
+                  <MenuItem value="0">Bitte einen eBay Nutzernamen eingeben</MenuItem>
               }
             </Select>
           </Grid>
         </Grid>
-        <Button onClick={() => onClickHandler(itemId)} style={{ margin: "5px" }} variant="contained" color="primary">
+        <Button onClick={() => onClickHandler(itemId)} disabled={!(itemId > "0")} style={{ margin: "5px" }} variant="contained" color="primary">
           Produktbeschreibung generieren
   </Button>
       </div>
@@ -139,7 +160,7 @@ const app = (props) => {
           <TextField onKeyDown={onItemIdKeyDown} value={itemIdForDirectInput} onChange={onItemIdChange} label="eBay Artikelnummer" />
         </Grid>
       </Grid>
-      <Button onClick={() => onClickHandler(itemIdForDirectInput)} style={{ margin: "5px" }} variant="contained" color="primary">
+      <Button onClick={() => onClickHandler(itemIdForDirectInput)} disabled={!itemIdForDirectInput} style={{ margin: "5px" }} variant="contained" color="primary">
         Produktbeschreibung generieren
   </Button>
     </div>
@@ -163,25 +184,31 @@ const app = (props) => {
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       </head>
       <body>
-        <div style={{ margin: "24px" }}>
-          <Content>
-            <div style={{ height: "auto", width: "auto", margin: "5px 5% 0px 5%" }}>
-              {toggleSearchbar}
-              {searchBar}
-            </div>
-            {/* <PreviewContainer
-              productDescription={prodDesc} /> */}
-
-            <Card>
-              <AppBar variant={"contained"} color={"secondary"} position="static">
-                <Button color="inherit">Kopieren</Button>
-              </AppBar>
-              <Paper>
-                <PreviewContainer
-                  productDescription={prodDesc} />
-              </Paper>
-            </Card>
-          </Content>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">
+              demIT eBay Description Generator
+          </Typography>
+          </Toolbar>
+        </AppBar>
+        <div style={{ margin: "5px 2% 5px 2%" }}>
+          {toggleSearchbar}
+          <div style={{ height: "auto", width: "auto", margin: "5px 0 5px 0" }}>
+            {searchBar}
+          </div>
+          <Card variant={"outlined"} style={{ backgroundColor: "#3F51B5" }} >
+            <AppBar position="static">
+              <Toolbar>
+                <Typography variant="h6">
+                  VORSCHAU
+          </Typography>
+                <Button onClick={() => copyToClipboard(prodDesc)} color="inherit" style={{ float: "right" }}><span class="material-icons">file_copy</span></Button>
+              </Toolbar>
+            </AppBar>
+            <Paper elevation={"0"} style={{ margin: "1px" }}>
+              {prodDesc}
+            </Paper>
+          </Card>
         </div>
       </body>
     </html>

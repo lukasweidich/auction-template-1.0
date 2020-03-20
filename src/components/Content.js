@@ -3,7 +3,7 @@ import React from "react"
 const Content = (props) => {
     let styles = {
         content: {
-            minHeight: "80vh",
+            // minHeight: "80vh",
             overflow: "hidden",
             display: "block",
             position: "relative"
