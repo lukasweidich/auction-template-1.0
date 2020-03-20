@@ -5,6 +5,7 @@ import URLs from "./constants/MiscAPI"
 import ReactGenerator from "./util/ReactGenerator"
 import Content from './components/Content';
 import { Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, Card, AppBar, Paper, Toolbar, Typography } from '@material-ui/core/';
+import ReactDOMServer from 'react-dom/server';
 require('dotenv').config()
 const fetch = require('node-fetch');
 const convert = require('xml-js');
@@ -202,7 +203,7 @@ const app = (props) => {
                 <Typography variant="h6">
                   VORSCHAU
           </Typography>
-                <Button onClick={() => copyToClipboard(prodDesc)} color="inherit" style={{ float: "right" }}><span class="material-icons">file_copy</span></Button>
+                <Button onClick={() => copyToClipboard(ReactDOMServer.renderToStaticMarkup(prodDesc))} color="inherit" style={{ float: "right" }}><span class="material-icons">file_copy</span></Button>
               </Toolbar>
             </AppBar>
             <Paper elevation={"0"} style={{ margin: "1px" }}>
