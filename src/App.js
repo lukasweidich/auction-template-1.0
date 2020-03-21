@@ -3,7 +3,30 @@ import ReactGenerator from "./util/ReactGenerator"
 import ReactDOMServer from 'react-dom/server';
 import eBayApi from "./util/eBayApi";
 import Miscellaneous from "./util/Miscellaneous"
-const { Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, Card, AppBar, Paper, Toolbar, Typography } = require('@material-ui/core');
+import withFirebaseAuth from 'react-with-firebase-auth'
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import logo from './logo.png';
+
+const config = require("./config");
+const { Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, Card, AppBar, Paper, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ExpandMoreIcon } = require('@material-ui/core');
+
+const firebaseConfig = {
+  apiKey: `${config.API_KEY}`,
+  authDomain: `${config.AUTH_DOMAIN}`,
+  databaseURL: `${config.DATABASE_URL}`,
+  projectId: `${config.PROJECT_ID}`,
+  storageBucket: `${config.STORAGE_BUCKET}`,
+  messagingSenderId: `${config.MESSAGING_SENDER_ID}`,
+  appId: `${config.APP_ID}`,
+  measurementId: `${config.MEASUREMENT_ID}`
+};
+
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const firebaseAppAuth = firebaseApp.auth();
+const providers = {
+  googleProvider: new firebase.auth.GoogleAuthProvider(),
+};
 
 const app = (props) => {
   const [seller, setSeller] = new useState("");
@@ -12,6 +35,15 @@ const app = (props) => {
   const [itemIdDropbox, setItemIdDropbox] = new useState("");
   const [itemIdInput, setItemIdInput] = new useState("");
   const [checked, setChecked] = new useState(false);
+  const [regEmail, setRegEmail] = new useState();
+  const [regPassword, setRegPassword] = new useState();
+  const [logEmail, setLogEmail] = new useState()
+  const [logPassword, setLogPassword] = new useState()
+
+  const {
+    user,
+    signOut
+  } = props;
 
   const onChangeSellerHandler = (event) => {
     setSeller(event.target.value);
@@ -51,6 +83,42 @@ const app = (props) => {
 
   const toggleCheckedHandler = (event) => {
     setChecked(!checked);
+  }
+
+  const changeRegEmailHandler = (event) => {
+    setRegEmail(event.target.value)
+  }
+
+  const changeRegPasswordHandler = (event) => {
+    setRegPassword(event.target.value)
+  }
+
+  const changeLogEmailHandler = (event) => {
+    setLogEmail(event.target.value)
+  }
+
+  const changeLogPasswordHandler = (event) => {
+    setLogPassword(event.target.value)
+  }
+
+  const registerUser = () => {
+    firebase.auth().createUserWithEmailAndPassword(regEmail, regPassword).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorCode);
+      console.log(errorMessage);
+    })
+  }
+
+  const loginUser = () => {
+    firebase.auth().signInWithEmailAndPassword(logEmail, logPassword).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorCode);
+      console.log(errorMessage);
+    });
   }
 
   //###############################################################################################################################################################
@@ -153,7 +221,7 @@ const app = (props) => {
 
   //###############################################################################################################################################################
 
-  return (
+  /*return (
     <div style={{ minHeight: "100vh", backgroundColor: "#E2E2E2" }} >
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
       {header}
@@ -163,7 +231,61 @@ const app = (props) => {
         {descriptionContainer}
       </div>
     </div>
+  );*/
+
+  return (
+    /*<div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        {
+          user
+            ? <p>Hello, {user.displayName}</p>
+            : <p>Please sign in.</p>
+        }
+        {
+          user
+            ? <button onClick={signOut}>Sign out</button>
+            : <button onClick={signInWithGoogle}>Sign in with Google</button>
+        }
+      </header>
+    </div>*/
+    <div>
+      <div>
+        <h1>Registrieren</h1>
+        <TextField id="standard-basic" value={regEmail} onChange={changeRegEmailHandler} label="E-Mail" /><br/>
+        <TextField
+            id="standard-password-input"
+            value={regPassword}
+            onChange={changeRegPasswordHandler}
+            label="Passwort"
+            type="password"
+            autoComplete="current-password"
+          /><br/>
+        <Button variant="contained" color="primary" onClick={registerUser}>
+          Registrieren
+        </Button>
+      </div>
+      <div>
+        <h1>Anmelden</h1>
+        <TextField id="standard-basic" value={logEmail} onChange={changeLogEmailHandler} label="E-Mail" /><br/>
+        <TextField
+            id="standard-password-input"
+            value={logPassword}
+            onChange={changeLogPasswordHandler}
+            label="Passwort"
+            type="password"
+            autoComplete="current-password"
+          /><br/>
+        <Button variant="contained" color="primary" onClick={loginUser}>
+          Anmelden
+        </Button>
+      </div>
+    </div>
+
   );
 }
 
-export default app;
+export default withFirebaseAuth({
+  providers,
+  firebaseAppAuth,
+})(app);

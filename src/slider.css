@@ -1,0 +1,117 @@
+#template-slider-wrapper {
+    padding-top: 20px;
+    width: 600px;
+    /*border: solid 1px #494949;*/
+    /*background-color: #EDEAE5;*/
+}
+
+.template-slider {
+    position: relative;
+    height: 420px;
+    outline: 0 solid black;
+    width: 600px;
+    overflow: hidden;
+}
+
+.template-slides {
+    transition: all 800ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+    width: 1200%;
+}
+
+.template-slide {
+    position: relative;
+    float: left;
+    height: 400px;
+}
+
+.template-slide-count {
+    display: none;
+}
+
+.template-slider .template-navslider {
+    position: absolute;
+    text-align: center;
+    z-index: 3;
+    top: 400px;
+    width: 600px;
+}
+
+.paragraph {
+    width: 600px;
+    margin-bottom: 15px;
+}
+
+.template-bottom {
+    background: #282828;
+    transition: all 800ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+    display: inline-block;
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+#template-slide0:checked~.template-navslider>label[for="template-slide0"],
+#template-slide1:checked~.template-navslider>label[for="template-slide1"],
+#template-slide2:checked~.template-navslider>label[for="template-slide2"],
+#template-slide3:checked~.template-navslider>label[for="template-slide3"],
+#template-slide4:checked~.template-navslider>label[for="template-slide4"],
+#template-slide5:checked~.template-navslider>label[for="template-slide5"],
+#template-slide6:checked~.template-navslider>label[for="template-slide6"],
+#template-slide7:checked~.template-navslider>label[for="template-slide7"],
+#template-slide8:checked~.template-navslider>label[for="template-slide8"],
+#template-slide9:checked~.template-navslider>label[for="template-slide9"],
+#template-slide10:checked~.template-navslider>label[for="template-slide10"],
+#template-slide11:checked~.template-navslider>label[for="template-slide11"] {
+    background: #3F51B5;
+    transition: all 800ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+}
+
+#template-slide0:checked~.template-slides {
+    margin-left: 0;
+}
+
+#template-slide1:checked~.template-slides {
+    margin-left: -100%;
+}
+
+#template-slide2:checked~.template-slides {
+    margin-left: -200%;
+}
+
+#template-slide3:checked~.template-slides {
+    margin-left: -300%;
+}
+
+#template-slide4:checked~.template-slides {
+    margin-left: -400%;
+}
+
+#template-slide5:checked~.template-slides {
+    margin-left: -500%;
+}
+
+#template-slide6:checked~.template-slides {
+    margin-left: -600%;
+}
+
+#template-slide7:checked~.template-slides {
+    margin-left: -700%;
+}
+
+#template-slide8:checked~.template-slides {
+    margin-left: -800%;
+}
+
+#template-slide9:checked~.template-slides {
+    margin-left: -900%;
+}
+
+#template-slide10:checked~.template-slides {
+    margin-left: -1000%;
+}
+
+#template-slide11:checked~.template-slides {
+    margin-left: -1100%;
+}

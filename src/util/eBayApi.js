@@ -4,6 +4,7 @@ const config = require("../config");
 
 const getAuthToken = async () => {
     var buffer = new Buffer(`${config.PROD_APP_ID__CLIENT_ID}:${config.PROD_CERT_ID__CLIENT_SECRET}`);
+    console.log(`${config.PROD_APP_ID__CLIENT_ID}:${config.PROD_CERT_ID__CLIENT_SECRET}`)
     var id_secret_b64 = buffer.toString('base64');
     let token = await fetch(`${config.EBAY_AUTH}`, {
         method: 'post',
