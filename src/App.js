@@ -107,7 +107,6 @@ const app = (props) => {
     setItem({ ...item, shortDescription: "" })
   }
   //###############################################################################################################################################################
-
   let searchBar = null;
   if (!checked) {
     searchBar =
@@ -147,9 +146,19 @@ const app = (props) => {
             </Select>
           </Grid>
         </Grid>
-        <Button onClick={() => onClickGenerateDescriptionHandler(itemIdDropbox)} disabled={!(itemIdDropbox > "0")} style={{ marginTop: "5px" }} variant="contained" color="primary">
-          Produktbeschreibung generieren
+
+        <Grid container spacing={1} alignItems="flex-end">
+          <Grid item>
+            <Button onClick={() => onClickGenerateDescriptionHandler(itemIdDropbox)} disabled={!(itemIdDropbox > "0")} style={{ marginTop: "5px" }} variant="contained" color="primary">
+              Produktbeschreibung generieren
   </Button>
+          </Grid>
+          <Grid item>
+            <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="primary">
+              Produktbeschreibung kopieren
+  </Button>
+          </Grid>
+        </Grid>
       </div>
   } else {
     searchBar = <div>
@@ -161,9 +170,19 @@ const app = (props) => {
           <TextField size="small" onKeyDown={onKeyDownItemIdInputHandler} value={itemIdInput} onChange={onChangeItemIdInputHandler} label="eBay Artikelnummer" />
         </Grid>
       </Grid>
-      <Button onClick={() => onClickGenerateDescriptionHandler(itemIdInput)} disabled={!itemIdInput} style={{ marginTop: "5px" }} variant="contained" color="primary">
-        Produktbeschreibung generieren
+      <Grid container spacing={1} alignItems="flex-end">
+        <Grid item>
+          <Button onClick={() => onClickGenerateDescriptionHandler(itemIdInput)} disabled={!itemIdInput} style={{ marginTop: "5px" }} variant="contained" color="primary">
+            Produktbeschreibung generieren
   </Button>
+        </Grid>
+        <Grid item>
+          <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="primary">
+            Produktbeschreibung kopieren
+  </Button>
+        </Grid>
+      </Grid>
+
     </div>
   }
 
@@ -190,30 +209,34 @@ const app = (props) => {
 
   let descriptionContainer = (
     productDescription ?
-      <ExpansionPanel expanded={true}>
+      <ExpansionPanel>
         <ExpansionPanelSummary
+          expandIcon={<span class="material-icons">
+            expand_more
+</span>}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
           <Typography variant="h6">
-            VORSCHAU
+            ANSEHEN
           </Typography>
-          <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} color="inherit" style={{ float: "right" }}><span class="material-icons">file_copy</span></Button>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           {productDescription}
         </ExpansionPanelDetails>
       </ExpansionPanel>
       :
-      <ExpansionPanel disabled expanded={false}>
+      <ExpansionPanel disabled>
         <ExpansionPanelSummary
+          expandIcon={<span class="material-icons">
+            expand_more
+          </span>}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
           <Typography variant="h6">
-            VORSCHAU
+            ANSEHEN
           </Typography>
-          <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} color="inherit" style={{ float: "right" }}><span class="material-icons">file_copy</span></Button>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           {productDescription}
@@ -264,7 +287,7 @@ const app = (props) => {
 
   let form = (
     item ? (
-      <div>
+      <div width="100%" noValidate autoComplete="off">
         <h1>Informationen</h1>
         {information}
         <h1>Beschreibung</h1>
@@ -272,7 +295,7 @@ const app = (props) => {
         <h1>Artikelmerkmale</h1>
         {localizedAspects}
         <div>
-          <Button onClick={() => onClickSaveChangesHandler()} style={{ margin: "10px 2% 10px 2%" }} variant="contained" color="primary">
+          <Button onClick={() => { onClickSaveChangesHandler(); console.log("clicked save") }} style={{ margin: "10px 2% 10px 2%" }} variant="contained" color="primary">
             SPEICHERN
 </Button>
         </div>
