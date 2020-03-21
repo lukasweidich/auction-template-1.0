@@ -7,7 +7,7 @@ const { Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, Car
 
 const app = (props) => {
   const [seller, setSeller] = new useState("");
-  const [sellersItems, setSellersItems] = new useState([]);
+  const [sellersItems, setSellersItems] = new useState();
   const [productDescription, setProductDescription] = new useState(null);
   const [itemIdDropbox, setItemIdDropbox] = new useState("");
   const [itemIdInput, setItemIdInput] = new useState("");
