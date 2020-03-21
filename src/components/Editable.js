@@ -28,22 +28,22 @@ const MyEditable = (props) => {
 
     const keyUpHandler = (event) => {
         var code = event.keyCode || event.which;
-        
+
         if (code === KEYCODE_ENTER) {
             acceptChangesHandler();
         }
-        
+
         if (code === KEYCODE_ESC) {
             rejectChangesHandler();
         }
     }
 
-    return (            
-                isEditing
-                    ?
-                    <input style={{width:"300"}} onKeyUp={keyUpHandler.bind(this)} onBlur={acceptChangesHandler} onChange={inputChangeHandler} value={currentValue} />
-                    :
-                    <span onClick={editOnClickHandler}>{React.cloneElement(props.children, [], currentValue || props.children.props.children)}</span> 
+    return (
+        isEditing
+            ?
+            <input style={{ width: "300" }} onKeyUp={keyUpHandler.bind(this)} onBlur={acceptChangesHandler} onChange={inputChangeHandler} value={currentValue} />
+            :
+            <span onClick={editOnClickHandler}>{React.cloneElement(props.children, [], currentValue || props.children.props.children)}</span>
     )
 }
 
