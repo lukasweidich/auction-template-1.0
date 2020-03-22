@@ -164,7 +164,7 @@ const templateGenerator = (props) => {
             <div>
                 <Grid container spacing={1} alignItems="flex-end">
                     <Grid item>
-                        <span class="material-icons">account_circle</span>
+                        {<span className="material-icons">account_circle</span>}
                     </Grid>
                     <Grid item>
                         <TextField size="small" onKeyDown={onKeyDownSellerHandler} value={seller} onChange={onChangeSellerHandler} label="eBay Nutzername" />
@@ -177,8 +177,8 @@ const templateGenerator = (props) => {
                     <Grid item>
                         {
                             itemIdDropbox > "0" ?
-                                <span class="material-icons">local_offer</span> :
-                                <span class="material-icons">label</span>
+                                <span className="material-icons">local_offer</span> :
+                                <span className="material-icons">label</span>
                         }
                     </Grid>
                     <Grid item>
@@ -215,7 +215,7 @@ const templateGenerator = (props) => {
         searchBar = <div>
             <Grid container spacing={1} alignItems="flex-end">
                 <Grid item>
-                    <span class="material-icons">search</span>
+                    <span className="material-icons">search</span>
                 </Grid>
                 <Grid item>
                     <TextField size="small" onKeyDown={onKeyDownItemIdInputHandler} value={itemIdInput} onChange={onChangeItemIdInputHandler} label="eBay Artikelnummer" />
@@ -262,7 +262,7 @@ const templateGenerator = (props) => {
         productDescription ?
             <ExpansionPanel>
                 <ExpansionPanelSummary
-                    expandIcon={<span class="material-icons">
+                    expandIcon={<span className="material-icons">
                         expand_more
 </span>}
                     aria-controls="panel1a-content"
@@ -279,7 +279,7 @@ const templateGenerator = (props) => {
             :
             <ExpansionPanel disabled>
                 <ExpansionPanelSummary
-                    expandIcon={<span class="material-icons">
+                    expandIcon={<span className="material-icons">
                         expand_more
           </span>}
                     aria-controls="panel1a-content"
@@ -397,7 +397,7 @@ const templateGenerator = (props) => {
         productDescription ?
             <ExpansionPanel>
                 <ExpansionPanelSummary
-                    expandIcon={<span class="material-icons">
+                    expandIcon={<span className="material-icons">
                         expand_more
           </span>}
                     aria-controls="panel1a-content"
@@ -414,7 +414,7 @@ const templateGenerator = (props) => {
             :
             <ExpansionPanel disabled>
                 <ExpansionPanelSummary
-                    expandIcon={<span class="material-icons">
+                    expandIcon={<span className="material-icons">
                         expand_more
           </span>}
                     aria-controls="panel1a-content"
@@ -423,8 +423,6 @@ const templateGenerator = (props) => {
                     <Typography variant="h6">
                         BEARBEITEN
           </Typography>
-                    <Button>
-                    </Button>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     {form}
