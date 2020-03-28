@@ -3,7 +3,8 @@ import ReactGenerator from "../util/ReactGenerator"
 import ReactDOMServer from 'react-dom/server';
 import eBayApi from "../util/eBayApi";
 import Miscellaneous from "../util/Miscellaneous"
-const { Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
+const { Alert, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
+const { Autocomplete } = require('@material-ui/lab');
 
 const templateGenerator = (props) => {
     const [seller, setSeller] = new useState("");
@@ -13,6 +14,8 @@ const templateGenerator = (props) => {
     const [itemIdInput, setItemIdInput] = new useState("");
     const [checked, setChecked] = new useState(false);
     const [item, setItem] = new useState();
+    const [loadingSellersItems, setLoadingSellersItems] = new useState(false);
+    const [loadingItemTemplate, setLoadingItemTemplate] = new useState(false);
     const [articleOptions, setArticleOptions] = new useState({
         paymentOptions: [
             { selected: false, name: "Banktransfer", img: "https://template-builder.de/icons/payment/banktransfer.png" },
@@ -46,7 +49,8 @@ const templateGenerator = (props) => {
             { selected: false, name: "UPS", img: "https://template-builder.de/icons/shipping/ups.png" },
             { selected: false, name: "Worldmap", img: "https://template-builder.de/icons/shipping/worldmap.png" },
         ],
-        shipping: "0"
+        shipping: "0",
+        legalInformation: null
     });
 
     const onChangeSellerHandler = (event) => {
@@ -54,10 +58,18 @@ const templateGenerator = (props) => {
     }
 
     const onClickSellerHandler = async () => {
+        setLoadingSellersItems(true)
         setItemIdDropbox("");
         let allItems = await eBayApi.getItemsFromSeller(seller);
-        let comboboxItems = Miscellaneous.mapItemsFromSellerToComboboxFormat(allItems);
-        setSellersItems(comboboxItems)
+        if (allItems.error) {
+            setLoadingSellersItems(false)
+            alert(`Fehler: ${allItems.error.message._text}`)
+        } else {
+            let comboboxItems = Miscellaneous.mapItemsFromSellerToComboboxFormat(allItems);
+            setSellersItems(comboboxItems)
+            setLoadingSellersItems(false)
+            alert(`Es konnten ${comboboxItems.length} Artikel erfolgreich geladen werden!`)
+        }
     }
 
     const onKeyDownSellerHandler = (event) => {
@@ -66,8 +78,14 @@ const templateGenerator = (props) => {
         }
     }
 
-    const onChangeItemDropboxHandler = (event) => {
-        setItemIdDropbox(event.target.value)
+    // const onChangeItemDropboxHandler = (event) => {
+    //     setItemIdDropbox(event.target.value)
+    // }
+
+    const onChangeItemDropboxHandler = (event, value, reason) => {
+        if (value) {
+            setItemIdDropbox(value.value)
+        }
     }
 
     const onChangeItemIdInputHandler = (event) => {
@@ -81,9 +99,17 @@ const templateGenerator = (props) => {
     }
 
     const onClickGenerateDescriptionHandler = async (itemId) => {
+        setLoadingItemTemplate(true)
         let itm = await eBayApi.getItemFromItemId(itemId);
-        setItem(itm)
-        setProductDescription(<ReactGenerator item={itm} articleOptions={articleOptions} />);
+        console.log(itm)
+        if (itm.errors) {
+            setLoadingItemTemplate(false)
+            alert(`Fehler: ${itm.errors[0].message}`)
+        } else {
+            setItem(itm)
+            setProductDescription(<ReactGenerator item={itm} articleOptions={articleOptions} />);
+            setLoadingItemTemplate(false)
+        }
     }
 
     const toggleCheckedHandler = (event) => {
@@ -157,6 +183,18 @@ const templateGenerator = (props) => {
     const onChangeShippingHandler = (event) => {
         setArticleOptions({ ...articleOptions, shipping: event.target.value })
     }
+
+    const onChangeLegalInformationHandler = (event) => {
+        setArticleOptions({ ...articleOptions, legalInformation: event.target.value })
+    }
+
+    const onClickDeleteLegalInformationHandler = () => {
+        setArticleOptions({ ...articleOptions, legalInformation: null })
+    }
+
+    const onClickAddLegalInformationHandler = () => {
+        setArticleOptions({ ...articleOptions, legalInformation: "" })
+    }
     //###############################################################################################################################################################
     let searchBar = null;
     if (!checked) {
@@ -170,39 +208,35 @@ const templateGenerator = (props) => {
                         <TextField size="small" onKeyDown={onKeyDownSellerHandler} value={seller} onChange={onChangeSellerHandler} label="eBay Nutzername" />
                     </Grid>
                     <Grid item>
-                        <Button onClick={onClickSellerHandler} disabled={!seller}>Eingeben</Button>
+                        <Button onClick={onClickSellerHandler} disabled={!seller || loadingSellersItems}>Eingeben</Button>
                     </Grid>
+                    {loadingSellersItems && <Grid item><CircularProgress size={25} /></Grid>}
                 </Grid>
                 <Grid container spacing={1} alignItems="flex-end">
                     <Grid item>
-                        {
-                            itemIdDropbox > "0" ?
-                                <span className="material-icons">local_offer</span> :
-                                <span className="material-icons">label</span>
-                        }
+                        <span className="material-icons">local_offer</span>
                     </Grid>
                     <Grid item>
-                        <Select size="small" labelId="label" id="select" value={itemIdDropbox || "0"} onChange={onChangeItemDropboxHandler} >
-                            {!itemIdDropbox && sellersItems ?
-                                <MenuItem value="0">Bitte ein Produkt auswählen</MenuItem> : null}
-
-                            {
-                                sellersItems ?
-                                    sellersItems.map(item => {
-                                        return <MenuItem value={item.value}>{item.value} - {item.text}</MenuItem>
-                                    })
-                                    :
-                                    <MenuItem value="0">Bitte einen eBay Nutzernamen eingeben</MenuItem>
-                            }
-                        </Select>
+                        <Autocomplete
+                            id="combo-box-demo"
+                            getOptionLabel={option => option.value + " - " + option.text}
+                            style={{ width: 400 }}
+                            renderInput={params => <TextField {...params} />}
+                            variant="outlined"
+                            size="small"
+                            id="select"
+                            options={sellersItems ? sellersItems.sort((a, b) => -b.text.localeCompare(a.text)) : null}
+                            onChange={onChangeItemDropboxHandler}
+                            disabled={!sellersItems}
+                        />
                     </Grid>
-                </Grid>
-
+                </Grid >
                 <Grid container spacing={1} alignItems="flex-end">
                     <Grid item>
-                        <Button onClick={() => onClickGenerateDescriptionHandler(itemIdDropbox)} disabled={!(itemIdDropbox > "0")} style={{ marginTop: "5px" }} variant="contained" color="primary">
-                            Produktbeschreibung generieren
-  </Button>
+                        <Button onClick={() => onClickGenerateDescriptionHandler(itemIdDropbox)} disabled={!(itemIdDropbox > "0") || loadingItemTemplate} style={{ marginTop: "5px" }} variant="contained" color="primary">Produktbeschreibung generieren</Button>
+                    </Grid>
+                    <Grid item>
+                        {loadingItemTemplate && <Grid item><CircularProgress size={25} /></Grid>}
                     </Grid>
                     <Grid item>
                         <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="primary">
@@ -210,7 +244,7 @@ const templateGenerator = (props) => {
   </Button>
                     </Grid>
                 </Grid>
-            </div>
+            </div >
     } else {
         searchBar = <div>
             <Grid container spacing={1} alignItems="flex-end">
@@ -223,9 +257,12 @@ const templateGenerator = (props) => {
             </Grid>
             <Grid container spacing={1} alignItems="flex-end">
                 <Grid item>
-                    <Button onClick={() => onClickGenerateDescriptionHandler(itemIdInput)} disabled={!itemIdInput} style={{ marginTop: "5px" }} variant="contained" color="primary">
+                    <Button onClick={() => onClickGenerateDescriptionHandler(itemIdInput)} disabled={!itemIdInput || loadingItemTemplate} style={{ marginTop: "5px" }} variant="contained" color="primary">
                         Produktbeschreibung generieren
   </Button>
+                </Grid>
+                <Grid item>
+                    {loadingItemTemplate && <Grid item><CircularProgress size={25} /></Grid>}
                 </Grid>
                 <Grid item>
                     <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="primary">
@@ -370,6 +407,21 @@ const templateGenerator = (props) => {
             null
     )
 
+    let legalInformation = (
+        item ? (
+            articleOptions.legalInformation !== null ?
+                <div>
+                    <TextField multiline rows="5" onChange={(event) => onChangeLegalInformationHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Rechtliche Angaben" value={articleOptions.legalInformation} variant="outlined" />
+                    <Button onClick={() => onClickDeleteLegalInformationHandler()} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                </div>
+                :
+                <div>
+                    <Button onClick={() => onClickAddLegalInformationHandler()} style={{ margin: "10px 2% 10px 2%" }}>HINZUFÜGEN</Button>
+                </div>
+        )
+            : null
+    )
+
     let form = (
         item ? (
             <div width="100%" noValidate autoComplete="off">
@@ -383,6 +435,8 @@ const templateGenerator = (props) => {
                 {paymentOptions}
                 <h1>Versand</h1>
                 {shippingOptions}
+                <h1>Rechtliche Angaben</h1>
+                {legalInformation}
                 <div>
                     <Button onClick={() => { onClickSaveChangesHandler() }} style={{ margin: "10px 2% 10px 2%" }} variant="contained" color="primary">
                         SPEICHERN

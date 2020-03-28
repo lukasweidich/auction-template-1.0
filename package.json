@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.7",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.46",
     "dotenv": "^8.2.0",
     "ebay-oauth-nodejs-client": "^1.2.0",
     "firebase": "^7.12.0",

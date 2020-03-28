@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import TemplateGenerator from "./screens/TemplateGenerator"
-// import LogInScreen from "./screens/LogInScreen"
 import LandingPage from "./screens/LandingPage"
 
 const app = (props) => {

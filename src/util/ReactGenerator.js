@@ -28,6 +28,7 @@ const createReactFromItem = (props) => {
     const paymentOptions = props.articleOptions.paymentOptions.filter(el => el.selected);
     const shippingOptions = props.articleOptions.shippingOptions.filter(el => el.selected);
     const shipping = props.articleOptions.shipping
+    const legalInformation = props.articleOptions.legalInformation;
 
     return (
         <html style={{ width: "100%" }}>
@@ -156,6 +157,21 @@ const createReactFromItem = (props) => {
                                             {shippingOptions.map((el, i) => {
                                                 return <img alt={`Payment Option #${i}`} src={el.img} />
                                             })}
+                                        </div>
+                                    </div>
+                                </div>
+                                :
+                                null
+                            }
+                            {legalInformation ?
+                                <div>
+                                    <div class="template-simple-divider template-display-mobile-none"></div>
+                                    <div class="template-column-50">
+                                        <div class="template-container">
+                                            <h1>Rechtliche Angaben</h1>
+                                            <div class="template-information-container">
+                                                <p id="template-description">{legalInformation}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

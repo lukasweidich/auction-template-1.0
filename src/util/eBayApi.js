@@ -18,18 +18,38 @@ const getAuthToken = async () => {
     return token
 }
 
-const getItemsFromSeller = async (seller) => {
-    let url = `${config.EBAY_FIND}&SECURITY-APPNAME=${config.PROD_APP_ID__CLIENT_ID}&GLOBAL-ID=EBAY-DE&itemFilter(0).name=Seller&itemFilter(0).value(0)=${seller}`
+const getItemsFromSeller = async (seller, attemptNumber) => {
+    const entriesPerPage = 100;
+    const pageNumber = attemptNumber || 1;
+    const noItemsFoundText = "No items found.";
+
+    let url = `${config.EBAY_FIND}&SECURITY-APPNAME=${config.PROD_APP_ID__CLIENT_ID}&GLOBAL-ID=EBAY-DE&itemFilter(0).name=Seller&itemFilter(0).value(0)=${seller}&paginationInput.pageNumber=${pageNumber}&paginationInput.entriesPerPage=${entriesPerPage}`
     let xml = await fetch(url).then(res => res.text()).then(body => body);
     let json = convert.xml2json(xml, { compact: true, spaces: 4 });
     json = JSON.parse(json)
-    return json.findItemsAdvancedResponse.searchResult.item
+    if (json.findItemsAdvancedResponse) {
+        if (json.findItemsAdvancedResponse.errorMessage) {
+            return json.findItemsAdvancedResponse.errorMessage
+        } else {
+            let allItems = json.findItemsAdvancedResponse.searchResult.item;
+            if (json.findItemsAdvancedResponse.searchResult.item) {
+                if (json.findItemsAdvancedResponse.paginationOutput.totalEntries._text > pageNumber * entriesPerPage) {
+                    let nextItems = await getItemsFromSeller(seller, pageNumber + 1)
+                    allItems = [...allItems, ...nextItems]
+                }
+                return allItems
+            } else {
+                return { error: { message: { _text: noItemsFoundText }, parameter: { _text: seller } } }
+            }
+        }
+    }
 }
 
 const getItemFromItemId = async (itemId) => {
     itemId = "v1|" + itemId + "|0"
     var url = `${config.EBAY_BROWSE}${itemId}`;
     let token = await getAuthToken();
+    console.log(token)
     var auth = "Bearer " + token
     let item = await fetch(url, {
         headers: {
