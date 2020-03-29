@@ -49,7 +49,6 @@ const getItemFromItemId = async (itemId) => {
     itemId = "v1|" + itemId + "|0"
     var url = `${config.EBAY_BROWSE}${itemId}`;
     let token = await getAuthToken();
-    console.log(token)
     var auth = "Bearer " + token
     let item = await fetch(url, {
         headers: {

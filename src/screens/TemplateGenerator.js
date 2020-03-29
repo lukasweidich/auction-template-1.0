@@ -3,7 +3,7 @@ import ReactGenerator from "../util/ReactGenerator"
 import ReactDOMServer from 'react-dom/server';
 import eBayApi from "../util/eBayApi";
 import Miscellaneous from "../util/Miscellaneous"
-const { Alert, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
+const { FormControl, Paper, ButtonBase, Alert, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
 const templateGenerator = (props) => {
@@ -16,6 +16,8 @@ const templateGenerator = (props) => {
     const [item, setItem] = new useState();
     const [loadingSellersItems, setLoadingSellersItems] = new useState(false);
     const [loadingItemTemplate, setLoadingItemTemplate] = new useState(false);
+    const [selectedItemTemplate, setSelectedItemTemplate] = new useState("dem-it-classic");
+    const [itemTemplates, setItemTemplates] = new useState([{ id: "dem-it-classic", name: "dem-IT Classic Template", img: "https://dem-it.de/uploads/unknown.png" }, { id: "nüscht", name: "lol anderes template", img: "https://dem-it.de/uploads/unknown.png" }]);
     const [articleOptions, setArticleOptions] = new useState({
         paymentOptions: [
             { selected: false, name: "Banktransfer", img: "https://template-builder.de/icons/payment/banktransfer.png" },
@@ -98,16 +100,15 @@ const templateGenerator = (props) => {
         }
     }
 
-    const onClickGenerateDescriptionHandler = async (itemId) => {
+    const onClickGenerateDescriptionHandler = async (itemId, templateId) => {
         setLoadingItemTemplate(true)
         let itm = await eBayApi.getItemFromItemId(itemId);
-        console.log(itm)
         if (itm.errors) {
             setLoadingItemTemplate(false)
             alert(`Fehler: ${itm.errors[0].message}`)
         } else {
             setItem(itm)
-            setProductDescription(<ReactGenerator item={itm} articleOptions={articleOptions} />);
+            setProductDescription(<ReactGenerator templateId={templateId} item={itm} articleOptions={articleOptions} />);
             setLoadingItemTemplate(false)
         }
     }
@@ -195,7 +196,77 @@ const templateGenerator = (props) => {
     const onClickAddLegalInformationHandler = () => {
         setArticleOptions({ ...articleOptions, legalInformation: "" })
     }
+
+    const onChangeSelectedItemTemplateHandler = (event) => {
+        setSelectedItemTemplate(event.target.value)
+    }
+
+    const onClickSelectItemTemplateHandler = (index) => {
+        setSelectedItemTemplate(itemTemplates[index].id)
+    }
     //###############################################################################################################################################################
+
+    let templateViewer = (
+        itemTemplates.map((el, i) => {
+            let selectedTemplate = itemTemplates.filter(el => el.id === selectedItemTemplate)
+            let selectedIndex = itemTemplates.indexOf(...selectedTemplate);
+            return <Paper style={{ margin: "10px", backgroundColor: selectedIndex === i ? "white" : "#D1D1D1" }} onClick={() => onClickSelectItemTemplateHandler(i)}>
+                <Grid container spacing={2}>
+                    <Grid item>
+                        <img style={{ opacity: selectedIndex === i ? "1" : "0.2" }} width="120px" alt="complex" src={el.img} />
+                    </Grid>
+                    <Grid item xs={12} sm container>
+                        <Grid item xs container direction="column" spacing={2}>
+                            <Grid item xs>
+                                <Typography style={{ opacity: selectedIndex === i ? "1" : "0.2" }} gutterBottom variant="subtitle2">
+                                    {el.name}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Paper>
+        })
+    )
+
+    let templateSelector = (
+        <FormControl style={{ minWidth: "400px" }}>
+            <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedItemTemplate}
+                onChange={onChangeSelectedItemTemplateHandler}
+                defaultValue={selectedItemTemplate}
+                width="100px"
+                labelWidth="200"
+                disabled={(!checked ? !(itemIdDropbox > "0") || loadingItemTemplate : !itemIdInput || loadingItemTemplate)}
+            >
+                {itemTemplates.map(el => {
+                    return <MenuItem value={el.id}>{el.name}</MenuItem>
+                })}
+            </Select>
+        </FormControl>
+    )
+
+    let templateExpansion = (
+        <ExpansionPanel disabled={(!checked ? !(itemIdDropbox > "0") || loadingItemTemplate : !itemIdInput || loadingItemTemplate)} >
+            <ExpansionPanelSummary
+                expandIcon={<span className="material-icons">
+                    expand_more
+</span>}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+            >
+                <Typography variant="h6">
+                    VORLAGEN
+  </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails style={{ padding: "8px 24px 8px 24px" }}>
+                {templateViewer}
+            </ExpansionPanelDetails>
+        </ExpansionPanel>
+    )
+
     let searchBar = null;
     if (!checked) {
         searchBar =
@@ -233,15 +304,19 @@ const templateGenerator = (props) => {
                 </Grid >
                 <Grid container spacing={1} alignItems="flex-end">
                     <Grid item>
-                        <Button onClick={() => onClickGenerateDescriptionHandler(itemIdDropbox)} disabled={!(itemIdDropbox > "0") || loadingItemTemplate} style={{ marginTop: "5px" }} variant="contained" color="primary">Produktbeschreibung generieren</Button>
+                        <span class="material-icons">
+                            web</span>
+                    </Grid>
+                    <Grid item>
+                        {templateSelector}
+                    </Grid>
+                </Grid>
+                <Grid container spacing={1} alignItems="flex-end">
+                    <Grid item>
+                        <Button onClick={() => onClickGenerateDescriptionHandler(itemIdDropbox, selectedItemTemplate)} disabled={!(itemIdDropbox > "0") || loadingItemTemplate} style={{ marginTop: "5px" }} variant="contained" color="primary">Produktbeschreibung generieren</Button>
                     </Grid>
                     <Grid item>
                         {loadingItemTemplate && <Grid item><CircularProgress size={25} /></Grid>}
-                    </Grid>
-                    <Grid item>
-                        <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="primary">
-                            Produktbeschreibung kopieren
-  </Button>
                     </Grid>
                 </Grid>
             </div >
@@ -257,17 +332,19 @@ const templateGenerator = (props) => {
             </Grid>
             <Grid container spacing={1} alignItems="flex-end">
                 <Grid item>
-                    <Button onClick={() => onClickGenerateDescriptionHandler(itemIdInput)} disabled={!itemIdInput || loadingItemTemplate} style={{ marginTop: "5px" }} variant="contained" color="primary">
+                    <span class="material-icons">
+                        web</span>
+                </Grid>
+                <Grid item>
+                    {templateSelector}
+                </Grid>
+                <Grid item>
+                    <Button onClick={() => onClickGenerateDescriptionHandler(itemIdInput, selectedItemTemplate)} disabled={!itemIdInput || loadingItemTemplate} style={{ marginTop: "5px" }} variant="contained" color="primary">
                         Produktbeschreibung generieren
   </Button>
                 </Grid>
                 <Grid item>
                     {loadingItemTemplate && <Grid item><CircularProgress size={25} /></Grid>}
-                </Grid>
-                <Grid item>
-                    <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="primary">
-                        Produktbeschreibung kopieren
-  </Button>
                 </Grid>
             </Grid>
 
@@ -296,37 +373,22 @@ const templateGenerator = (props) => {
     )
 
     let descriptionContainer = (
-        productDescription ?
-            <ExpansionPanel>
-                <ExpansionPanelSummary
-                    expandIcon={<span className="material-icons">
-                        expand_more
+        <ExpansionPanel disabled={!productDescription || loadingItemTemplate}>
+            <ExpansionPanelSummary
+                expandIcon={<span className="material-icons">
+                    expand_more
 </span>}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography variant="h6">
-                        ANSEHEN
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+            >
+                <Typography variant="h6">
+                    ANSEHEN
           </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails style={{ padding: "8px 24px 8px 24px" }}>
-                    {productDescription}
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            :
-            <ExpansionPanel disabled>
-                <ExpansionPanelSummary
-                    expandIcon={<span className="material-icons">
-                        expand_more
-          </span>}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography variant="h6">
-                        ANSEHEN
-          </Typography>
-                </ExpansionPanelSummary>
-            </ExpansionPanel>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails style={{ padding: "8px 24px 8px 24px" }}>
+                {productDescription ? productDescription : null}
+            </ExpansionPanelDetails>
+        </ExpansionPanel>
     )
 
     let information = (
@@ -448,40 +510,22 @@ const templateGenerator = (props) => {
     )
 
     let expansionPanel = (
-        productDescription ?
-            <ExpansionPanel>
-                <ExpansionPanelSummary
-                    expandIcon={<span className="material-icons">
-                        expand_more
+        <ExpansionPanel disabled={!productDescription || loadingItemTemplate}>
+            <ExpansionPanelSummary
+                expandIcon={<span className="material-icons">
+                    expand_more
           </span>}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography variant="h6">
-                        BEARBEITEN
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+            >
+                <Typography variant="h6">
+                    BEARBEITEN
           </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    {form}
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            :
-            <ExpansionPanel disabled>
-                <ExpansionPanelSummary
-                    expandIcon={<span className="material-icons">
-                        expand_more
-          </span>}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography variant="h6">
-                        BEARBEITEN
-          </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    {form}
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+                {form}
+            </ExpansionPanelDetails>
+        </ExpansionPanel>
     )
 
     //###############################################################################################################################################################
@@ -495,10 +539,18 @@ const templateGenerator = (props) => {
                 {searchBar}
             </div>
             <div style={{ margin: "10px 2% 10px 2%" }}>
+                {templateExpansion}
+            </div>
+            <div style={{ margin: "10px 2% 10px 2%" }}>
                 {expansionPanel}
             </div>
             <div style={{ margin: "10px 2% 10px 2%" }}>
                 {descriptionContainer}
+            </div>
+            <div style={{ margin: "10px 2% 10px 2%" }}>
+                <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="primary">
+                    Produktbeschreibung kopieren
+  </Button>
             </div>
         </div>
     );
