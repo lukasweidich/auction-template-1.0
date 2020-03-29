@@ -3,7 +3,7 @@ import withFirebaseAuth from 'react-with-firebase-auth'
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import firebaseConfig from '../config';
-const { Card, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
+const { TextField, Button, AppBar, Toolbar, Typography } = require('@material-ui/core');
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const firebaseAppAuth = firebaseApp.auth();
 const providers = {
@@ -14,7 +14,6 @@ const LandingScreen = (props) => {
 
     const {
         user,
-        signInWithGoogle
     } = props;
 
     props.setSignedIn((user ? true : false))
@@ -85,7 +84,7 @@ const LandingScreen = (props) => {
     let landingPage = (
         <center style={{ marginTop: "25vh" }}>
             <div>
-                <img style={{ margin: "10px auto 10px auto" }} width={"25%"} src="http://template-builder.de/uploads/template-builder-logo.PNG" />
+                <img alt="dem-it Logo" style={{ margin: "10px auto 10px auto" }} width={"25%"} src="http://template-builder.de/uploads/template-builder-logo.PNG" />
             </div>
             <div>
                 {/* <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="secondary" onClick={() => setCurrentScreen("2")}>REGISTRIEREN</Button> */}

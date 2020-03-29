@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import ReactGenerator from "../util/ReactGenerator"
 import ReactDOMServer from 'react-dom/server';
 import eBayApi from "../util/eBayApi";
+import config from "../config";
 import Miscellaneous from "../util/Miscellaneous"
-const { FormControl, Paper, ButtonBase, Alert, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
+const { FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
 const templateGenerator = (props) => {
@@ -17,41 +18,40 @@ const templateGenerator = (props) => {
     const [loadingSellersItems, setLoadingSellersItems] = new useState(false);
     const [loadingItemTemplate, setLoadingItemTemplate] = new useState(false);
     const [selectedItemTemplate, setSelectedItemTemplate] = new useState("dem-it-classic");
-    const [itemTemplates, setItemTemplates] = new useState([{ id: "dem-it-classic", name: "dem-IT Classic Template", img: "https://dem-it.de/uploads/unknown.png" }, { id: "nüscht", name: "lol anderes template", img: "https://dem-it.de/uploads/unknown.png" }]);
+    const [itemTemplates, setItemTemplates] = new useState([{ id: "dem-it-classic", name: "dem-IT Classic Template", img: "https://dem-it.de/uploads/unknown.png" }, { id: "dem-it-yellow", name: "dem-IT Yellow Template", img: "https://dem-it.de/uploads/unknown.png" }]);
     const [articleOptions, setArticleOptions] = new useState({
         paymentOptions: [
-            { selected: false, name: "Banktransfer", img: "https://template-builder.de/icons/payment/banktransfer.png" },
-            { selected: false, name: "DHL COD", img: "https://template-builder.de/icons/payment/dhl-cod.png" },
-            { selected: false, name: "DPD COD", img: "https://template-builder.de/icons/payment/dpd-cod.png" },
-            { selected: false, name: "Giropay", img: "https://template-builder.de/icons/payment/giropay.png" },
-            { selected: false, name: "Hermes COD", img: "https://template-builder.de/icons/payment/hermes-cod.png" },
-            { selected: false, name: "Invoice Alternate", img: "https://template-builder.de/icons/payment/invoice-alternate.png" },
-            { selected: false, name: "Mastercard", img: "https://template-builder.de/icons/payment/mastercard.png" },
-            { selected: false, name: "Payment in Advance", img: "https://template-builder.de/icons/payment/payment-in-advance.png" },
-            { selected: false, name: "Payment in Advance Alternate", img: "https://template-builder.de/icons/payment/payment-in-advance-alternate.png" },
-            { selected: false, name: "PayPal", img: "https://template-builder.de/icons/payment/paypal.png" },
-            { selected: false, name: "Paysafecard", img: "https://template-builder.de/icons/payment/paysafecard.png" },
-            { selected: false, name: "Text Barzahlung", img: "https://template-builder.de/icons/payment/text-barzahlung.png" },
-            { selected: false, name: "Text Lastschrift", img: "https://template-builder.de/icons/payment/text-lastschrift.png" },
-            { selected: false, name: "Text Nachnahme", img: "https://template-builder.de/icons/payment/text-nachnahme.png" },
-            { selected: false, name: "Text Rechnung", img: "https://template-builder.de/icons/payment/text-rechnung.png" },
-            { selected: false, name: "Text Überweisung", img: "https://template-builder.de/icons/payment/text-ueberweisung.png" },
-            { selected: false, name: "Text Vorkasse", img: "https://template-builder.de/icons/payment/text-vorkasse.png" },
-            { selected: false, name: "UPS COD", img: "https://template-builder.de/icons/payment/ups-cod.png" },
-            { selected: false, name: "Visa", img: "https://template-builder.de/icons/payment/visa.png" },
+            { ebayName: "MoneyXferAccepted", selected: false, name: "Banktransfer", img: "https://template-builder.de/icons/payment/banktransfer.png" },
+            { ebayName: "COD", selected: false, name: "DHL COD", img: "https://template-builder.de/icons/payment/dhl-cod.png" },
+            { ebayName: "COD", selected: false, name: "DPD COD", img: "https://template-builder.de/icons/payment/dpd-cod.png" },
+            { ebayName: "", selected: false, name: "Giropay", img: "https://template-builder.de/icons/payment/giropay.png" },
+            { ebayName: "COD", selected: false, name: "Hermes COD", img: "https://template-builder.de/icons/payment/hermes-cod.png" },
+            { ebayName: "", selected: false, name: "Invoice Alternate", img: "https://template-builder.de/icons/payment/invoice-alternate.png" },
+            { ebayName: "CreditCard", selected: false, name: "Mastercard", img: "https://template-builder.de/icons/payment/mastercard.png" },
+            { ebayName: "", selected: false, name: "Payment in Advance", img: "https://template-builder.de/icons/payment/payment-in-advance.png" },
+            { ebayName: "", selected: false, name: "Payment in Advance Alternate", img: "https://template-builder.de/icons/payment/payment-in-advance-alternate.png" },
+            { ebayName: "PayPal", selected: false, name: "PayPal", img: "https://template-builder.de/icons/payment/paypal.png" },
+            { ebayName: "", selected: false, name: "Paysafecard", img: "https://template-builder.de/icons/payment/paysafecard.png" },
+            { ebayName: "CashOnPickup", selected: false, name: "Text Barzahlung", img: "https://template-builder.de/icons/payment/text-barzahlung.png" },
+            { ebayName: "", selected: false, name: "Text Lastschrift", img: "https://template-builder.de/icons/payment/text-lastschrift.png" },
+            { ebayName: "", selected: false, name: "Text Nachnahme", img: "https://template-builder.de/icons/payment/text-nachnahme.png" },
+            { ebayName: "", selected: false, name: "Text Rechnung", img: "https://template-builder.de/icons/payment/text-rechnung.png" },
+            { ebayName: "MoneyXferAccepted", selected: false, name: "Text Überweisung", img: "https://template-builder.de/icons/payment/text-ueberweisung.png" },
+            { ebayName: "", selected: false, name: "Text Vorkasse", img: "https://template-builder.de/icons/payment/text-vorkasse.png" },
+            { ebayName: "COD", selected: false, name: "UPS COD", img: "https://template-builder.de/icons/payment/ups-cod.png" },
+            { ebayName: "CreditCard", selected: false, name: "Visa", img: "https://template-builder.de/icons/payment/visa.png" },
         ],
         shippingOptions: [
-            { selected: false, name: "DHL", img: "https://template-builder.de/icons/shipping/dhl.png" },
-            { selected: false, name: "DPD", img: "https://template-builder.de/icons/shipping/dpd.png" },
-            { selected: false, name: "FEDEX", img: "https://template-builder.de/icons/shipping/fedex.png" },
-            { selected: false, name: "GLS", img: "https://template-builder.de/icons/shipping/gls.png" },
-            { selected: false, name: "Hermes", img: "https://template-builder.de/icons/shipping/hermes.png" },
-            { selected: false, name: "Pickup", img: "https://template-builder.de/icons/shipping/pickup.png" },
-            { selected: false, name: "Post Germany", img: "https://template-builder.de/icons/shipping/post-germany.png" },
-            { selected: false, name: "UPS", img: "https://template-builder.de/icons/shipping/ups.png" },
-            { selected: false, name: "Worldmap", img: "https://template-builder.de/icons/shipping/worldmap.png" },
+            { id: "", selected: false, name: "DHL", img: "https://template-builder.de/icons/shipping/dhl.png" },
+            { id: "", selected: false, name: "DPD", img: "https://template-builder.de/icons/shipping/dpd.png" },
+            { id: "", selected: false, name: "FEDEX", img: "https://template-builder.de/icons/shipping/fedex.png" },
+            { id: "", selected: false, name: "GLS", img: "https://template-builder.de/icons/shipping/gls.png" },
+            { id: "", selected: false, name: "Hermes", img: "https://template-builder.de/icons/shipping/hermes.png" },
+            { id: "", selected: false, name: "Pickup", img: "https://template-builder.de/icons/shipping/pickup.png" },
+            { id: "", selected: false, name: "Post Germany", img: "https://template-builder.de/icons/shipping/post-germany.png" },
+            { id: "", selected: false, name: "UPS", img: "https://template-builder.de/icons/shipping/ups.png" },
+            { id: "", selected: false, name: "Worldmap", img: "https://template-builder.de/icons/shipping/worldmap.png" },
         ],
-        shipping: "0",
         legalInformation: null
     });
 
@@ -70,7 +70,7 @@ const templateGenerator = (props) => {
             let comboboxItems = Miscellaneous.mapItemsFromSellerToComboboxFormat(allItems);
             setSellersItems(comboboxItems)
             setLoadingSellersItems(false)
-            alert(`Es konnten ${comboboxItems.length} Artikel erfolgreich geladen werden!`)
+            alert(`${comboboxItems.length} Artikel konnten erfolgreich geladen werden`)
         }
     }
 
@@ -79,10 +79,6 @@ const templateGenerator = (props) => {
             onClickSellerHandler(seller)
         }
     }
-
-    // const onChangeItemDropboxHandler = (event) => {
-    //     setItemIdDropbox(event.target.value)
-    // }
 
     const onChangeItemDropboxHandler = (event, value, reason) => {
         if (value) {
@@ -96,21 +92,23 @@ const templateGenerator = (props) => {
 
     const onKeyDownItemIdInputHandler = (event) => {
         if (event.key === "Enter") {
-            onClickGenerateDescriptionHandler(itemIdInput)
+            onClickGenerateDescriptionHandler(itemIdInput, selectedItemTemplate)
         }
     }
 
     const onClickGenerateDescriptionHandler = async (itemId, templateId) => {
         setLoadingItemTemplate(true)
-        let itm = await eBayApi.getItemFromItemId(itemId);
-        if (itm.errors) {
-            setLoadingItemTemplate(false)
-            alert(`Fehler: ${itm.errors[0].message}`)
-        } else {
-            setItem(itm)
-            setProductDescription(<ReactGenerator templateId={templateId} item={itm} articleOptions={articleOptions} />);
-            setLoadingItemTemplate(false)
+        const { GetSingleItemResponse } = await eBayApi.getItemFromItemId(itemId);
+        const { Ack } = GetSingleItemResponse;
+        if (Ack._text === config.ACK_SUCCESS) {
+            setItem(GetSingleItemResponse.Item)
+            mapItemPaymentToArticleOptionPayment(GetSingleItemResponse.Item);
+            setProductDescription(<ReactGenerator templateId={templateId} item={GetSingleItemResponse.Item} articleOptions={articleOptions} />);
+            alert(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`)
+        } else if (Ack._text === config.ACK_FAILURE) {
+            alert(`Fehler: ${GetSingleItemResponse.Errors.LongMessage._text}`)
         }
+        setLoadingItemTemplate(false)
     }
 
     const toggleCheckedHandler = (event) => {
@@ -118,55 +116,79 @@ const templateGenerator = (props) => {
     }
 
     const onClickDeleteLocalizedAspectHandler = (index) => {
-        let tmp = [...item.localizedAspects]
-        tmp.splice(index, 1)
-        setItem({ ...item, localizedAspects: tmp })
+        if (Array.isArray(item.ItemSpecifics.NameValueList)) {
+            let tmp = [...item.ItemSpecifics.NameValueList]
+            tmp.splice(index, 1)
+            setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: tmp } })
+        } else {
+            setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: [] } })
+        }
     }
 
     const onClickAddLocalizedAspect = () => {
-        let tmp = [...item.localizedAspects]
-        tmp.push({ name: "", value: "" })
-        setItem({ ...item, localizedAspects: tmp })
+        if (Array.isArray(item.ItemSpecifics.NameValueList)) {
+            let tmp = [...item.ItemSpecifics.NameValueList]
+            tmp.push({ Name: { _text: "" }, Value: { _text: "" } })
+            setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: tmp } })
+        } else {
+            let tmp = item.ItemSpecifics.NameValueList;
+            let x = [];
+            x.push(tmp);
+            x.push({ Name: { _text: "" }, Value: { _text: "" } })
+            setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: x } })
+        }
     }
 
     const onChangeLocalizedAspectNameHandler = (event, i) => {
-        let tmp = [...item.localizedAspects]
-        tmp[i] = { ...tmp[i], name: event.target.value }
-        setItem({ ...item, localizedAspects: tmp })
+        if (Array.isArray(item.ItemSpecifics.NameValueList)) {
+            let tmp = [...item.ItemSpecifics.NameValueList]
+            tmp[i] = { ...tmp[i], Name: { _text: event.target.value } }
+            setItem({ ...item, ItemSpecifics: { NameValueList: tmp } })
+        } else {
+            let tmp = item.ItemSpecifics.NameValueList;
+            tmp = { ...tmp, Name: { _text: event.target.value } }
+            setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: tmp } })
+        }
     }
 
     const onChangeLocalizedAspectValueHandler = (event, i) => {
-        let tmp = [...item.localizedAspects]
-        tmp[i] = { ...tmp[i], value: event.target.value }
-        setItem({ ...item, localizedAspects: tmp })
+        if (Array.isArray(item.ItemSpecifics.NameValueList)) {
+            let tmp = [...item.ItemSpecifics.NameValueList]
+            tmp[i] = { ...tmp[i], Value: { _text: event.target.value } }
+            setItem({ ...item, ItemSpecifics: { NameValueList: tmp } })
+        } else {
+            let tmp = item.ItemSpecifics.NameValueList;
+            tmp = { ...tmp, Value: { _text: event.target.value } }
+            setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: tmp } })
+        }
     }
 
     const onChangeTitleHandler = (event) => {
-        setItem({ ...item, title: event.target.value })
+        setItem({ ...item, Title: { _text: event.target.value } })
     }
 
     const onChangePriceValueHandler = (event) => {
-        setItem({ ...item, price: { ...item.price, convertedFromValue: event.target.value } })
+        setItem({ ...item, CurrentPrice: { ...item.CurrentPrice, _text: event.target.value } })
     }
 
     const onChangePriceCurrencyHandler = (event) => {
-        setItem({ ...item, price: { ...item.price, convertedFromCurrency: event.target.value } })
+        setItem({ ...item, CurrentPrice: { ...item.CurrentPrice, _attributes: { currencyID: event.target.value } } })
     }
 
     const onChangeDescriptionHandler = (event) => {
-        setItem({ ...item, shortDescription: event.target.value })
+        setItem({ ...item, Description: { _text: event.target.value } })
     }
 
     const onClickSaveChangesHandler = () => {
-        setProductDescription(<ReactGenerator item={item} articleOptions={articleOptions} />);
+        setProductDescription(<ReactGenerator templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
     }
 
     const onClickDeleteDescriptionHandler = () => {
-        setItem({ ...item, shortDescription: null })
+        setItem({ ...item, Description: { _text: null } })
     }
 
     const onClickAddDescriptionHandler = () => {
-        setItem({ ...item, shortDescription: "" })
+        setItem({ ...item, Description: { _text: "" } })
     }
 
     const onClickPaymentOptionHandler = (index) => {
@@ -182,7 +204,7 @@ const templateGenerator = (props) => {
     }
 
     const onChangeShippingHandler = (event) => {
-        setArticleOptions({ ...articleOptions, shipping: event.target.value })
+        setItem({ ...item, ShippingCostSummary: { ShippingServiceCost: { _text: event.target.value } } });
     }
 
     const onChangeLegalInformationHandler = (event) => {
@@ -204,21 +226,30 @@ const templateGenerator = (props) => {
     const onClickSelectItemTemplateHandler = (index) => {
         setSelectedItemTemplate(itemTemplates[index].id)
     }
-    //###############################################################################################################################################################
 
+    const mapItemPaymentToArticleOptionPayment = (itemInput) => {
+        if (itemInput) {
+            let paymentOptions = itemInput.PaymentMethods.map(el => el._text)
+            let tmp = [...articleOptions.paymentOptions]
+            tmp.forEach(el => { if (paymentOptions.includes(el.ebayName)) { el.selected = true } })
+            console.log(tmp)
+            setArticleOptions({ ...articleOptions, paymentOptions: tmp })
+        }
+    }
+    //###############################################################################################################################################################
     let templateViewer = (
         itemTemplates.map((el, i) => {
             let selectedTemplate = itemTemplates.filter(el => el.id === selectedItemTemplate)
             let selectedIndex = itemTemplates.indexOf(...selectedTemplate);
-            return <Paper style={{ margin: "10px", backgroundColor: selectedIndex === i ? "white" : "#D1D1D1" }} onClick={() => onClickSelectItemTemplateHandler(i)}>
+            return <Paper style={{ margin: "10px", backgroundColor: selectedIndex === i ? "white" : "#D1D1D1", opacity: selectedIndex === i ? "1" : "0.2" }} onClick={() => onClickSelectItemTemplateHandler(i)}>
                 <Grid container spacing={2}>
                     <Grid item>
-                        <img style={{ opacity: selectedIndex === i ? "1" : "0.2" }} width="120px" alt="complex" src={el.img} />
+                        <img width="120px" alt="complex" src={el.img} />
                     </Grid>
                     <Grid item xs={12} sm container>
                         <Grid item xs container direction="column" spacing={2}>
                             <Grid item xs>
-                                <Typography style={{ opacity: selectedIndex === i ? "1" : "0.2" }} gutterBottom variant="subtitle2">
+                                <Typography gutterBottom variant="subtitle2">
                                     {el.name}
                                 </Typography>
                             </Grid>
@@ -394,19 +425,19 @@ const templateGenerator = (props) => {
     let information = (
         item ?
             <div>
-                <TextField onChange={(event) => onChangeTitleHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Titel" value={item.title} variant="outlined" />
-                <TextField onChange={(event) => onChangePriceValueHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Preis" value={item.price.convertedFromValue} variant="outlined" />
-                <TextField onChange={(event) => onChangeShippingHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Versandkosten" value={articleOptions.shipping} variant="outlined" ></TextField>
-                <TextField onChange={(event) => onChangePriceCurrencyHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Währung" value={item.price.convertedFromCurrency} variant="outlined" />
+                <TextField onChange={(event) => onChangeTitleHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Titel" value={item.Title._text} variant="outlined" />
+                <TextField onChange={(event) => onChangePriceValueHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Preis" value={item.CurrentPrice._text} variant="outlined" />
+                <TextField onChange={(event) => onChangeShippingHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Versandkosten" value={item.ShippingCostSummary.ShippingServiceCost._text} variant="outlined" ></TextField>
+                <TextField onChange={(event) => onChangePriceCurrencyHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Währung" value={item.CurrentPrice._attributes.currencyID} variant="outlined" />
             </div>
             : null
     )
 
     let description = (
         item ? (
-            item.shortDescription !== null ?
+            item.Description._text !== null ?
                 <div>
-                    <TextField multiline rows="5" onChange={(event) => onChangeDescriptionHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Beschreibung" value={item.shortDescription} variant="outlined" />
+                    <TextField multiline rows="5" onChange={(event) => onChangeDescriptionHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Beschreibung" value={item.Description._text} variant="outlined" />
                     <Button onClick={() => onClickDeleteDescriptionHandler()} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
                 </div>
                 :
@@ -417,13 +448,22 @@ const templateGenerator = (props) => {
             : null
     )
 
+    let aspects = (item ?
+        Array.isArray(item.ItemSpecifics.NameValueList) ?
+            item.ItemSpecifics.NameValueList.map(el => el = { name: el.Name._text, value: el.Value._text === "" ? el.Value._text : el.Value._text || el.Value.map(el => el._text).join(", ") })
+            :
+            (item.ItemSpecifics.NameValueList ?
+                [{ name: item.ItemSpecifics.NameValueList.Name._text, value: item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
+                : [])
+        : null)
+
     let localizedAspects = (
         item ?
             <div>
-                {item.localizedAspects.map((aspect, i) => (
+                {aspects.map((aspect, i) => (
                     <div id={i}>
                         <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspect.name} variant="outlined" />
-                        <TextField onChange={(event) => onChangeLocalizedAspectValueHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={aspect.value} variant="outlined" />
+                        <TextField onChange={(event) => onChangeLocalizedAspectValueHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspect.value) ? aspect.value.map(el => el._text).join(", ") : aspect.value} variant="outlined" />
                         <Button onClick={() => onClickDeleteLocalizedAspectHandler(i)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
                     </div>
                 ))}
@@ -532,7 +572,10 @@ const templateGenerator = (props) => {
 
     return (
         <div style={{ minHeight: "100vh", backgroundColor: "#eeeeee" }} >
+            <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
+            <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
+            <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
             {header}
             <div style={{ margin: "10px 2% 10px 2%" }}>
                 {toggleSearchbar}
