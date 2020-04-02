@@ -19,7 +19,8 @@ const createReactFromItem = (props) => {
     const shipping = props.item.ShippingCostSummary.ShippingServiceCost._text
     const legalInformation = props.articleOptions.legalInformation;
     const id = props.item.ItemID._text;
-
+    const variations = props.item.Variations ? props.item.Variations.VariationSpecificsSet.NameValueList.map(el => el = { name: el.Name._text, value: el.Value.map(el => el._text) }) : null;
+    console.log(variations)
     if (props.templateId === "dem-it-classic") {
         return (
             <html style={{ width: "100%" }}>
@@ -30,7 +31,7 @@ const createReactFromItem = (props) => {
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
                     <title>DemIT eBay Description Generator</title>
                 </head>
-                <body id="template-body">
+                <body style={{ backgroundColor: props.colors.primary }} id="template-body">
                     <div class="template-nav"> <input type="checkbox" id="template-nav-check" />
                         <div class="template-nav-header">
                             <div class="template-nav-title"> {seller} </div>
@@ -178,10 +179,6 @@ const createReactFromItem = (props) => {
                 </body>
             </html>
         )
-    } else if (props.templateId === "nüscht") {
-        return (
-            <h1>lol anderes template</h1>
-        )
     } else if (props.templateId === "dem-it-yellow") {
         return (
             <div id="template">
@@ -251,6 +248,23 @@ const createReactFromItem = (props) => {
                                                 })}
                                             </ul>
                                         </div>
+                                        {variations ?
+                                            <div>
+                                                <hr />
+                                                {variations.map(el => {
+                                                    return <div>
+                                                        <h3 class="template-variation-headline">{el.name}</h3>
+                                                        <div class="template-variation-inline">
+                                                            {el.value.map(el => {
+                                                                return <div class="template-variation">
+                                                                    <span>{el}</span>
+                                                                </div>
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                })}
+                                            </div>
+                                            : null}
                                         <div class="template-column-wrapper">
                                             <div class="template-column-50 template-price-container">
                                                 <h1 id="template-price">{price_value}</h1>

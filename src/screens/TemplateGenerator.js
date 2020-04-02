@@ -4,13 +4,15 @@ import ReactDOMServer from 'react-dom/server';
 import eBayApi from "../util/eBayApi";
 import config from "../config";
 import Miscellaneous from "../util/Miscellaneous"
+import ButtonColorPicker from "../components/ButtonColorPicker"
 const { FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
 const templateGenerator = (props) => {
+    const colors = ['#EAEAEA', '#483D3F', '#B78E4B', '#F25C54', '#628395']
     const [seller, setSeller] = new useState("");
     const [sellersItems, setSellersItems] = new useState();
-    const [productDescription, setProductDescription] = new useState(null);
+    const [productDescription, setProductDescription] = new useState();
     const [itemIdDropbox, setItemIdDropbox] = new useState("");
     const [itemIdInput, setItemIdInput] = new useState("");
     const [checked, setChecked] = new useState(false);
@@ -18,7 +20,31 @@ const templateGenerator = (props) => {
     const [loadingSellersItems, setLoadingSellersItems] = new useState(false);
     const [loadingItemTemplate, setLoadingItemTemplate] = new useState(false);
     const [selectedItemTemplate, setSelectedItemTemplate] = new useState("dem-it-classic");
-    const [itemTemplates, setItemTemplates] = new useState([{ id: "dem-it-classic", name: "dem-IT Classic Template", img: "https://dem-it.de/uploads/unknown.png" }, { id: "dem-it-yellow", name: "dem-IT Yellow Template", img: "https://dem-it.de/uploads/unknown.png" }]);
+    const [templateColorScheme, setTemplateColorScheme] = new useState({ primary: null, secondary: null, title: null, text: null });
+    const getColorSchemeById = (templateId) => {
+        let selected = itemTemplates.find((el) => {
+            return el.id === templateId;
+        })
+        return selected;
+    }
+    const [itemTemplates, setItemTemplates] = new useState(
+        [
+            {
+                id: "dem-it-classic",
+                name: "dem-IT Classic Template",
+                img: "https://dem-it.de/uploads/basic_thumbnail.jpg",
+                colors: { primary: "#026670", secondary: "#F6F6F6", title: "#FFFFFF", text: "#494949" }
+            }
+            ,
+            {
+                id: "dem-it-yellow",
+                name: "dem-IT Yellow Template",
+                img: "https://dem-it.de/uploads/solstorm_thumbnail.jpg",
+                colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
+            }
+        ]
+    )
+
     const [articleOptions, setArticleOptions] = new useState({
         paymentOptions: [
             { ebayName: "MoneyXferAccepted", selected: false, name: "Banktransfer", img: "https://template-builder.de/icons/payment/banktransfer.png" },
@@ -54,6 +80,25 @@ const templateGenerator = (props) => {
         ],
         legalInformation: null
     });
+
+
+
+    const onChangePrimaryColorPickerHandler = (color) => {
+        setTemplateColorScheme({ ...templateColorScheme, primary: color.hex });
+        console.log(`set to ${color.hex}`);
+    }
+    const onChangeSecondaryColorPickerHandler = (color) => {
+        setTemplateColorScheme({ ...templateColorScheme, secondary: color.hex });
+        console.log(`set to ${color.hex}`);
+    }
+    const onChangeTitleTextColorPickerHandler = (color) => {
+        setTemplateColorScheme({ ...templateColorScheme, title: color.hex });
+        console.log(`set to ${color.hex}`);
+    }
+    const onChangeTextColorPickerHandler = (color) => {
+        setTemplateColorScheme({ ...templateColorScheme, text: color.hex });
+        console.log(`set to ${color.hex}`);
+    }
 
     const onChangeSellerHandler = (event) => {
         setSeller(event.target.value);
@@ -103,7 +148,7 @@ const templateGenerator = (props) => {
         if (Ack._text === config.ACK_SUCCESS) {
             setItem(GetSingleItemResponse.Item)
             mapItemPaymentToArticleOptionPayment(GetSingleItemResponse.Item);
-            setProductDescription(<ReactGenerator templateId={templateId} item={GetSingleItemResponse.Item} articleOptions={articleOptions} />);
+            setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={templateId} item={GetSingleItemResponse.Item} articleOptions={articleOptions} />);
             alert(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`)
         } else if (Ack._text === config.ACK_FAILURE) {
             alert(`Fehler: ${GetSingleItemResponse.Errors.LongMessage._text}`)
@@ -180,7 +225,7 @@ const templateGenerator = (props) => {
     }
 
     const onClickSaveChangesHandler = () => {
-        setProductDescription(<ReactGenerator templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
+        setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
     }
 
     const onClickDeleteDescriptionHandler = () => {
@@ -221,10 +266,15 @@ const templateGenerator = (props) => {
 
     const onChangeSelectedItemTemplateHandler = (event) => {
         setSelectedItemTemplate(event.target.value)
+        let selected = itemTemplates.find((el) => {
+            return el.id === event.target.value;
+        })
+        setTemplateColorScheme(selected.colors);
     }
 
     const onClickSelectItemTemplateHandler = (index) => {
         setSelectedItemTemplate(itemTemplates[index].id)
+        setTemplateColorScheme(itemTemplates[index].colors);
     }
 
     const mapItemPaymentToArticleOptionPayment = (itemInput) => {
@@ -232,7 +282,6 @@ const templateGenerator = (props) => {
             let paymentOptions = itemInput.PaymentMethods.map(el => el._text)
             let tmp = [...articleOptions.paymentOptions]
             tmp.forEach(el => { if (paymentOptions.includes(el.ebayName)) { el.selected = true } })
-            console.log(tmp)
             setArticleOptions({ ...articleOptions, paymentOptions: tmp })
         }
     }
@@ -279,6 +328,42 @@ const templateGenerator = (props) => {
         </FormControl>
     )
 
+    if (!((!checked ? !(itemIdDropbox > "0") || loadingItemTemplate : !itemIdInput || loadingItemTemplate))) {
+        if (Array.from(Object.keys(templateColorScheme)).filter(el => templateColorScheme[el] === null).length > 0) {
+            setTemplateColorScheme(getColorSchemeById(selectedItemTemplate).colors);
+        }
+    }
+
+    let colorPickers = (<div>
+        <ButtonColorPicker
+            colors={colors}
+            triangle="hide"
+            templateColor={templateColorScheme.primary || colors[0]}
+            onChangeComplete={onChangePrimaryColorPickerHandler}
+            text="Primärfarbe" />
+
+        <ButtonColorPicker
+            colors={colors}
+            triangle="hide"
+            templateColor={templateColorScheme.secondary || colors[0]}
+            onChangeComplete={onChangeSecondaryColorPickerHandler}
+            text="Sekundärfarbe" />
+
+        <ButtonColorPicker
+            colors={colors}
+            triangle="hide"
+            templateColor={templateColorScheme.title || colors[0]}
+            onChangeComplete={onChangeTitleTextColorPickerHandler}
+            text="Textfarbe Titel" />
+
+        <ButtonColorPicker
+            colors={colors}
+            triangle="hide"
+            templateColor={templateColorScheme.text || colors[0]}
+            onChangeComplete={onChangeTextColorPickerHandler}
+            text="Textfarbe" />
+    </div>)
+
     let templateExpansion = (
         <ExpansionPanel disabled={(!checked ? !(itemIdDropbox > "0") || loadingItemTemplate : !itemIdInput || loadingItemTemplate)} >
             <ExpansionPanelSummary
@@ -293,6 +378,7 @@ const templateGenerator = (props) => {
   </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={{ padding: "8px 24px 8px 24px" }}>
+                {colorPickers}
                 {templateViewer}
             </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -571,7 +657,7 @@ const templateGenerator = (props) => {
     //###############################################################################################################################################################
 
     return (
-        <div style={{ minHeight: "100vh", backgroundColor: "#eeeeee" }} >
+        <div style={{ minHeight: "100vh", backgroundColor: "#ffffff" }} >
             <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
             <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />

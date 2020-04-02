@@ -84,7 +84,7 @@ const LandingScreen = (props) => {
     let landingPage = (
         <center style={{ marginTop: "25vh" }}>
             <div>
-                <img alt="dem-it Logo" style={{ margin: "10px auto 10px auto" }} width={"25%"} src="http://template-builder.de/uploads/template-builder-logo.PNG" />
+                <img alt="dem-it Logo" style={{ margin: "10px auto 10px auto" }} width={"25%"} src="https://template-builder.de/uploads/template-builder-logo.PNG" />
             </div>
             <div>
                 {/* <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="secondary" onClick={() => setCurrentScreen("2")}>REGISTRIEREN</Button> */}
