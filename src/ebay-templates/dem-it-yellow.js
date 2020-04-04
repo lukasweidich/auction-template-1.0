@@ -1,7 +1,26 @@
 import React from "react"
 
-//todo: enter props prefix before properties
 const dem_it_yellow = (props) => {
+    const title = props.item.Title._text;
+    const price_value = props.item.CurrentPrice._text
+    const price_currency = props.item.CurrentPrice._attributes.currencyID
+    const price = price_value + price_currency
+    const description = props.item.Description._text
+    const images = Array.isArray(props.item.PictureURL) ? [...props.item.PictureURL.map(el => el._text)] : [props.item.PictureURL._text]
+    const localizedAspects = Array.isArray(props.item.ItemSpecifics.NameValueList) ?
+        props.item.ItemSpecifics.NameValueList.map(el => el = { name: el.Name._text, value: el.Value._text === "" ? el.Value._text : el.Value._text || el.Value.map(el => el._text).join(", ") })
+        :
+        (props.item.ItemSpecifics.NameValueList ?
+            [{ name: props.item.ItemSpecifics.NameValueList.Name._text, value: props.item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
+            : null)
+    const seller = props.item.Seller.UserID._text;
+    const paymentOptions = props.articleOptions.paymentOptions.filter(el => el.selected);
+    const shippingOptions = props.articleOptions.shippingOptions.filter(el => el.selected);
+    const shipping = props.item.ShippingCostSummary.ShippingServiceCost._text
+    const legalInformation = props.articleOptions.legalInformation;
+    const id = props.item.ItemID._text;
+    const variations = props.item.Variations ? props.item.Variations.VariationSpecificsSet.NameValueList.map(el => el = { name: el.Name._text, value: el.Value.map(el => el._text) }) : null;
+
     return (<div id="template">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />

@@ -35,7 +35,9 @@ const ButtonColorPicker = (props) => {
 
     return (
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-            <div style={{ width: "fit-content" }}>
+            <div style={{ width: "auto", backgroundColor: props.templateColor || "#000000", background: "rgb(183, 142, 75)", height: "22px", width: "22px", position: "relative", border: ".5px solid black", float: "left", margin: "5px", borderRadius: "4px" }}>
+            </div>
+            <div style={{ width: "fit-content", float: "right" }}>
                 <Button onClick={() => handleClick()}>{props.text}</Button>
                 {displayColorPicker ? <div style={style.popover}>
                     <div style={{ zIndex: 10 }}>
@@ -47,8 +49,6 @@ const ButtonColorPicker = (props) => {
                             style={{ zIndex: 10 }} />
                     </div>
                 </div> : null}
-            </div>
-            <div style={{ width: "auto", backgroundColor: props.templateColor || "#000000", background: "rgb(183, 142, 75)", height: "22px", width: "22px", position: "relative", border: ".5px solid black", float: "left", margin: "auto", borderRadius: "4px" }}>
             </div>
         </div >
     )

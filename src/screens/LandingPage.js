@@ -16,7 +16,10 @@ const LandingScreen = (props) => {
         user,
     } = props;
 
-    props.setSignedIn((user ? true : false))
+    if (user) {
+        props.setUser(user);
+        props.setSignedIn(true);
+    }
 
     // 0 = landing, 1 = login, 2 = register
     const [currentScreen, setCurrentScreen] = new useState("0");
@@ -42,32 +45,24 @@ const LandingScreen = (props) => {
     }
 
     const onClickLogIn = () => {
-        console.log(logInEmail + ":" + logInPassword)
         loginUser();
     }
 
     const onClickRegister = () => {
-        console.log(logInEmail + ":" + logInPassword)
         registerUser();
     }
 
-
     const registerUser = () => {
         firebase.auth().createUserWithEmailAndPassword(registerEmail, registerPassword).catch(function (error) {
-            var errorCode = error.code;
             var errorMessage = error.message;
-            console.log(errorCode);
-            console.log(errorMessage);
+            alert(errorMessage);
         })
-        setCurrentScreen("1")
     }
 
     const loginUser = () => {
         firebase.auth().signInWithEmailAndPassword(logInEmail, logInPassword).catch(function (error) {
-            var errorCode = error.code;
             var errorMessage = error.message;
-            console.log(errorCode);
-            console.log(errorMessage);
+            alert(errorMessage);
         });
     }
 
@@ -87,7 +82,7 @@ const LandingScreen = (props) => {
                 <img alt="dem-it Logo" style={{ margin: "10px auto 10px auto" }} width={"25%"} src="https://template-builder.de/uploads/template-builder-logo.PNG" />
             </div>
             <div>
-                {/* <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="secondary" onClick={() => setCurrentScreen("2")}>REGISTRIEREN</Button> */}
+                <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="secondary" onClick={() => setCurrentScreen("2")}>REGISTRIEREN</Button>
                 <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="primary" onClick={() => setCurrentScreen("1")}>ANMELDEN</Button>
                 {/* <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="primary" onClick={signInWithGoogle}>ANMELDEN MIT GOOGLE</Button> */}
             </div>

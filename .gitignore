@@ -16,3 +16,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 config.js*
+
+#service file for google
+/src/Template_Builder-b91f97981c0b.json
