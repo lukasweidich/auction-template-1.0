@@ -1,6 +1,6 @@
+import config from "../config";
 const fetch = require('node-fetch');
 const convert = require('xml-js');
-const config = require("../config");
 
 const getAuthToken = async () => {
     var buffer = new Buffer(`${config.PROD_APP_ID__CLIENT_ID}:${config.PROD_CERT_ID__CLIENT_SECRET}`);
@@ -78,4 +78,4 @@ const getItemFromItemId = async (itemId) => {
     // return { response: json.GetSingleItemResponse.Item ? json.GetSingleItemResponse.Item.ItemSpecifics.NameValueList : json.GetSingleItemResponse.Errors, status: json.GetSingleItemResponse.Ack._text };
 }
 
-module.exports = { getAuthToken, getItemFromItemId, getItemsFromSeller }
+export default { getAuthToken, getItemFromItemId, getItemsFromSeller }

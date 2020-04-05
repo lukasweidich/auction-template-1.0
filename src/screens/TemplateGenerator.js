@@ -3,8 +3,8 @@ import ReactGenerator from "../util/ReactGenerator"
 import ReactDOMServer from 'react-dom/server';
 import Miscellaneous from "../util/Miscellaneous"
 import ButtonColorPicker from "../components/ButtonColorPicker"
-const eBayApi = require("../util/eBayApi");
-const config = require("../config");
+import eBayApi from "../util/eBayApi";
+import config from "../config";
 
 const { FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
@@ -454,7 +454,7 @@ const templateGenerator = (props) => {
         )
 
         let descriptionContainer = (
-            //todo: somehow remove pointer cursor 
+            //todo: somehow remove pointer cursor
             <ExpansionPanel style={{ cursor: "default!important" }} expanded disabled={loadingItemTemplate}>
                 <ExpansionPanelSummary
                     aria-controls="panel1a-content"

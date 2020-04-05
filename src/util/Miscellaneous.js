@@ -15,4 +15,4 @@ const mapItemsFromSellerToComboboxFormat = (sellersItems) => {
     return arr;
 }
 
-module.exports = { copyToClipboard, mapItemsFromSellerToComboboxFormat }
+export default { copyToClipboard, mapItemsFromSellerToComboboxFormat }

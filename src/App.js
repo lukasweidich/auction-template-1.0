@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import TemplateGenerator from "./screens/TemplateGenerator"
 import LandingPage from "./screens/LandingPage"
+import config from "./config";
 const fetch = require("node-fetch");
-const config = require("./config");
 
 const app = (props) => {
   const [signedIn, setSignedIn] = new useState(false);

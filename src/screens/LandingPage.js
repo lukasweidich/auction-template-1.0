@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import withFirebaseAuth from 'react-with-firebase-auth'
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
-const firebaseConfig = require("../config");
+import firebaseConfig from "../config";
 const { TextField, Button, AppBar, Toolbar, Typography } = require('@material-ui/core');
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const firebaseAppAuth = firebaseApp.auth();
