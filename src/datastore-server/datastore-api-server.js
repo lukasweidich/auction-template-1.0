@@ -16,11 +16,13 @@ app.get('/userid/:userId', function (req, res) {
 });
 
 app.post("/userid/:userId", (req, res) => {
-    // if (!datastoreApi.hasAnyAccessibleTemplates(req.params.userId)) {
-    datastoreApi.insertHasAccessNewUser({ acessibleTemplateIds: [{ templateId: "dem-it-classic" }], userId: req.params.userId }, req.params.userId).then(
-        res.send(`Successfully added dem-it-classic to userId: ${req.params.userId}`)
-    )
-    // }
+    datastoreApi.doesUserExist(req.params.userId).then(exists => {
+        if (!exists) {
+            datastoreApi.insertHasAccessNewUser({ acessibleTemplateIds: [{ templateId: "dem-it-classic" }], userId: req.params.userId }, req.params.userId).then(
+                res.send(`Successfully added dem-it-classic to userId: ${req.params.userId}`)
+            )
+        }
+    })
 })
 
 app.get('/cors/:xdd', async function (req, res) {

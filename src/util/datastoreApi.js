@@ -35,6 +35,15 @@ const getAccessibleTemplatesOfUser = (userId) => {
     });
 };
 
+const doesUserExist = (userId) => {
+    const query = datastore
+        .createQuery('hasAccess')
+        .filter("userId", "=", userId);
+    return datastore.runQuery(query).then(res => {
+        return res[0].length > 0;
+    });
+};
+
 const hasAccessibleTemplates = (userId) => {
     const query = datastore
         .createQuery('hasAccess')
@@ -46,4 +55,5 @@ const hasAccessibleTemplates = (userId) => {
 
 // getAccessibleTemplatesOfUser("z1wefYkT0afD5WEq0uWpCNDEWk62").then(console.log)
 // hasAccessibleTemplates("z1wefYkT0afD5WEq0uWpCNDEWk62").then(console.log)
-module.exports = { getAccessibleTemplatesOfUser, getHasAccess, insertHasAccess, insertHasAccessNewUser }
+// doesUserExist("dqdw").then(console.log)
+module.exports = { getAccessibleTemplatesOfUser, getHasAccess, insertHasAccess, insertHasAccessNewUser, doesUserExist }

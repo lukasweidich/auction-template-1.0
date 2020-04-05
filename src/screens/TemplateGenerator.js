@@ -698,7 +698,7 @@ const templateGenerator = (props) => {
         //###############################################################################################################################################################
 
         return (
-            props.templates ?
+            props.templates && props.templates.length > 0 ?
                 <div style={{ minHeight: "100vh", backgroundColor: "#eeeeee" }} >
                     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
                     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />

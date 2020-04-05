@@ -27,10 +27,10 @@ const app = (props) => {
   )
 
   if (user && !templates) {
-    fetch(`https://cors-anywhere.herokuapp.com/https://1ea31619.ngrok.io/userid/${user.uid}`, {
+    fetch(`https://cors-anywhere.herokuapp.com/https://1ffbecf5.ngrok.io/userid/${user.uid}`, {
       method: 'post'
     }).then(
-      fetch(`https://cors-anywhere.herokuapp.com/https://1ea31619.ngrok.io/userid/${user.uid}`).then(res => res.text()).then(accessibleTemplates => {
+      fetch(`https://cors-anywhere.herokuapp.com/https://1ffbecf5.ngrok.io/userid/${user.uid}`).then(res => res.text()).then(accessibleTemplates => {
         setTemplates(itemTemplates.filter(template => accessibleTemplates.includes(template.id)));
       })
     );
