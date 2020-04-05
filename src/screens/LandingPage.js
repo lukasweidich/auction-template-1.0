@@ -70,7 +70,7 @@ const LandingScreen = (props) => {
         <AppBar color="primary" position="static">
             <Toolbar>
                 <Typography variant="h6">
-                    demIT eBay Description Generator
+                    auction-template.com
           </Typography>
             </Toolbar>
         </AppBar>

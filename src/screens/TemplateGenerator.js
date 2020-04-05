@@ -12,7 +12,7 @@ const header = (
     <AppBar color="primary" position="static">
         <Toolbar>
             <Typography variant="h6">
-                demIT eBay Description Generator
+                auction-template.com
   </Typography>
         </Toolbar>
     </AppBar>
@@ -324,22 +324,6 @@ const templateGenerator = (props) => {
                     <ButtonColorPicker
                         colors={colors}
                         triangle="hide"
-                        templateColor={templateColorScheme.primary}
-                        onChangeComplete={onChangePrimaryColorPickerHandler}
-                        text="Farbe Header" />
-                </Grid>
-                <Grid item xs={12}>
-                    <ButtonColorPicker
-                        colors={colors}
-                        triangle="hide"
-                        templateColor={templateColorScheme.title}
-                        onChangeComplete={onChangeTitleTextColorPickerHandler}
-                        text="Textfarbe Header" />
-                </Grid>
-                <Grid item xs={12}>
-                    <ButtonColorPicker
-                        colors={colors}
-                        triangle="hide"
                         templateColor={templateColorScheme.secondary}
                         onChangeComplete={onChangeSecondaryColorPickerHandler}
                         text="Hintergrundfarbe" />
@@ -348,9 +332,25 @@ const templateGenerator = (props) => {
                     <ButtonColorPicker
                         colors={colors}
                         triangle="hide"
+                        templateColor={templateColorScheme.primary}
+                        onChangeComplete={onChangePrimaryColorPickerHandler}
+                        text="Akzentfarbe" />
+                </Grid>
+                <Grid item xs={12}>
+                    <ButtonColorPicker
+                        colors={colors}
+                        triangle="hide"
                         templateColor={templateColorScheme.text}
                         onChangeComplete={onChangeTextColorPickerHandler}
-                        text="Textfarbe" />
+                        text="Textfarbe 1" />
+                </Grid>
+                <Grid item xs={12}>
+                    <ButtonColorPicker
+                        colors={colors}
+                        triangle="hide"
+                        templateColor={templateColorScheme.title}
+                        onChangeComplete={onChangeTitleTextColorPickerHandler}
+                        text="Textfarbe 2" />
                 </Grid>
                 <Grid item style={{ float: "right" }}>
                     <Button style={{ margin: "2px", float: "right" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />)}>aktualisieren</Button>
