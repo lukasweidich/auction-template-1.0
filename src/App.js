@@ -27,7 +27,7 @@ const app = (props) => {
     ]
   )
 
-  if (user && !templates) {
+  if (user) {
     fetch(`${config.HEROKU_SERVER}/userid/${user.uid}`, {
       method: 'post'
     }).then(
