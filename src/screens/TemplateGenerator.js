@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import ReactGenerator from "../util/ReactGenerator"
 import ReactDOMServer from 'react-dom/server';
-import eBayApi from "../util/eBayApi";
-import config from "../config";
 import Miscellaneous from "../util/Miscellaneous"
 import ButtonColorPicker from "../components/ButtonColorPicker"
+const eBayApi = require("../util/eBayApi");
+const config = require("../config");
+
 const { FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 

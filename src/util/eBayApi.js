@@ -55,7 +55,7 @@ const getItemsFromSeller = async (seller, attemptNumber) => {
 //     itemId = "v1|" + itemId + "|0"
 //     var url = `${config.EBAY_BROWSE}${itemId}`;
 //     let token = await getAuthToken();
-//     var auth = "Bearer " + token
+//     var auth = "Bearer " + tokenF
 //     let item = await fetch(url, {
 //         headers: {
 //             "Authorization": auth
