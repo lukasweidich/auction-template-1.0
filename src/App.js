@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TemplateGenerator from "./screens/TemplateGenerator"
 import LandingPage from "./screens/LandingPage"
 const fetch = require("node-fetch");
+const config = require("./config");
 
 const app = (props) => {
   const [signedIn, setSignedIn] = new useState(false);
@@ -12,14 +13,14 @@ const app = (props) => {
     [
       {
         id: "dem-it-classic",
-        name: "dem-IT Classic Template",
+        name: "Free",
         img: "https://dem-it.de/uploads/basic_thumbnail.jpg",
         colors: { primary: "#026670", secondary: "#F6F6F6", title: "#FFFFFF", text: "#494949" }
       }
       ,
       {
         id: "dem-it-yellow",
-        name: "dem-IT Yellow Template",
+        name: "Solstorm",
         img: "https://dem-it.de/uploads/solstorm_thumbnail.jpg",
         colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
       }
@@ -27,10 +28,10 @@ const app = (props) => {
   )
 
   if (user && !templates) {
-    fetch(`https://cors-anywhere.herokuapp.com/https://1ffbecf5.ngrok.io/userid/${user.uid}`, {
+    fetch(`${config.HEROKU_SERVER}/userid/${user.uid}`, {
       method: 'post'
     }).then(
-      fetch(`https://cors-anywhere.herokuapp.com/https://1ffbecf5.ngrok.io/userid/${user.uid}`).then(res => res.text()).then(accessibleTemplates => {
+      fetch(`${config.HEROKU_SERVER}/userid/${user.uid}`).then(res => res.text()).then(accessibleTemplates => {
         setTemplates(itemTemplates.filter(template => accessibleTemplates.includes(template.id)));
       })
     );

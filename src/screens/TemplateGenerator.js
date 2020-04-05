@@ -19,7 +19,7 @@ const header = (
 )
 
 const templateGenerator = (props) => {
-    if (props.templates) {
+    if (props.templates && props.templates != null && props.templates.length > 0) {
         const colors = ['#EAEAEA', '#483D3F', '#B78E4B', '#F25C54', '#628395']
         const [seller, setSeller] = new useState("");
         const [sellersItems, setSellersItems] = new useState();
@@ -31,7 +31,7 @@ const templateGenerator = (props) => {
         const [loadingSellersItems, setLoadingSellersItems] = new useState(false);
         const [loadingItemTemplate, setLoadingItemTemplate] = new useState(false);
         const [selectedItemTemplate, setSelectedItemTemplate] = new useState(props.templates[0] ? props.templates[0].id : "");
-        const [templateColorScheme, setTemplateColorScheme] = new useState({ primary: null, secondary: null, title: null, text: null });
+        const [templateColorScheme, setTemplateColorScheme] = new useState(props.templates[0] ? props.templates[0].colors : null);
         const [articleOptions, setArticleOptions] = new useState({
             paymentOptions: [
                 { ebayName: "MoneyXferAccepted", selected: false, name: "Banktransfer", img: "https://template-builder.de/icons/payment/banktransfer.png" },
@@ -62,33 +62,22 @@ const templateGenerator = (props) => {
                 { id: "", selected: false, name: "Pickup", img: "https://template-builder.de/icons/shipping/pickup.png" },
                 { id: "", selected: false, name: "Post Germany", img: "https://template-builder.de/icons/shipping/post-germany.png" },
                 { id: "", selected: false, name: "UPS", img: "https://template-builder.de/icons/shipping/ups.png" },
-                { id: "", selected: false, name: "Worldmap", img: "https://template-builder.de/icons/shipping/worldmap.png" },
+                { id: "global", selected: false, name: "Worldmap", img: "https://template-builder.de/icons/shipping/worldmap.png" },
             ],
             legalInformation: null
         });
 
-
-        const getColorSchemeById = (templateId) => {
-            let selected = props.templates.find((el) => {
-                return el.id === templateId;
-            })
-            return selected;
-        }
-
-        // if one of colors is null: 
-        // getColorSchemeById(selectedItemTemplate)
-
         const onChangePrimaryColorPickerHandler = (color) => {
-            setTemplateColorScheme({ ...templateColorScheme, primary: color.hex });
+            setTemplateColorScheme({ ...templateColorScheme, primary: color });
         }
         const onChangeSecondaryColorPickerHandler = (color) => {
-            setTemplateColorScheme({ ...templateColorScheme, secondary: color.hex });
+            setTemplateColorScheme({ ...templateColorScheme, secondary: color });
         }
         const onChangeTitleTextColorPickerHandler = (color) => {
-            setTemplateColorScheme({ ...templateColorScheme, title: color.hex });
+            setTemplateColorScheme({ ...templateColorScheme, title: color });
         }
         const onChangeTextColorPickerHandler = (color) => {
-            setTemplateColorScheme({ ...templateColorScheme, text: color.hex });
+            setTemplateColorScheme({ ...templateColorScheme, text: color });
         }
 
         const onChangeSellerHandler = (event) => {
@@ -271,37 +260,45 @@ const templateGenerator = (props) => {
         const mapItemPaymentToArticleOptionPayment = (itemInput) => {
             if (itemInput) {
                 let paymentOptions = itemInput.PaymentMethods.map(el => el._text)
-                let tmp = [...articleOptions.paymentOptions]
-                tmp.forEach(el => { if (paymentOptions.includes(el.ebayName)) { el.selected = true } })
-                setArticleOptions({ ...articleOptions, paymentOptions: tmp })
+                let tmpPayment = [...articleOptions.paymentOptions]
+                tmpPayment.forEach(el => { if (paymentOptions.includes(el.ebayName)) { el.selected = true } })
+
+                let tmpShipping = [...articleOptions.shippingOptions]
+                tmpShipping = tmpShipping.map(el => {
+                    if (el.id === "global") {
+                        el = { ...el, selected: itemInput.GlobalShipping._text == "true" };
+                        return el;
+                    } else {
+                        return el;
+                    }
+                })
+
+                setArticleOptions({ ...articleOptions, paymentOptions: tmpPayment, shippingOptions: tmpShipping })
             }
         }
         //###############################################################################################################################################################
 
         let templateViewer = (
-            <Grid container justify="center">
-                {props.templates.map((el, i) => {
-                    let selectedTemplate = props.templates.filter(el => el.id === selectedItemTemplate)
-                    let selectedIndex = props.templates.indexOf(...selectedTemplate);
-                    return (
-                        <Paper>
-                            <Grid item style={{ margin: "10px", backgroundColor: selectedIndex === i ? "white" : "#D1D1D1", opacity: selectedIndex === i ? "1" : "0.2" }} onClick={() => onClickSelectItemTemplateHandler(i)} xs={6} spacing={2}>
+            < div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }} >
+                {
+                    props.templates.map((el, i) => {
+                        let selectedTemplate = props.templates.filter(el => el.id === selectedItemTemplate)
+                        let selectedIndex = props.templates.indexOf(...selectedTemplate);
+                        return (
+                            <Paper style={{ margin: "10px", backgroundColor: selectedIndex === i ? "white" : "#D1D1D1", opacity: selectedIndex === i ? "1" : "0.2" }} onClick={() => onClickSelectItemTemplateHandler(i)}>
                                 <Grid item>
                                     <img width="120px" alt="complex" src={el.img} />
                                 </Grid>
-                                <Grid item container>
-                                    <Grid item container direction="column" spacing={2}>
-                                        <Grid item >
-                                            <Typography gutterBottom variant="subtitle2">
-                                                {el.name}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
+                                <Grid item >
+                                    <center>
+                                        {el.name}
+                                    </center>
                                 </Grid>
-                            </Grid>
-                        </Paper>)
-                })}
-            </Grid>
+                            </Paper>
+                        )
+                    })
+                }
+            </div >
         )
 
         let templateSelector = (
@@ -314,7 +311,6 @@ const templateGenerator = (props) => {
                     defaultValue={selectedItemTemplate}
                     width="100px"
                     labelWidth="200"
-                    disabled={(!checked ? !(itemIdDropbox > "0") || loadingItemTemplate : !itemIdInput || loadingItemTemplate)}
                 >
                     {props.templates.map(el => {
                         return <MenuItem value={el.id}>{el.name}</MenuItem>
@@ -322,79 +318,45 @@ const templateGenerator = (props) => {
                 </Select>
             </FormControl>
         )
-
-        // if (!((!checked ? !(itemIdDropbox > "0") || loadingItemTemplate : !itemIdInput || loadingItemTemplate))) {
-        // if (Array.from(Object.keys(templateColorScheme)).filter(el => templateColorScheme[el] === null).length > 0) {
-        //     setTemplateColorScheme(getColorSchemeById(selectedItemTemplate).colors);
-        // }
-        // }
-
-        let colorPickers = (<Grid container>
-            <Grid item>
-                <ButtonColorPicker
-                    colors={colors}
-                    triangle="hide"
-                    templateColor={templateColorScheme.primary || colors[0]}
-                    onChangeComplete={onChangePrimaryColorPickerHandler}
-                    text="Primärfarbe" />
-            </Grid>
-            <Grid item>
-                <ButtonColorPicker
-                    colors={colors}
-                    triangle="hide"
-                    templateColor={templateColorScheme.secondary || colors[0]}
-                    onChangeComplete={onChangeSecondaryColorPickerHandler}
-                    text="Sekundärfarbe" />
-            </Grid>
-            <Grid item>
-                <ButtonColorPicker
-                    colors={colors}
-                    triangle="hide"
-                    templateColor={templateColorScheme.title || colors[0]}
-                    onChangeComplete={onChangeTitleTextColorPickerHandler}
-                    text="Textfarbe Titel" />
-            </Grid>
-            <Grid item>
-                <ButtonColorPicker
-                    colors={colors}
-                    triangle="hide"
-                    templateColor={templateColorScheme.text || colors[0]}
-                    onChangeComplete={onChangeTextColorPickerHandler}
-                    text="Textfarbe" />
-            </Grid>
-            <Grid item>
-                <Button variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />)}>aktualisieren</Button>
-            </Grid>
-        </Grid >)
-
-        //     let templateExpansion = (
-        //         <ExpansionPanel disabled={(!checked ? !(itemIdDropbox > "0") || loadingItemTemplate : !itemIdInput || loadingItemTemplate)} >
-        //             <ExpansionPanelSummary
-        //                 expandIcon={<span className="material-icons">
-        //                     expand_more
-        // </span>}
-        //                 aria-controls="panel1a-content"
-        //                 id="panel1a-header"
-        //             >
-        //                 <Typography variant="h6">
-        //                     VORLAGEN
-        //   </Typography>
-        //             </ExpansionPanelSummary>
-        //             <ExpansionPanelDetails style={{ padding: "8px 24px 8px 24px" }}>
-        //                 <Grid container spacing={1}>
-        //                     <Grid item xs={12}>
-        //                         {colorPickers}
-        //                     </Grid>
-        //                     <Grid item xs={12}>
-        //                         {templateViewer}
-        //                     </Grid>
-        //                     <Grid item xs={12}>
-        //                         <Button variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />)}>Vorlage aktualisieren</Button>
-        //                     </Grid>
-        //                 </Grid>
-        //             </ExpansionPanelDetails>
-        //         </ExpansionPanel>
-        //     )
+        let colorPickers = (
+            <Grid container>
+                <Grid item xs={12}>
+                    <ButtonColorPicker
+                        colors={colors}
+                        triangle="hide"
+                        templateColor={templateColorScheme.primary}
+                        onChangeComplete={onChangePrimaryColorPickerHandler}
+                        text="Farbe Header" />
+                </Grid>
+                <Grid item xs={12}>
+                    <ButtonColorPicker
+                        colors={colors}
+                        triangle="hide"
+                        templateColor={templateColorScheme.title}
+                        onChangeComplete={onChangeTitleTextColorPickerHandler}
+                        text="Textfarbe Header" />
+                </Grid>
+                <Grid item xs={12}>
+                    <ButtonColorPicker
+                        colors={colors}
+                        triangle="hide"
+                        templateColor={templateColorScheme.secondary}
+                        onChangeComplete={onChangeSecondaryColorPickerHandler}
+                        text="Hintergrundfarbe" />
+                </Grid>
+                <Grid item xs={12}>
+                    <ButtonColorPicker
+                        colors={colors}
+                        triangle="hide"
+                        templateColor={templateColorScheme.text}
+                        onChangeComplete={onChangeTextColorPickerHandler}
+                        text="Textfarbe" />
+                </Grid>
+                <Grid item style={{ float: "right" }}>
+                    <Button style={{ margin: "2px", float: "right" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />)}>aktualisieren</Button>
+                </Grid>
+            </Grid >
+        )
 
         let searchBar = null;
         if (!checked) {

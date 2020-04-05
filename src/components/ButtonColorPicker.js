@@ -8,48 +8,41 @@ const ButtonColorPicker = (props) => {
     const [displayColorPicker, setDisplayColorPicker] = new useState(false);
 
     const handleClick = () => {
-        setDisplayColorPicker(!displayColorPicker);
+        setDisplayColorPicker(!displayColorPicker)
     };
 
     const handleClose = () => {
-        setDisplayColorPicker(false);
-    };
-    const handleOpen = () => {
-        console.log("tests")
-        setDisplayColorPicker(true);
+        setDisplayColorPicker(false)
     };
 
-    const style = {
-        popover: {
-            position: 'absolute',
-            zIndex: '2',
-        },
-        cover: {
-            position: 'fixed',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-        }
+    const handleChange = (color, event) => {
+        props.onChangeComplete(color.hex)
+    }
+
+    const popover = {
+        position: 'absolute',
+        zIndex: '2',
+    }
+    const cover = {
+        position: 'fixed',
+        top: '0px',
+        right: '0px',
+        bottom: '0px',
+        left: '0px',
     }
 
     return (
-        <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-            <div style={{ width: "auto", backgroundColor: props.templateColor || "#000000", background: "rgb(183, 142, 75)", height: "22px", width: "22px", position: "relative", border: ".5px solid black", float: "left", margin: "5px", borderRadius: "4px" }}>
+        <div>
+            <div style={{ margin: "2px", display: "flex", flexDirection: "row", alignItems: "center" }} onClick={handleClick}>
+                <div style={{ background: props.templateColor, height: "22px", width: "22px", cursor: "pointer", position: "relative", border: "1px solid black", borderRadius: "4px" }}></div>
+                <Button>{props.text}</Button>
             </div>
-            <div style={{ width: "fit-content", float: "right" }}>
-                <Button onClick={() => handleClick()}>{props.text}</Button>
-                {displayColorPicker ? <div style={style.popover}>
-                    <div style={{ zIndex: 10 }}>
-                        <BlockPicker
-                            colors={props.colors}
-                            triangle={props.triangle}
-                            color={props.templateColor || props.colors[0]}
-                            onChangeComplete={props.onChangeComplete}
-                            style={{ zIndex: 10 }} />
-                    </div>
-                </div> : null}
-            </div>
+            {
+                displayColorPicker ? <div style={popover}>
+                    <div style={cover} onClick={handleClose} />
+                    <BlockPicker color={props.templateColor} colors={props.colors} onChangeComplete={handleChange} triangle={"hide"} style={{ fontFamily: "sans-serif" }} />
+                </div> : null
+            }
         </div >
     )
 }
