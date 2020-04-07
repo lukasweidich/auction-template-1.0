@@ -5,6 +5,7 @@ import Miscellaneous from "../util/Miscellaneous"
 import ButtonColorPicker from "../components/ButtonColorPicker"
 import eBayApi from "../util/eBayApi";
 import config from "../config";
+import './TemplateGenerator.css';
 
 const { FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
@@ -65,7 +66,8 @@ const templateGenerator = (props) => {
                 { id: "", selected: false, name: "UPS", img: "https://template-builder.de/icons/shipping/ups.png" },
                 { id: "global", selected: false, name: "Worldmap", img: "https://template-builder.de/icons/shipping/worldmap.png" },
             ],
-            legalInformation: null
+            legalInformation: null,
+            sellerName: null
         });
 
         const onChangePrimaryColorPickerHandler = (color) => {
@@ -245,6 +247,18 @@ const templateGenerator = (props) => {
             setArticleOptions({ ...articleOptions, legalInformation: "" })
         }
 
+        const onChangeSellerNameHandler = (event) => {
+            setArticleOptions({ ...articleOptions, sellerName: event.target.value })
+        }
+
+        const onClickDeleteSellerNameHandler = () => {
+            setArticleOptions({ ...articleOptions, sellerName: null })
+        }
+
+        const onClickAddSellerNameHandler = () => {
+            setArticleOptions({ ...articleOptions, sellerName: "" })
+        }
+
         const onChangeSelectedItemTemplateHandler = (event) => {
             setSelectedItemTemplate(event.target.value)
             let selected = props.templates.find((el) => {
@@ -354,7 +368,7 @@ const templateGenerator = (props) => {
                         text="Textfarbe 2" />
                 </Grid>
                 <Grid item style={{ float: "right" }}>
-                    <Button style={{ margin: "2px", float: "right" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />)}>aktualisieren</Button>
+                    <Button style={{ margin: "2px", float: "left" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />)}>aktualisieren</Button>
                 </Grid>
             </Grid >
         )
@@ -574,12 +588,18 @@ const templateGenerator = (props) => {
                 : null
         )
 
+        let sellerName =
+            item ?
+                <TextField onChange={(event) => onChangeSellerNameHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Shopname" value={articleOptions.sellerName || item.Seller.UserID._text} variant="outlined" />
+                : null
+
         let form = (
             item ? (
                 <Grid container spacing={3}>
                     <div width="100%" noValidate autoComplete="off">
                         <Grid item xs={11}>
                             <h1>Informationen</h1>
+                            {sellerName}
                             {information}
                         </Grid>
                         <Grid item xs={11}>
@@ -637,25 +657,37 @@ const templateGenerator = (props) => {
 
 
         let templateInputContainer = (
-            < Grid container spacing={3} >
-                <Grid item xs={6}>
-                    {colorPickers}
-                </Grid>
-                <Grid item xs={6}>
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start" }}>
+                <div>
                     {templateViewer}
-                </Grid>
-            </Grid >
+                </div>
+                <div>
+                    {colorPickers}
+                </div>
+            </div >
         )
         let inputContainer = (
-            <Grid container spacing={3}>
-                <Grid item xs={3}>
-                    {toggleSearchbar}
-                    {searchBar}
-                </Grid>
-                <Grid item xs={3}>
+            <div id="template-generator-wrapper" style={{ width: "fit-content", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                <div className="template-generator-section" style={{ width: "33.33%", display: "flex", flexDirection: "row", justifySelf: "flex-start" }}>
+                    <div>
+                        {toggleSearchbar}
+                        {searchBar}
+                    </div>
+                </div>
+                {/* <div item xs={3}>
                     {templateInputContainer}
-                </Grid>
-            </Grid>
+                </div> */}
+                <div className="template-generator-section" style={{ width: "33.33%", display: "flex", flexDirection: "row", justifySelf: "flex-start" }}>
+                    <div>
+                        {templateViewer}
+                    </div>
+                </div>
+                <div className="template-generator-section" style={{ width: "33.33%", display: "flex", flexDirection: "row", justifySelf: "flex-start" }}>
+                    <div>
+                        {colorPickers}
+                    </div>
+                </div>
+            </div>
         )
 
         //###############################################################################################################################################################

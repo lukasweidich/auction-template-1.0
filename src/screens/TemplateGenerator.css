@@ -1,0 +1,14 @@
+@media screen and (max-width: 768px) {
+    .template-generator-section {
+        width: 100%;
+    }
+    #template-generator-wrapper {
+        flex-direction: column;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        background-color: lightblue!important;
+    }
+}

@@ -15,7 +15,8 @@ const dem_it_yellow = (props) => {
         (props.item.ItemSpecifics.NameValueList ?
             [{ name: props.item.ItemSpecifics.NameValueList.Name._text, value: props.item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
             : null)
-    const seller = props.item.Seller.UserID._text;
+    const sellerDisplay = props.articleOptions.sellerName || props.item.Seller.UserID._text
+    const seller = props.item.Seller.UserID._text
     const paymentOptions = props.articleOptions.paymentOptions.filter(el => el.selected);
     const shippingOptions = props.articleOptions.shippingOptions.filter(el => el.selected);
     const shipping = props.item.ShippingCostSummary.ShippingServiceCost._text
@@ -48,7 +49,7 @@ const dem_it_yellow = (props) => {
         <div style={{ ...style.title, ...style.primary }} class="template-nav" >
             <input type="checkbox" id="template-nav-check" />
             <div class="template-nav-header">
-                <div class="template-nav-title" style={style.title}> {seller} </div>
+                <div class="template-nav-title" style={style.title}> {sellerDisplay} </div>
             </div>
             <div class="template-nav-btn">
                 <label for="template-nav-check">
