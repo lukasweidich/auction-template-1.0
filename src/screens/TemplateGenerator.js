@@ -7,7 +7,7 @@ import eBayApi from "../util/eBayApi";
 import config from "../config";
 import './TemplateGenerator.css';
 
-const { FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
+const { InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
 const header = (
@@ -67,7 +67,10 @@ const templateGenerator = (props) => {
                 { id: "global", selected: false, name: "Worldmap", img: "https://template-builder.de/icons/shipping/worldmap.png" },
             ],
             legalInformation: null,
-            sellerName: null
+            sellerName: null,
+            additionalAspects: [{
+                name: "name0", value: [{ name: "name1", value: "value1" }, { name: "name2", value: "value2" }]
+            }]
         });
 
         const onChangePrimaryColorPickerHandler = (color) => {
@@ -309,7 +312,10 @@ const templateGenerator = (props) => {
         )
 
         let templateSelector = (
-            <FormControl style={{ minWidth: "400px" }}>
+            <FormControl size="small" style={{ minWidth: "400px" }}>
+                <InputLabel>
+                    Template Design
+        </InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -317,9 +323,10 @@ const templateGenerator = (props) => {
                     onChange={onChangeSelectedItemTemplateHandler}
                     width="100px"
                     labelWidth={200}
+                    size="small"
                 >
                     {props.templates.map((el, i) => {
-                        return <MenuItem key={i} value={el.id}>{el.name}</MenuItem>
+                        return <MenuItem size="small" key={i} value={el.id}>{el.name}</MenuItem>
                     })}
                 </Select>
             </FormControl>
@@ -364,6 +371,8 @@ const templateGenerator = (props) => {
             </Grid >
         )
 
+
+        let placeholderText = (sellersItems ? "Produkt suchen" : "Bitte einen eBay Nutzernamen eingeben")
         let searchBar = null;
         if (!checked) {
             searchBar =
@@ -388,12 +397,12 @@ const templateGenerator = (props) => {
                             <Autocomplete
                                 getOptionLabel={option => option.value + " - " + option.text}
                                 style={{ width: 400 }}
-                                renderInput={params => <TextField {...params} />}
+                                renderInput={params => <TextField label={placeholderText} {...params} />}
                                 variant="outlined"
-                                size="small"
                                 options={sellersItems ? sellersItems.sort((a, b) => -b.text.localeCompare(a.text)) : []}
                                 onChange={onChangeItemDropboxHandler}
                                 disabled={!sellersItems}
+                                size="small"
                             />
                         </Grid>
                     </Grid >
@@ -511,14 +520,34 @@ const templateGenerator = (props) => {
         let localizedAspects = (
             item ?
                 <div>
-                    {aspects.map((aspect, i) => (
-                        <div key={i} id={i}>
-                            <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspect.name} variant="outlined" />
-                            <TextField onChange={(event) => onChangeLocalizedAspectValueHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspect.value) ? aspect.value.map(el => el._text).join(", ") : aspect.value} variant="outlined" />
-                            <Button onClick={() => onClickDeleteLocalizedAspectHandler(i)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                    <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" value={"Artikelmerkmale"} variant="outlined" />
+                    <Button variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe LÖSCHEN</Button>
+                    <div style={{ marginLeft: "50px" }} >
+                        {aspects.map((aspect, i) => (
+                            <div key={i} id={i}>
+                                <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspect.name} variant="outlined" />
+                                <TextField onChange={(event) => onChangeLocalizedAspectValueHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspect.value) ? aspect.value.map(el => el._text).join(", ") : aspect.value} variant="outlined" />
+                                <Button onClick={() => onClickDeleteLocalizedAspectHandler(i)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                            </div>
+                        ))}
+                        <Button style={{ margin: "10px 2% 10px 2%" }} onClick={onClickAddLocalizedAspect} >HINZUFÜGEN</Button>
+                    </div>
+                    {articleOptions && articleOptions.additionalAspects ?
+                        <div>
+                            {articleOptions.additionalAspects.map((el, i) => {
+                                return (<div>
+                                    <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" value={el.name} variant="outlined" />
+                                    {el.value.map((aspect, i) => (
+                                        <div key={i} id={i}>
+                                            <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspect.name} variant="outlined" />
+                                            <TextField onChange={(event) => onChangeLocalizedAspectValueHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspect.value) ? aspect.value.map(el => el._text).join(", ") : aspect.value} variant="outlined" />
+                                            <Button onClick={() => onClickDeleteLocalizedAspectHandler(i)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                                        </div>
+                                    ))}
+                                </div>)
+                            })}
                         </div>
-                    ))}
-                    <Button style={{ margin: "10px 2% 10px 2%" }} onClick={onClickAddLocalizedAspect} >HINZUFÜGEN</Button>
+                        : null}
                 </div>
                 :
                 null
