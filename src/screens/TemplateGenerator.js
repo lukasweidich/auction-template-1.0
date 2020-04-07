@@ -69,10 +69,63 @@ const templateGenerator = (props) => {
             legalInformation: null,
             sellerName: null,
             aspectHeadline: "Artikelmerkmale",
-            additionalAspects: [{
-                name: "name0", value: [{ name: "name1", value: "value1" }, { name: "name2", value: "value2" }]
-            }],
+            additionalAspects: [
+                // {
+                //     name: "name0", value: [{ name: "name1", value: "value1" }, { name: "name2", value: "value2" }],
+                // },
+
+                // {
+                //     name: "name0", value: [{ name: "name1", value: "value1" }, { name: "name2", value: "value2" }],
+                // }
+            ],
+            xd: "Lulz"
         });
+
+        const onAddAdditionalAspectGroup = () => {
+            var tmp = [...articleOptions.additionalAspects];
+            tmp.push({ name: "", value: [] })
+            /*
+            let a = {b:[]}
+            let x = [...a.b]
+            console.log(x)
+            x.push({a:1,b:42})
+            console.log(x)
+            */
+            setArticleOptions({ ...articleOptions, additionalAspects: tmp })
+        }
+        const onAddAdditionalAspectItem = (index) => {
+            var array = [...articleOptions.additionalAspects];
+            array[index].push({ name: "", value: "" });
+            setArticleOptions({ ...articleOptions, additionalAspects: array })
+        }
+        const onDeleteAdditionalAspectGroup = (index) => {
+            var array = [...articleOptions.additionalAspects];
+            array.splice(index, 1)
+            setArticleOptions({ ...articleOptions, additionalAspects: array })
+        }
+        const onDeleteAdditionalAspectItem = (indexGroup, indexItem) => {
+            var tmp = [...articleOptions.additionalAspects];
+            tmp[indexGroup].splice(indexItem, 1)
+            setArticleOptions({ ...articleOptions, additionalAspects: tmp })
+        }
+        const onChangeAdditionalAspectTitle = (event, indexGroup) => {
+            var tmp = [...articleOptions.additionalAspects][indexGroup];
+            tmp = { ...tmp, name: event.target.value }
+            setArticleOptions({ ...articleOptions, additionalAspects: tmp })
+        }
+        const onChangeAdditionalAspectName = (event, indexGroup, indexItem) => {
+            var group = [...articleOptions.additionalAspects][indexGroup];
+            var item = group.value[indexItem]
+            var tmp = { ...item, name: event.target.value }
+            group[indexItem] = tmp;
+            setArticleOptions({ ...articleOptions, additionalAspects: group })
+        }
+        const onChangeAdditionalAspectValue = (event, indexGroup, indexItem) => {
+            var group = [...articleOptions.additionalAspects][indexGroup];
+            var item = group.value[indexItem]
+            var tmp = { ...item, value: event.target.value }
+            group[indexItem] = tmp;
+        }
 
         const onChangeAspectHeadlineHandler = event => {
             setArticleOptions({ ...articleOptions, aspectHeadline: event.target.value })
@@ -537,23 +590,26 @@ const templateGenerator = (props) => {
                         ))}
                         <Button style={{ margin: "10px 2% 10px 2%" }} onClick={onClickAddLocalizedAspect} >HINZUFÜGEN</Button>
                     </div>
-                    <Button variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe HINZUFÜGEN</Button>
                     {articleOptions && articleOptions.additionalAspects ?
                         <div>
-                            {articleOptions.additionalAspects.map((el, i) => {
+                            {articleOptions.additionalAspects.map((el, groupIndex) => {
                                 return (<div>
-                                    <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" value={el.name} variant="outlined" />
-                                    {el.value.map((aspect, i) => (
-                                        <div key={i} id={i}>
-                                            <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspect.name} variant="outlined" />
-                                            <TextField onChange={(event) => onChangeLocalizedAspectValueHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspect.value) ? aspect.value.map(el => el._text).join(", ") : aspect.value} variant="outlined" />
-                                            <Button onClick={() => onClickDeleteLocalizedAspectHandler(i)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                                    <TextField onChange={(event) => onChangeAdditionalAspectTitle(event, groupIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" value={el.name} variant="outlined" />
+                                    <Button onClick={onDeleteAdditionalAspectGroup(groupIndex)} variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe LÖSCHEN</Button>
+                                    {el.value.map((aspect, itemIndex) => (
+                                        <div key={itemIndex} id={itemIndex}>
+                                            <TextField onChange={(event) => onChangeAdditionalAspectName(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspect.name} variant="outlined" />
+                                            <TextField onChange={(event) => onChangeAdditionalAspectValue(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={aspect.value} variant="outlined" />
+                                            <Button onClick={() => onDeleteAdditionalAspectItem(groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
                                         </div>
                                     ))}
-                                </div>)
+                                    <Button style={{ margin: "10px 2% 10px 2%" }} onClick={onAddAdditionalAspectItem} >HINZUFÜGEN</Button>
+                                </div>
+                                )
                             })}
                         </div>
                         : null}
+                    <Button onClick={onAddAdditionalAspectGroup} variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe HINZUFÜGEN</Button>
                 </div>
                 :
                 null
@@ -680,7 +736,7 @@ const templateGenerator = (props) => {
         )
 
         let inputContainer = (
-            <div id="template-generator-wrapper" style={{ width: "fit-content", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <div className="template-generator-wrapper" style={{ width: "fit-content", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                 <div className="template-generator-section" style={{ width: "33.33%", display: "flex", flexDirection: "row", justifySelf: "flex-start" }}>
                     <div>
                         {toggleSearchbar}

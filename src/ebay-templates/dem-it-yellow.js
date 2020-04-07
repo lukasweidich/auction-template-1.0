@@ -101,7 +101,7 @@ const dem_it_yellow = (props) => {
                             </div>
                             <div className="col col-md-12 order-2">
                                 <div className="content__bulletpoints">
-                                    <h1>{aspectHeadline}</h1>
+                                    <h2 style={style.text} id="template-title">{aspectHeadline}</h2>
                                     <ul style={{ listStyleType: "none" }} className="bulletpoints__list" id="template-aspects">
                                         {localizedAspects.map((el, i) => {
                                             return <li key={i} style={style.text} className="bulletpoints__item"><i aria-hidden="true" className="fa fa-chevron-right"></i><span style={{ fontWeight: 700 }}>{el.name}: </span>{el.value}</li>
