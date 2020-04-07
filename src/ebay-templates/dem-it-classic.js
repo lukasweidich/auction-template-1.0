@@ -38,11 +38,19 @@ const dem_it_classic = (props) => {
                     <div className="template-nav-header">
                         <div className="template-nav-title" style={style.title}> {sellerDisplay} </div>
                     </div>
-                    <div className="template-nav-btn"><label htmlFor="template-nav-check"><span></span><span></span><span></span></label></div>
+                    <div className="template-nav-btn">
+                        <label htmlFor="template-nav-check">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </label>
+                    </div>
                     <div className="template-nav-links">
                         <a href={`https://www.ebay.de/usr/${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Unser Shop</a>
+                        <a href={` https://www.ebay.de/sch/${seller}/m.html?_nkw=&_armrs=1&_ipg=&_from=`} rel="noopener noreferrer" target="_blank" style={style.title}>Unsere Artikel</a>
                         <a href={`https://www.ebay.de/fdbk/feedback_profile/${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Bewertungen</a>
-                        <a href={`https://contact.ebay.de/ws/eBayISAPI.dll?FindAnswers&requested=${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Kontakt</a>
+                        <a href={`https://contact.ebay.de/ws/eBayISAPI.dll?FindAnswers&requested=${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Fragen?</a>
                     </div>
                 </div>
                 <div id="layout__layout-4">
