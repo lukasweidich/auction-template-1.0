@@ -68,10 +68,15 @@ const templateGenerator = (props) => {
             ],
             legalInformation: null,
             sellerName: null,
+            aspectHeadline: "Artikelmerkmale",
             additionalAspects: [{
                 name: "name0", value: [{ name: "name1", value: "value1" }, { name: "name2", value: "value2" }]
-            }]
+            }],
         });
+
+        const onChangeAspectHeadlineHandler = event => {
+            setArticleOptions({ ...articleOptions, aspectHeadline: event.target.value })
+        }
 
         const onChangePrimaryColorPickerHandler = (color) => {
             setTemplateColorScheme({ ...templateColorScheme, primary: color });
@@ -314,7 +319,7 @@ const templateGenerator = (props) => {
         let templateSelector = (
             <FormControl size="small" style={{ minWidth: "400px" }}>
                 <InputLabel>
-                    Template Design
+                    Design
         </InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -520,7 +525,7 @@ const templateGenerator = (props) => {
         let localizedAspects = (
             item ?
                 <div>
-                    <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" value={"Artikelmerkmale"} variant="outlined" />
+                    <TextField onChange={(event) => onChangeAspectHeadlineHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" value={articleOptions.aspectHeadline} variant="outlined" />
                     <Button variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe LÖSCHEN</Button>
                     <div style={{ marginLeft: "50px" }} >
                         {aspects.map((aspect, i) => (
@@ -532,6 +537,7 @@ const templateGenerator = (props) => {
                         ))}
                         <Button style={{ margin: "10px 2% 10px 2%" }} onClick={onClickAddLocalizedAspect} >HINZUFÜGEN</Button>
                     </div>
+                    <Button variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe HINZUFÜGEN</Button>
                     {articleOptions && articleOptions.additionalAspects ?
                         <div>
                             {articleOptions.additionalAspects.map((el, i) => {
