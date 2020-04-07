@@ -251,14 +251,6 @@ const templateGenerator = (props) => {
             setArticleOptions({ ...articleOptions, sellerName: event.target.value })
         }
 
-        const onClickDeleteSellerNameHandler = () => {
-            setArticleOptions({ ...articleOptions, sellerName: null })
-        }
-
-        const onClickAddSellerNameHandler = () => {
-            setArticleOptions({ ...articleOptions, sellerName: "" })
-        }
-
         const onChangeSelectedItemTemplateHandler = (event) => {
             setSelectedItemTemplate(event.target.value)
             let selected = props.templates.find((el) => {
@@ -281,7 +273,7 @@ const templateGenerator = (props) => {
                 let tmpShipping = [...articleOptions.shippingOptions]
                 tmpShipping = tmpShipping.map(el => {
                     if (el.id === "global") {
-                        el = { ...el, selected: itemInput.GlobalShipping._text == "true" };
+                        el = { ...el, selected: itemInput.GlobalShipping._text === "true" };
                         return el;
                     } else {
                         return el;
@@ -300,7 +292,7 @@ const templateGenerator = (props) => {
                         let selectedTemplate = props.templates.filter(el => el.id === selectedItemTemplate)
                         let selectedIndex = props.templates.indexOf(...selectedTemplate);
                         return (
-                            <Paper style={{ margin: "10px", backgroundColor: selectedIndex === i ? "white" : "#D1D1D1", opacity: selectedIndex === i ? "1" : "0.2" }} onClick={() => onClickSelectItemTemplateHandler(i)}>
+                            <Paper key={i} style={{ margin: "10px", backgroundColor: selectedIndex === i ? "white" : "#D1D1D1", opacity: selectedIndex === i ? "1" : "0.2" }} onClick={() => onClickSelectItemTemplateHandler(i)}>
                                 <Grid item>
                                     <img width="120px" alt="complex" src={el.img} />
                                 </Grid>
@@ -321,14 +313,14 @@ const templateGenerator = (props) => {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={selectedItemTemplate}
+                    value={selectedItemTemplate ? selectedItemTemplate : "Kein Template ausgewählt."}
                     onChange={onChangeSelectedItemTemplateHandler}
-                    defaultValue={selectedItemTemplate}
+                    // defaultValue={selectedItemTemplate}
                     width="100px"
-                    labelWidth="200"
+                    labelWidth={200}
                 >
-                    {props.templates.map(el => {
-                        return <MenuItem value={el.id}>{el.name}</MenuItem>
+                    {props.templates.map((el, i) => {
+                        return <MenuItem key={i} value={el.id}>{el.name}</MenuItem>
                     })}
                 </Select>
             </FormControl>
@@ -395,14 +387,12 @@ const templateGenerator = (props) => {
                         </Grid>
                         <Grid item>
                             <Autocomplete
-                                id="combo-box-demo"
                                 getOptionLabel={option => option.value + " - " + option.text}
                                 style={{ width: 400 }}
                                 renderInput={params => <TextField {...params} />}
                                 variant="outlined"
                                 size="small"
-                                id="select"
-                                options={sellersItems ? sellersItems.sort((a, b) => -b.text.localeCompare(a.text)) : null}
+                                options={sellersItems ? sellersItems.sort((a, b) => -b.text.localeCompare(a.text)) : []}
                                 onChange={onChangeItemDropboxHandler}
                                 disabled={!sellersItems}
                             />
@@ -410,7 +400,7 @@ const templateGenerator = (props) => {
                     </Grid >
                     <Grid container spacing={1} alignItems="flex-end">
                         <Grid item>
-                            <span class="material-icons">
+                            <span className="material-icons">
                                 web</span>
                         </Grid>
                         <Grid item>
@@ -438,7 +428,7 @@ const templateGenerator = (props) => {
                 </Grid>
                 <Grid container spacing={1} alignItems="flex-end">
                     <Grid item>
-                        <span class="material-icons">
+                        <span className="material-icons">
                             web</span>
                     </Grid>
                     <Grid item>
@@ -523,7 +513,7 @@ const templateGenerator = (props) => {
             item ?
                 <div>
                     {aspects.map((aspect, i) => (
-                        <div id={i}>
+                        <div key={i} id={i}>
                             <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspect.name} variant="outlined" />
                             <TextField onChange={(event) => onChangeLocalizedAspectValueHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspect.value) ? aspect.value.map(el => el._text).join(", ") : aspect.value} variant="outlined" />
                             <Button onClick={() => onClickDeleteLocalizedAspectHandler(i)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
@@ -540,7 +530,7 @@ const templateGenerator = (props) => {
             item ?
                 <Grid container>
                     {articleOptions.paymentOptions.map((option, i) => (
-                        <Grid item xs={6}>
+                        <Grid key={i} item xs={6}>
                             <div id={i} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                                 <FormControlLabel
                                     style={{ margin: "10px 2% 10px 2%" }}
@@ -560,7 +550,7 @@ const templateGenerator = (props) => {
             item ?
                 <div>
                     {articleOptions.shippingOptions.map((option, i) => (
-                        <div id={i} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                        <div key={i} id={i} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                             <FormControlLabel
                                 style={{ margin: "10px 2% 10px 2%" }}
                                 control={<Switch color="primary" checked={option.selected} onChange={() => onClickShippingOptionHandler(i)} />}
@@ -655,17 +645,6 @@ const templateGenerator = (props) => {
             </ExpansionPanel>
         )
 
-
-        let templateInputContainer = (
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start" }}>
-                <div>
-                    {templateViewer}
-                </div>
-                <div>
-                    {colorPickers}
-                </div>
-            </div >
-        )
         let inputContainer = (
             <div id="template-generator-wrapper" style={{ width: "fit-content", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                 <div className="template-generator-section" style={{ width: "33.33%", display: "flex", flexDirection: "row", justifySelf: "flex-start" }}>
@@ -695,7 +674,7 @@ const templateGenerator = (props) => {
         return (
             props.templates && props.templates.length > 0 ?
                 <div style={{ minHeight: "100vh", backgroundColor: "#eeeeee" }} >
-                    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
+                    <meta charSet="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
                     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
@@ -723,7 +702,7 @@ const templateGenerator = (props) => {
                 </div>
                 :
                 <div>
-                    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
+                    <meta charSet="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
                     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
@@ -735,7 +714,7 @@ const templateGenerator = (props) => {
         );
     } else {
         return <div>
-            <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
+            <meta charSet="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
             <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
             <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />

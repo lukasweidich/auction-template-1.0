@@ -9,7 +9,7 @@ const app = (props) => {
   const [user, setUser] = new useState();
   const [templates, setTemplates] = new useState();
 
-  const [itemTemplates, setItemTemplates] = new useState(
+  const itemTemplates =
     [
       {
         id: "dem-it-classic",
@@ -25,7 +25,6 @@ const app = (props) => {
         colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
       }
     ]
-  )
 
   if (user) {
     fetch(`${config.HEROKU_SERVER}/userid/${user.uid}`, {

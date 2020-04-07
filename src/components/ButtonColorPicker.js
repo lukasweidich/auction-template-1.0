@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { BlockPicker } from 'react-color'
-const { Button, Typography } = require('@material-ui/core');
+const { Button } = require('@material-ui/core');
 
 
 const ButtonColorPicker = (props) => {
