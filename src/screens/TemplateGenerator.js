@@ -315,7 +315,6 @@ const templateGenerator = (props) => {
                     id="demo-simple-select"
                     value={selectedItemTemplate ? selectedItemTemplate : "Kein Template ausgewählt."}
                     onChange={onChangeSelectedItemTemplateHandler}
-                    // defaultValue={selectedItemTemplate}
                     width="100px"
                     labelWidth={200}
                 >
@@ -360,7 +359,7 @@ const templateGenerator = (props) => {
                         text="Textfarbe 2" />
                 </Grid>
                 <Grid item style={{ float: "right" }}>
-                    <Button style={{ margin: "2px", float: "left" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />)}>aktualisieren</Button>
+                    <Button style={{ margin: "2px", float: "left" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />)}>produktbeschreibung aktualisieren</Button>
                 </Grid>
             </Grid >
         )
