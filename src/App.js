@@ -39,19 +39,33 @@ const app = (props) => {
 
   return (
 
-    signedIn ?
+    // signedIn ?
 
-      <TemplateGenerator
-        user={user}
-        templates={templates}
-      />
+    <TemplateGenerator
+      // user={user}
+      templates={[
+        {
+          id: "dem-it-classic",
+          name: "Free",
+          img: "https://dem-it.de/uploads/basic_thumbnail.jpg",
+          colors: { primary: "#026670", secondary: "#F6F6F6", title: "#FFFFFF", text: "#494949" }
+        }
+        ,
+        {
+          id: "dem-it-yellow",
+          name: "Solstorm",
+          img: "https://dem-it.de/uploads/solstorm_thumbnail.jpg",
+          colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
+        }
+      ]}
+    />
 
-      :
+    // :
 
-      <LandingPage
-        setSignedIn={setSignedIn}
-        setUser={setUser}
-      />
+    // <LandingPage
+    //   setSignedIn={setSignedIn}
+    //   setUser={setUser}
+    // />
   )
 }
 
