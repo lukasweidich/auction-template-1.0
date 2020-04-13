@@ -38,19 +38,19 @@ const app = (props) => {
 
   return (
 
-    signedIn ?
+    // signedIn ?
 
-      <TemplateGenerator
-        user={user}
-        templates={templates}
-      />
+    <TemplateGenerator
+      user={user}
+      templates={itemTemplates}
+    />
 
-      :
+    // :
 
-      <LandingPage
-        setSignedIn={setSignedIn}
-        setUser={setUser}
-      />
+    // <LandingPage
+    //   setSignedIn={setSignedIn}
+    //   setUser={setUser}
+    // />
   )
 }
 
