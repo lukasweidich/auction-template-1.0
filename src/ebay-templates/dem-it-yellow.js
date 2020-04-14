@@ -55,7 +55,6 @@ const dem_it_yellow = (props) => {
                     <span></span>
                     <span></span>
                     <span></span>
-                    <span></span>
                 </label>
             </div>
             <div className="template-nav-links">

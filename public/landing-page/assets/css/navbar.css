@@ -1,0 +1,44 @@
+#navbar {
+  width: 100%;
+  background-color: #F4E4C1;
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 99;
+}
+
+#logo {
+  width: 125px;
+  padding: 5px 10px 5px 10px;
+}
+
+#login {
+  font-size: 1.25em;
+  padding-right: 20px;
+}
+
+.navbar-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.navlinks a {
+  padding-right: 20px;
+  text-decoration: none;
+  border: none;
+  font-weight: 600;
+}
+
+.add-navbar-background {
+  box-shadow: 0px 0px 8px #000;
+  transition: all 0.2s;
+}
+
+.remove-navbar-background {
+  box-shadow: none;
+  transition: all 0.2s;
+}

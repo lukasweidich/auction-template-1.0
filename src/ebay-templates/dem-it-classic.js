@@ -44,7 +44,6 @@ const dem_it_classic = (props) => {
                             <span></span>
                             <span></span>
                             <span></span>
-                            <span></span>
                         </label>
                     </div>
                     <div className="template-nav-links">
