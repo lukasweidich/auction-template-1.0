@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import TemplateGenerator from "./screens/TemplateGenerator"
+import LogInPage from "./screens/LogInPage"
 import LandingPage from "./screens/LandingPage"
+import FAQScreen from "./screens/FAQScreen"
+import TemplatesScreen from "./screens/TemplatesScreen"
+import HowToScreen from "./screens/HowToScreen"
 import config from "./config";
+const { BrowserRouter, Switch, Route } = require("react-router-dom")
 const fetch = require("node-fetch");
 
 const app = (props) => {
@@ -37,20 +42,24 @@ const app = (props) => {
   }
 
   return (
-
-    // signedIn ?
-
-    <TemplateGenerator
-      user={user}
-      templates={itemTemplates}
-    />
-
-    // :
-
-    // <LandingPage
-    //   setSignedIn={setSignedIn}
-    //   setUser={setUser}
-    // />
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact render={() => <LandingPage />} />
+        <Route path="/Templates" exact render={() => <TemplatesScreen />} />
+        <Route path="/FAQ" exact render={() => <FAQScreen />} />
+        <Route path="/How-To" exact render={() => <HowToScreen />} />
+        <Route path="/Generator" exact render={() => signedIn ?
+          <TemplateGenerator
+            user={user}
+            templates={templates}
+          />
+          :
+          <LogInPage
+            setSignedIn={setSignedIn}
+            setUser={setUser}
+          />} />
+      </Switch>
+    </BrowserRouter>
   )
 }
 

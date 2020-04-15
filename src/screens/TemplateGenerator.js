@@ -3,22 +3,13 @@ import ReactGenerator from "../util/ReactGenerator"
 import ReactDOMServer from 'react-dom/server';
 import Miscellaneous from "../util/Miscellaneous"
 import ButtonColorPicker from "../components/ButtonColorPicker"
+import Header from "../components/Header"
 import eBayApi from "../util/eBayApi";
 import config from "../config";
 import './TemplateGenerator.css';
 
 const { InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
-
-const header = (
-    <AppBar color="primary" position="static">
-        <Toolbar>
-            <Typography variant="h6">
-                auction-template.com
-  </Typography>
-        </Toolbar>
-    </AppBar>
-)
 
 const templateGenerator = (props) => {
     if (props.templates && props.templates != null && props.templates.length > 0) {
@@ -763,12 +754,12 @@ const templateGenerator = (props) => {
 
         return (
             props.templates && props.templates.length > 0 ?
-                <div style={{ minHeight: "100vh", backgroundColor: "#eeeeee" }} >
+                <div style={{ minHeight: "100vh", backgroundColor: "#e8e8eb" }} >
                     <meta charSet="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
                     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
-                    {header}
+                    <Header />
                     <div style={{ margin: "10px 2% 10px 2%" }}>
                         {inputContainer}
                     </div>
@@ -796,8 +787,8 @@ const templateGenerator = (props) => {
                     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
-                    {header}
-                    <div style={{ height: "100vh", backgroundColor: "#eeeeee", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                    <Header />
+                    <div style={{ height: "100vh", backgroundColor: "#e8e8eb", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                         <CircularProgress></CircularProgress>
                     </div>
                 </div>
@@ -808,8 +799,8 @@ const templateGenerator = (props) => {
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
             <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
             <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
-            {header}
-            <div style={{ height: "100vh", backgroundColor: "#eeeeee", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+            <Header />
+            <div style={{ height: "100vh", backgroundColor: "#e8e8eb", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                 <CircularProgress></CircularProgress>
             </div>
         </div>
