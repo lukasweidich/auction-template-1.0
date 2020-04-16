@@ -59,68 +59,59 @@ const templateGenerator = (props) => {
             ],
             legalInformation: null,
             sellerName: null,
-            aspectHeadline: "Artikelmerkmale",
-            additionalAspects: [
-                // {
-                //     name: "name0", value: [{ name: "name1", value: "value1" }, { name: "name2", value: "value2" }],
-                // },
-
-                // {
-                //     name: "name0", value: [{ name: "name1", value: "value1" }, { name: "name2", value: "value2" }],
-                // }
-            ],
-            xd: "Lulz"
         });
+        const [allAspects, setAllAspects] = new useState([]);
+        // const onAddAdditionalAspectGroup = () => {
+        //     var tmp = [...articleOptions.additionalAspects];
+        //     console.log(articleOptions.additionalAspects)
+        //     console.log("before ##################################################")
+        //     // tmp.push({ name: "", value: [] })
+        //     /*
+        //     let a = {b:[]}
+        //     let x = [...a.b]
+        //     console.log(x)
+        //     x.push({a:1,b:42})
+        //     console.log(x)
+        //     */
+        //     // setArticleOptions({ ...articleOptions, additionalAspects: tmp })
+        // }
+        // const onAddAdditionalAspectItem = (index) => {
+        //     var array = [...articleOptions.additionalAspects];
+        //     array[index].push({ name: "", value: "" });
+        //     setArticleOptions({ ...articleOptions, additionalAspects: array })
+        // }
+        // const onDeleteAdditionalAspectGroup = (index) => {
+        //     var array = [...articleOptions.additionalAspects];
+        //     array.splice(index, 1)
+        //     setArticleOptions({ ...articleOptions, additionalAspects: array })
+        // }
+        // const onDeleteAdditionalAspectItem = (indexGroup, indexItem) => {
+        //     var tmp = [...articleOptions.additionalAspects];
+        //     tmp[indexGroup].splice(indexItem, 1)
+        //     setArticleOptions({ ...articleOptions, additionalAspects: tmp })
+        // }
+        // const onChangeAdditionalAspectTitle = (event, indexGroup) => {
+        //     var tmp = [...articleOptions.additionalAspects][indexGroup];
+        //     tmp = { ...tmp, name: event.target.value }
+        //     setArticleOptions({ ...articleOptions, additionalAspects: tmp })
+        // }
+        // const onChangeAdditionalAspectName = (event, indexGroup, indexItem) => {
+        //     var group = [...articleOptions.additionalAspects][indexGroup];
+        //     var item = group.value[indexItem]
+        //     var tmp = { ...item, name: event.target.value }
+        //     group[indexItem] = tmp;
+        //     setArticleOptions({ ...articleOptions, additionalAspects: group })
+        // }
+        // const onChangeAdditionalAspectValue = (event, indexGroup, indexItem) => {
+        //     var group = [...articleOptions.additionalAspects][indexGroup];
+        //     var item = group.value[indexItem]
+        //     var tmp = { ...item, value: event.target.value }
+        //     group[indexItem] = tmp;
+        // }
 
-        const onAddAdditionalAspectGroup = () => {
-            var tmp = [...articleOptions.additionalAspects];
-            tmp.push({ name: "", value: [] })
-            /*
-            let a = {b:[]}
-            let x = [...a.b]
-            console.log(x)
-            x.push({a:1,b:42})
-            console.log(x)
-            */
-            setArticleOptions({ ...articleOptions, additionalAspects: tmp })
-        }
-        const onAddAdditionalAspectItem = (index) => {
-            var array = [...articleOptions.additionalAspects];
-            array[index].push({ name: "", value: "" });
-            setArticleOptions({ ...articleOptions, additionalAspects: array })
-        }
-        const onDeleteAdditionalAspectGroup = (index) => {
-            var array = [...articleOptions.additionalAspects];
-            array.splice(index, 1)
-            setArticleOptions({ ...articleOptions, additionalAspects: array })
-        }
-        const onDeleteAdditionalAspectItem = (indexGroup, indexItem) => {
-            var tmp = [...articleOptions.additionalAspects];
-            tmp[indexGroup].splice(indexItem, 1)
-            setArticleOptions({ ...articleOptions, additionalAspects: tmp })
-        }
-        const onChangeAdditionalAspectTitle = (event, indexGroup) => {
-            var tmp = [...articleOptions.additionalAspects][indexGroup];
-            tmp = { ...tmp, name: event.target.value }
-            setArticleOptions({ ...articleOptions, additionalAspects: tmp })
-        }
-        const onChangeAdditionalAspectName = (event, indexGroup, indexItem) => {
-            var group = [...articleOptions.additionalAspects][indexGroup];
-            var item = group.value[indexItem]
-            var tmp = { ...item, name: event.target.value }
-            group[indexItem] = tmp;
-            setArticleOptions({ ...articleOptions, additionalAspects: group })
-        }
-        const onChangeAdditionalAspectValue = (event, indexGroup, indexItem) => {
-            var group = [...articleOptions.additionalAspects][indexGroup];
-            var item = group.value[indexItem]
-            var tmp = { ...item, value: event.target.value }
-            group[indexItem] = tmp;
-        }
-
-        const onChangeAspectHeadlineHandler = event => {
-            setArticleOptions({ ...articleOptions, aspectHeadline: event.target.value })
-        }
+        // const onChangeAspectHeadlineHandler = event => {
+        //     setArticleOptions({ ...articleOptions, aspectHeadline: event.target.value })
+        // }
 
         const onChangePrimaryColorPickerHandler = (color) => {
             setTemplateColorScheme({ ...templateColorScheme, primary: color });
@@ -183,6 +174,16 @@ const templateGenerator = (props) => {
             if (Ack._text === config.ACK_SUCCESS) {
                 setItem(GetSingleItemResponse.Item)
                 mapItemPaymentToArticleOptionPayment(GetSingleItemResponse.Item);
+                //setAspects
+                setAllAspects([{
+                    name: "Artikelmerkmale", value:
+                        Array.isArray(GetSingleItemResponse.Item.ItemSpecifics.NameValueList) ?
+                            GetSingleItemResponse.Item.ItemSpecifics.NameValueList.map(el => el = { name: el.Name._text, value: el.Value._text === "" ? el.Value._text : el.Value._text || el.Value.map(el => el._text).join(", ") })
+                            :
+                            (GetSingleItemResponse.Item.ItemSpecifics.NameValueList ?
+                                [{ name: GetSingleItemResponse.Item.ItemSpecifics.NameValueList.Name._text, value: GetSingleItemResponse.Item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
+                                : [])
+                }]);
                 setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={templateId} item={GetSingleItemResponse.Item} articleOptions={articleOptions} />);
                 alert(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`)
             } else if (Ack._text === config.ACK_FAILURE) {
@@ -193,6 +194,7 @@ const templateGenerator = (props) => {
 
         const toggleCheckedHandler = (event) => {
             setChecked(!checked);
+            console.log(allAspects)
         }
 
         const onClickDeleteLocalizedAspectHandler = (index) => {
@@ -557,50 +559,82 @@ const templateGenerator = (props) => {
                 : null
         )
 
-        let aspects = (item ?
-            Array.isArray(item.ItemSpecifics.NameValueList) ?
-                item.ItemSpecifics.NameValueList.map(el => el = { name: el.Name._text, value: el.Value._text === "" ? el.Value._text : el.Value._text || el.Value.map(el => el._text).join(", ") })
-                :
-                (item.ItemSpecifics.NameValueList ?
-                    [{ name: item.ItemSpecifics.NameValueList.Name._text, value: item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
-                    : [])
-            : null)
+        const onChangeGroupNameHandler = (event, groupIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.name = event.target.value;
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
+
+        const onDeleteGroupHandler = (groupIndex) => {
+            let array = [...allAspects]
+            array.splice(groupIndex, 1);
+            setAllAspects(array)
+        }
+
+        const onAddGroupHandler = () => {
+            let array = [...allAspects]
+            array.push({ name: "", value: [{ name: "", value: "" }] });
+            setAllAspects(array)
+        }
+
+        const onAddItemHandler = (groupIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.value.push({ name: "", value: "" })
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
+
+        const onDeleteItemHandler = (groupIndex, itemIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.value.splice(itemIndex, 1)
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
+
+        const onChangeItemNameHandler = (event, groupIndex, itemIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.value[itemIndex].name = event.target.value;
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
+
+        const onChangeItemValueHandler = (event, groupIndex, itemIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.value[itemIndex].value = event.target.value;
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
 
         let localizedAspects = (
             item ?
                 <div>
-                    <TextField onChange={(event) => onChangeAspectHeadlineHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" value={articleOptions.aspectHeadline} variant="outlined" />
-                    <Button variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe LÖSCHEN</Button>
-                    <div style={{ marginLeft: "50px" }} >
-                        {aspects.map((aspect, i) => (
-                            <div key={i} id={i}>
-                                <TextField onChange={(event) => onChangeLocalizedAspectNameHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspect.name} variant="outlined" />
-                                <TextField onChange={(event) => onChangeLocalizedAspectValueHandler(event, i)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspect.value) ? aspect.value.map(el => el._text).join(", ") : aspect.value} variant="outlined" />
-                                <Button onClick={() => onClickDeleteLocalizedAspectHandler(i)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
-                            </div>
-                        ))}
-                        <Button style={{ margin: "10px 2% 10px 2%" }} onClick={onClickAddLocalizedAspect} >HINZUFÜGEN</Button>
-                    </div>
-                    {articleOptions && articleOptions.additionalAspects ?
-                        <div>
-                            {articleOptions.additionalAspects.map((el, groupIndex) => {
-                                return (<div>
-                                    <TextField onChange={(event) => onChangeAdditionalAspectTitle(event, groupIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" value={el.name} variant="outlined" />
-                                    <Button onClick={onDeleteAdditionalAspectGroup(groupIndex)} variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe LÖSCHEN</Button>
-                                    {el.value.map((aspect, itemIndex) => (
-                                        <div key={itemIndex} id={itemIndex}>
-                                            <TextField onChange={(event) => onChangeAdditionalAspectName(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspect.name} variant="outlined" />
-                                            <TextField onChange={(event) => onChangeAdditionalAspectValue(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={aspect.value} variant="outlined" />
-                                            <Button onClick={() => onDeleteAdditionalAspectItem(groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
-                                        </div>
-                                    ))}
-                                    <Button style={{ margin: "10px 2% 10px 2%" }} onClick={onAddAdditionalAspectItem} >HINZUFÜGEN</Button>
+                    {allAspects.map((aspectGroup, groupIndex) => {
+                        return (
+                            <div>
+                                <TextField onChange={(event) => onChangeGroupNameHandler(event, groupIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" variant="outlined" value={aspectGroup.name} />
+                                <Button onClick={() => onDeleteGroupHandler(groupIndex)} variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe löschen</Button>
+                                <div style={{ marginLeft: "50px" }}>
+                                    {aspectGroup.value.map((aspectItem, itemIndex) => {
+                                        return (
+                                            <div>
+                                                <TextField onChange={(event) => onChangeItemNameHandler(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspectItem.name} variant="outlined" />
+                                                <TextField onChange={(event) => onChangeItemValueHandler(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspectItem.value) ? aspectItem.value.map(el => el._text).join(", ") : aspectItem.value} variant="outlined" />
+                                                <Button onClick={() => onDeleteItemHandler(groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                                            </div>
+                                        )
+                                    })}
+                                    <Button style={{ margin: "10px 2% 10px 2%" }} onClick={() => onAddItemHandler(groupIndex)} >HINZUFÜGEN</Button>
                                 </div>
-                                )
-                            })}
-                        </div>
-                        : null}
-                    <Button onClick={onAddAdditionalAspectGroup} variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe HINZUFÜGEN</Button>
+                            </div>
+                        )
+                    })}
+                    <Button onClick={() => onAddGroupHandler()} variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe HINZUFÜGEN</Button>
                 </div>
                 :
                 null

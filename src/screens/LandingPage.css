@@ -42,23 +42,3 @@
   box-shadow: none;
   transition: all 0.2s;
 }
-
-/* unvisited link */
-a:link {
-  color: green;
-}
-
-/* visited link */
-a:visited {
-  color: green;
-}
-
-/* mouse over link */
-a:hover {
-  color: red;
-}
-
-/* selected link */
-a:active {
-  color: yellow;
-}

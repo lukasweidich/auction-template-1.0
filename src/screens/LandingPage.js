@@ -15,7 +15,8 @@ const LandingPage = (props) => {
             <Heading>Steigern Sie Ihre Umsätze</Heading>
             <Subhead>mit Auction Template</Subhead>
             <Laptop />
-            <Button href="/generator" variant="contained" color="primary" >Auktionsvorlage erstellen</Button>
+            <Button href="/Generator" variant="contained" color="primary" >Auktionsvorlage generieren</Button>
+            <ScrollDownIndicator />
         </Hero>
     )
 
@@ -28,7 +29,7 @@ const LandingPage = (props) => {
             <Feature icon={<span class="material-icons">timer</span>} description={<span>Die Auktionsvorlage ist in <strong>wenigen Sekunden</strong> erstellt</span>}>Direkt Loslegen</Feature>
         </Flex>
         <Flex flexWrap="wrap" justifyContent="center">
-            <Feature icon={<span class="material-icons">card_giftcard</span>} description={<span>Die kostenlosen Auktionsvorlagen sind <strong>dauerhaft</strong> abrufbar</span>}>Keine Kosten</Feature>
+            <Feature icon={<span class="material-icons">card_giftcard</span>} description={<span>Die kostenlosen Auktionsvorlagen sind <strong>dauerhaft</strong> abrufbar, es gibt keinen Haken</span>}>Keine Kosten</Feature>
             <Feature icon={<span class="material-icons">format_indent_increase</span>} description={<span>Sie können sich zurücklehnen - Die Artikelinformationen werden <strong>automatisch</strong> eingefügt</span>}>Keine Doppelpflege</Feature>
             <Feature icon={<span class="material-icons">format_paint</span>} description={<span>Die Artikelmerkmale und das Design der Auktionsvorlage lassen sich vollständig <strong>bearbeiten</strong></span>}>Konfigurierbar</Feature>
         </Flex>
