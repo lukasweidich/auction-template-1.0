@@ -45,7 +45,15 @@ const app = (props) => {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact render={() => <LandingPage />} />
-        <Route path="/Templates" exact render={() => <TemplatesScreen />} />
+        <Route path="/Templates" exact render={() => signedIn ?
+          <TemplatesScreen
+            user={user}
+          />
+          :
+          <LogInPage
+            setSignedIn={setSignedIn}
+            setUser={setUser}
+          />} />
         <Route path="/FAQ" exact render={() => <FAQScreen />} />
         <Route path="/How-To" exact render={() => <HowToScreen />} />
         <Route path="/Generator" exact render={() => signedIn ?

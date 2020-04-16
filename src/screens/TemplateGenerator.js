@@ -8,7 +8,7 @@ import eBayApi from "../util/eBayApi";
 import config from "../config";
 import './TemplateGenerator.css';
 
-const { InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
+const { ButtonGroup, InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
 const templateGenerator = (props) => {
@@ -611,30 +611,80 @@ const templateGenerator = (props) => {
             setAllAspects(array)
         }
 
+        const onMoveItemHandler = (groupIndex, itemIndex, direction) => {
+            let oldIndex = itemIndex;
+            let newIndex = itemIndex + direction;
+            let allAspectsCopy = [...allAspects]
+            let group = allAspectsCopy[groupIndex];
+            let groupItems = group.value;
+
+            if (newIndex >= 0 && newIndex < groupItems.length) {
+                let swapElement = groupItems[newIndex];
+                let selectedElement = groupItems[oldIndex];
+                groupItems[newIndex] = selectedElement;
+                groupItems[oldIndex] = swapElement;
+                group = { ...group, value: groupItems }
+                allAspectsCopy[groupIndex] = group;
+                setAllAspects(allAspectsCopy)
+            }
+        }
+
+        const onMoveGroupHandler = (groupIndex, direction) => {
+            let oldIndex = groupIndex;
+            let newIndex = groupIndex + direction;
+            let allAspectsCopy = [...allAspects]
+
+            if (newIndex >= 0 && newIndex < allAspectsCopy.length) {
+                let swapElement = allAspectsCopy[newIndex];
+                let selectedElement = allAspectsCopy[oldIndex];
+                allAspectsCopy[newIndex] = selectedElement;
+                allAspectsCopy[oldIndex] = swapElement;
+                setAllAspects(allAspectsCopy)
+            }
+        }
+
         let localizedAspects = (
             item ?
                 <div>
                     {allAspects.map((aspectGroup, groupIndex) => {
                         return (
                             <div>
-                                <TextField onChange={(event) => onChangeGroupNameHandler(event, groupIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" variant="outlined" value={aspectGroup.name} />
-                                <Button onClick={() => onDeleteGroupHandler(groupIndex)} variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe löschen</Button>
+                                <div style={{ margin: "10px", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                                    <ButtonGroup
+                                        orientation="vertical"
+                                        color="primary"
+                                        aria-label="vertical outlined primary button group"
+                                    >
+                                        <Button disabled={groupIndex === 0} onClick={() => onMoveGroupHandler(groupIndex, -1)}><span class="material-icons">arrow_drop_up</span></Button>
+                                        <Button disabled={groupIndex === allAspects.length - 1} onClick={() => onMoveGroupHandler(groupIndex, 1)}><span class="material-icons">arrow_drop_down</span></Button>
+                                    </ButtonGroup>
+                                    <TextField onChange={(event) => onChangeGroupNameHandler(event, groupIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" variant="outlined" value={aspectGroup.name} />
+                                    <Button onClick={() => onDeleteGroupHandler(groupIndex)} variant="outlined" color="primary" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe löschen</Button>
+                                </div>
                                 <div style={{ marginLeft: "50px" }}>
                                     {aspectGroup.value.map((aspectItem, itemIndex) => {
                                         return (
-                                            <div>
+                                            <div style={{ margin: "10px", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                                                <ButtonGroup
+                                                    orientation="vertical"
+                                                    color="secondary"
+                                                    aria-label="vertical outlined secondary button group"
+                                                >
+                                                    <Button disabled={itemIndex === 0} onClick={() => onMoveItemHandler(groupIndex, itemIndex, -1)} ><span class="material-icons">arrow_drop_up</span></Button>
+                                                    <Button disabled={itemIndex === aspectGroup.value.length - 1} onClick={() => onMoveItemHandler(groupIndex, itemIndex, 1)} ><span class="material-icons">arrow_drop_down</span></Button>
+                                                </ButtonGroup>
                                                 <TextField onChange={(event) => onChangeItemNameHandler(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspectItem.name} variant="outlined" />
                                                 <TextField onChange={(event) => onChangeItemValueHandler(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspectItem.value) ? aspectItem.value.map(el => el._text).join(", ") : aspectItem.value} variant="outlined" />
-                                                <Button onClick={() => onDeleteItemHandler(groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                                                <Button variant="outlined" color="secondary" onClick={() => onDeleteItemHandler(groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
                                             </div>
                                         )
                                     })}
-                                    <Button style={{ margin: "10px 2% 10px 2%" }} onClick={() => onAddItemHandler(groupIndex)} >HINZUFÜGEN</Button>
+                                    <Button variant="outlined" color="secondary" style={{ margin: "10px 2% 10px 2%" }} onClick={() => onAddItemHandler(groupIndex)} >HINZUFÜGEN</Button>
                                 </div>
                             </div>
                         )
                     })}
-                    <Button onClick={() => onAddGroupHandler()} variant="contained" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe HINZUFÜGEN</Button>
+                    <Button onClick={() => onAddGroupHandler()} variant="outlined" color="primary" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe HINZUFÜGEN</Button>
                 </div>
                 :
                 null
