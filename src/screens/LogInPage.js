@@ -3,7 +3,7 @@ import withFirebaseAuth from 'react-with-firebase-auth'
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import firebaseConfig from "../config";
-import Header from "../components/Header";
+import StyledPage from "../components/StyledPage";
 const { TextField, Button, AppBar, Toolbar, Typography } = require('@material-ui/core');
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const firebaseAppAuth = firebaseApp.auth();
@@ -58,18 +58,22 @@ const LandingScreen = (props) => {
         if (registerPassword === registerPassword2) {
             firebase.auth().createUserWithEmailAndPassword(registerEmail, registerPassword).catch(function (error) {
                 var errorMessage = error.message;
-                alert(errorMessage);
+                // alert(errorMessage);
+                props.enqueueSnackbar(errorMessage, "error");
+
             })
         }
         else {
-            alert("Die Passwörter stimmen nicht überein!");
+            // alert("Die Passwörter stimmen nicht überein!");
+            props.enqueueSnackbar("Die Passwörter stimmen nicht überein!", "error");
         }
     }
 
     const loginUser = () => {
         firebase.auth().signInWithEmailAndPassword(logInEmail, logInPassword).catch(function (error) {
             var errorMessage = error.message;
-            alert(errorMessage);
+            // alert(errorMessage);
+            props.enqueueSnackbar(errorMessage, "error");
         });
     }
 
@@ -88,7 +92,7 @@ const LandingScreen = (props) => {
     let landingPage = (
         <center style={{ marginTop: "25vh" }}>
             <div>
-                <img alt="dem-it Logo" style={{ margin: "10px auto 10px auto" }} width={"25%"} src="https://template-builder.de/uploads/template-builder-logo.PNG" />
+                <img alt="dem-it Logo" style={{ margin: "10px auto 10px auto" }} width={"25%"} src="https://dem-it.de/auction-template/auction-template-logo-dark.png" />
             </div>
             <div>
                 <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="secondary" onClick={() => setCurrentScreen("2")}>REGISTRIEREN</Button>
@@ -151,8 +155,9 @@ const LandingScreen = (props) => {
     return (
 
         <div style={{ minHeight: "100vh", backgroundColor: "#e8e8eb" }} >
-            <Header />
-            {content}
+            <StyledPage>
+                {content}
+            </StyledPage>
         </div>
     )
 }

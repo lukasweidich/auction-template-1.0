@@ -1,13 +1,19 @@
 import React from "react"
-import { NavLink } from "react-router-dom"
-import { Small, Flex } from "react-landing-page"
+import "./Links.css"
+const { AppBar, Toolbar, Button, ButtonGroup } = require('@material-ui/core');
+const { NavLink } = require("react-router-dom")
 
 const Footer = props => {
     return (
-        <Flex is="footer" alignItems="center" p={3}>
-            <NavLink to="/help">Hilfe</NavLink>
-            <Small color="grey" ml="auto">© <a href="https://www.dem-it.de">demIT</a>, 2020</Small>
-        </Flex>
+        <div style={{ padding: "6px 0px 6px 0px", color: "#E7EFF6", backgroundColor: "#263740", width: "100vw", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <div>
+                <span style={{ margin: "10px" }}>© 2020 - Auction Template</span>
+            </div>
+            <div >
+                <NavLink style={{ textDecoration: "none", margin: "10px" }} to="/Imprint">Impressum</NavLink>
+                <NavLink style={{ textDecoration: "none", margin: "10px" }} to="/TermsAndConditions">AGB</NavLink>
+            </div>
+        </div >
     )
 }
 

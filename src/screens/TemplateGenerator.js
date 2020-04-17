@@ -3,11 +3,11 @@ import ReactGenerator from "../util/ReactGenerator"
 import ReactDOMServer from 'react-dom/server';
 import Miscellaneous from "../util/Miscellaneous"
 import ButtonColorPicker from "../components/ButtonColorPicker"
-import Header from "../components/Header"
+import StyledPage from "../components/StyledPage"
+import LoadingPage from "../screens/LoadingPage"
 import eBayApi from "../util/eBayApi";
 import config from "../config";
 import './TemplateGenerator.css';
-
 const { ButtonGroup, InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
@@ -136,12 +136,14 @@ const templateGenerator = (props) => {
             let allItems = await eBayApi.getItemsFromSeller(seller);
             if (allItems.error) {
                 setLoadingSellersItems(false)
-                alert(`Fehler: ${allItems.error.message._text}`)
+                // alert(`Fehler: ${allItems.error.message._text}`)
+                props.enqueueSnackbar(`${allItems.error.message._text}`, "error");
             } else {
                 let comboboxItems = Miscellaneous.mapItemsFromSellerToComboboxFormat(allItems);
                 setSellersItems(comboboxItems)
                 setLoadingSellersItems(false)
-                alert(`${comboboxItems.length} Artikel konnten erfolgreich geladen werden`)
+                // alert(`${comboboxItems.length} Artikel konnten erfolgreich geladen werden`)
+                props.enqueueSnackbar(`${comboboxItems.length} Artikel konnten erfolgreich geladen werden`, "success");
             }
         }
 
@@ -174,7 +176,6 @@ const templateGenerator = (props) => {
             if (Ack._text === config.ACK_SUCCESS) {
                 setItem(GetSingleItemResponse.Item)
                 mapItemPaymentToArticleOptionPayment(GetSingleItemResponse.Item);
-                //setAspects
                 setAllAspects([{
                     name: "Artikelmerkmale", value:
                         Array.isArray(GetSingleItemResponse.Item.ItemSpecifics.NameValueList) ?
@@ -185,9 +186,11 @@ const templateGenerator = (props) => {
                                 : [])
                 }]);
                 setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={templateId} item={GetSingleItemResponse.Item} articleOptions={articleOptions} />);
-                alert(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`)
+                // alert(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`)
+                props.enqueueSnackbar(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`, "success");
             } else if (Ack._text === config.ACK_FAILURE) {
-                alert(`Fehler: ${GetSingleItemResponse.Errors.LongMessage._text}`)
+                // alert(`Fehler: ${GetSingleItemResponse.Errors.LongMessage._text}`)
+                props.enqueueSnackbar(`${GetSingleItemResponse.Errors.LongMessage._text}`, "error");
             }
             setLoadingItemTemplate(false)
         }
@@ -436,7 +439,7 @@ const templateGenerator = (props) => {
                             <TextField size="small" onKeyDown={onKeyDownSellerHandler} value={seller} onChange={onChangeSellerHandler} label="eBay Nutzername" />
                         </Grid>
                         <Grid item>
-                            <Button onClick={onClickSellerHandler} disabled={!seller || loadingSellersItems}>Eingeben</Button>
+                            <Button variant="outlined" onClick={onClickSellerHandler} disabled={!seller || loadingSellersItems}>Eingeben</Button>
                         </Grid>
                         {loadingSellersItems && <Grid item><CircularProgress size={25} /></Grid>}
                     </Grid>
@@ -652,14 +655,14 @@ const templateGenerator = (props) => {
                                 <div style={{ margin: "10px", display: "flex", flexDirection: "row", alignItems: "center" }}>
                                     <ButtonGroup
                                         orientation="vertical"
-                                        color="primary"
-                                        aria-label="vertical outlined primary button group"
+                                        color="default"
+                                        aria-label="vertical outlined default button group"
                                     >
-                                        <Button disabled={groupIndex === 0} onClick={() => onMoveGroupHandler(groupIndex, -1)}><span class="material-icons">arrow_drop_up</span></Button>
-                                        <Button disabled={groupIndex === allAspects.length - 1} onClick={() => onMoveGroupHandler(groupIndex, 1)}><span class="material-icons">arrow_drop_down</span></Button>
+                                        <Button color="default" disabled={groupIndex === 0} onClick={() => onMoveGroupHandler(groupIndex, -1)}><span class="material-icons">arrow_drop_up</span></Button>
+                                        <Button color="default" disabled={groupIndex === allAspects.length - 1} onClick={() => onMoveGroupHandler(groupIndex, 1)}><span class="material-icons">arrow_drop_down</span></Button>
                                     </ButtonGroup>
                                     <TextField onChange={(event) => onChangeGroupNameHandler(event, groupIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" variant="outlined" value={aspectGroup.name} />
-                                    <Button onClick={() => onDeleteGroupHandler(groupIndex)} variant="outlined" color="primary" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe löschen</Button>
+                                    <Button className="template-generator-remove" onClick={() => onDeleteGroupHandler(groupIndex)} variant="outlined" color="secondary" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe löschen</Button>
                                 </div>
                                 <div style={{ marginLeft: "50px" }}>
                                     {aspectGroup.value.map((aspectItem, itemIndex) => {
@@ -667,24 +670,28 @@ const templateGenerator = (props) => {
                                             <div style={{ margin: "10px", display: "flex", flexDirection: "row", alignItems: "center" }}>
                                                 <ButtonGroup
                                                     orientation="vertical"
-                                                    color="secondary"
-                                                    aria-label="vertical outlined secondary button group"
+                                                    color="default"
+                                                    aria-label="vertical outlined default button group"
                                                 >
-                                                    <Button disabled={itemIndex === 0} onClick={() => onMoveItemHandler(groupIndex, itemIndex, -1)} ><span class="material-icons">arrow_drop_up</span></Button>
-                                                    <Button disabled={itemIndex === aspectGroup.value.length - 1} onClick={() => onMoveItemHandler(groupIndex, itemIndex, 1)} ><span class="material-icons">arrow_drop_down</span></Button>
+                                                    <Button color="default" disabled={itemIndex === 0} onClick={() => onMoveItemHandler(groupIndex, itemIndex, -1)} ><span class="material-icons">arrow_drop_up</span></Button>
+                                                    <Button color="default" disabled={itemIndex === aspectGroup.value.length - 1} onClick={() => onMoveItemHandler(groupIndex, itemIndex, 1)} ><span class="material-icons">arrow_drop_down</span></Button>
                                                 </ButtonGroup>
                                                 <TextField onChange={(event) => onChangeItemNameHandler(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Eigenschaft" value={aspectItem.name} variant="outlined" />
                                                 <TextField onChange={(event) => onChangeItemValueHandler(event, groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Wert" value={Array.isArray(aspectItem.value) ? aspectItem.value.map(el => el._text).join(", ") : aspectItem.value} variant="outlined" />
-                                                <Button variant="outlined" color="secondary" onClick={() => onDeleteItemHandler(groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                                                <Button variant="outlined" className="template-generator-remove" onClick={() => onDeleteItemHandler(groupIndex, itemIndex)} style={{ margin: "10px 2% 10px 2%" }}><span class="material-icons">
+                                                    delete_forever
+</span></Button>
                                             </div>
                                         )
                                     })}
-                                    <Button variant="outlined" color="secondary" style={{ margin: "10px 2% 10px 2%" }} onClick={() => onAddItemHandler(groupIndex)} >HINZUFÜGEN</Button>
+                                    <Button variant="outlined" color="default" className="template-generator-add" style={{ margin: "10px 2% 10px 2%" }} onClick={() => onAddItemHandler(groupIndex)} ><span class="material-icons">
+                                        add_box
+</span></Button>
                                 </div>
                             </div>
                         )
                     })}
-                    <Button onClick={() => onAddGroupHandler()} variant="outlined" color="primary" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe HINZUFÜGEN</Button>
+                    <Button onClick={() => onAddGroupHandler()} variant="outlined" className="template-generator-add" style={{ margin: "10px 2% 10px 2%" }}>merkmalgruppe HINZUFÜGEN</Button>
                 </div>
                 :
                 null
@@ -733,11 +740,11 @@ const templateGenerator = (props) => {
                 articleOptions.legalInformation !== null ?
                     <div>
                         <TextField multiline rows="5" onChange={(event) => onChangeLegalInformationHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Rechtliche Angaben" value={articleOptions.legalInformation} variant="outlined" />
-                        <Button onClick={() => onClickDeleteLegalInformationHandler()} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                        <Button className="template-generator-remove" variant="outlined" onClick={() => onClickDeleteLegalInformationHandler()} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
                     </div>
                     :
                     <div>
-                        <Button onClick={() => onClickAddLegalInformationHandler()} style={{ margin: "10px 2% 10px 2%" }}>HINZUFÜGEN</Button>
+                        <Button className="template-generator-add" variant="outlined" onClick={() => onClickAddLegalInformationHandler()} style={{ margin: "10px 2% 10px 2%" }}>HINZUFÜGEN</Button>
                     </div>
             )
                 : null
@@ -843,51 +850,34 @@ const templateGenerator = (props) => {
                     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
-                    <Header />
-                    <div style={{ margin: "10px 2% 10px 2%" }}>
-                        {inputContainer}
-                    </div>
-                    {/* <div style={{ margin: "10px 2% 10px 2%" }}>
+                    <StyledPage>
+                        <div style={{ margin: "10px 2% 10px 2%" }}>
+                            {inputContainer}
+                        </div>
+                        {/* <div style={{ margin: "10px 2% 10px 2%" }}>
                 {templateExpansion}
             </div> */}
-                    {productDescription &&
-                        <div>
-                            <div style={{ margin: "10px 2% 10px 2%" }}>
-                                {expansionPanel}
-                            </div>
-                            <div style={{ margin: "10px 2% 10px 2%" }}>
-                                {descriptionContainer}
-                            </div>
-                            <div style={{ margin: "10px 2% 10px 2%", position: "fixed", bottom: "0", right: "0", padding: "35px", boxShadow: "", zIndex: "99999" }}>
-                                <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="secondary">
-                                    Produktbeschreibung kopieren
+                        {productDescription &&
+                            <div>
+                                <div style={{ margin: "10px 2% 10px 2%" }}>
+                                    {expansionPanel}
+                                </div>
+                                <div style={{ margin: "10px 2% 10px 2%" }}>
+                                    {descriptionContainer}
+                                </div>
+                                <div style={{ margin: "10px 2% 10px 2%", position: "fixed", bottom: "0", right: "0", padding: "35px", boxShadow: "", zIndex: "99999" }}>
+                                    <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="secondary">
+                                        Produktbeschreibung kopieren
   </Button>
-                            </div>
-                        </div>}
+                                </div>
+                            </div>}
+                    </StyledPage>
                 </div>
                 :
-                <div>
-                    <meta charSet="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
-                    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
-                    <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
-                    <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
-                    <Header />
-                    <div style={{ height: "100vh", backgroundColor: "#e8e8eb", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                        <CircularProgress></CircularProgress>
-                    </div>
-                </div>
+                <LoadingPage />
         );
     } else {
-        return <div>
-            <meta charSet="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
-            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossOrigin="anonymous" />
-            <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
-            <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
-            <Header />
-            <div style={{ height: "100vh", backgroundColor: "#e8e8eb", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                <CircularProgress></CircularProgress>
-            </div>
-        </div>
+        return <LoadingPage />
     }
 }
 

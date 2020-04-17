@@ -6,13 +6,26 @@ import FAQScreen from "./screens/FAQScreen"
 import TemplatesScreen from "./screens/TemplatesScreen"
 import HowToScreen from "./screens/HowToScreen"
 import config from "./config";
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { SnackbarProvider, useSnackbar } from 'notistack';
+import "./App.css"
 const { BrowserRouter, Switch, Route } = require("react-router-dom")
 const fetch = require("node-fetch");
 
-const app = (props) => {
+const App = (props) => {
   const [signedIn, setSignedIn] = new useState(false);
   const [user, setUser] = new useState();
   const [templates, setTemplates] = new useState();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const addSnackbar = (text, variant) => {
+    enqueueSnackbar(text, {
+      variant: variant,
+      anchorOrigin: { vertical: "bottom", horizontal: "center" },
+      style: { zIndex: 99 },
+      autoHideDuration: 2000
+    });
+  }
 
   const itemTemplates =
     [
@@ -41,34 +54,56 @@ const app = (props) => {
     );
   }
 
+  const theme = createMuiTheme({
+    palette: {
+      primary: { main: "#263740" },
+      secondary: { main: "#F2B255" },
+      error: { main: "#FF0000" },
+      contrastThreshold: 3,
+      tonalOffset: 0.2,
+    },
+  });
+
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/" exact render={() => <LandingPage />} />
-        <Route path="/Templates" exact render={() => signedIn ?
-          <TemplatesScreen
-            user={user}
-          />
-          :
-          <LogInPage
-            setSignedIn={setSignedIn}
-            setUser={setUser}
-          />} />
-        <Route path="/FAQ" exact render={() => <FAQScreen />} />
-        <Route path="/How-To" exact render={() => <HowToScreen />} />
-        <Route path="/Generator" exact render={() => signedIn ?
-          <TemplateGenerator
-            user={user}
-            templates={templates}
-          />
-          :
-          <LogInPage
-            setSignedIn={setSignedIn}
-            setUser={setUser}
-          />} />
-      </Switch>
-    </BrowserRouter>
+    <MuiThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" exact render={() => <LandingPage />} />
+          <Route path="/Templates" exact render={() => signedIn ?
+            <TemplatesScreen
+              user={user}
+            />
+            :
+            <LogInPage
+              setSignedIn={setSignedIn}
+              setUser={setUser}
+            />} />
+          <Route path="/FAQ" exact render={() => <FAQScreen />} />
+          <Route path="/How-To" exact render={() => <HowToScreen />} />
+          <Route path="/Generator" exact render={() => signedIn ?
+            <TemplateGenerator
+              user={user}
+              templates={templates}
+              enqueueSnackbar={addSnackbar}
+            />
+            :
+            <LogInPage
+              setSignedIn={setSignedIn}
+              setUser={setUser}
+              enqueueSnackbar={addSnackbar}
+            />} />
+        </Switch>
+      </BrowserRouter>
+    </MuiThemeProvider>
   )
 }
 
-export default app;
+// export default app;
+
+export default function IntegrationNotistack() {
+  return (
+    <SnackbarProvider maxSnack={3}>
+      <App />
+    </SnackbarProvider>
+  )
+}
