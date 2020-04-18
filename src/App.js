@@ -58,7 +58,6 @@ const App = (props) => {
     palette: {
       primary: { main: "#263740" },
       secondary: { main: "#F2B255" },
-      error: { main: "#FF0000" },
       contrastThreshold: 3,
       tonalOffset: 0.2,
     },

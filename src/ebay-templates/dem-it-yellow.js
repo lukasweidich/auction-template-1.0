@@ -2,27 +2,28 @@ import React from "react"
 
 const dem_it_yellow = (props) => {
     const { primary: primaryColor, secondary: secondaryColor, title: titleColor, text: textColor } = props.colors;
-
+    console.log(props)
     const title = props.item.Title._text;
     const price_value = props.item.CurrentPrice._text
     const price_currency = props.item.CurrentPrice._attributes.currencyID
-    const description = props.item.Description._text
+    const description = props.item.Description._text.replace(/(?:\r\n|\r|\n)/g, '<br>');
     const images = Array.isArray(props.item.PictureURL) ? [...props.item.PictureURL.map(el => el._text)] : [props.item.PictureURL._text]
-    const localizedAspects = Array.isArray(props.item.ItemSpecifics.NameValueList) ?
-        props.item.ItemSpecifics.NameValueList.map(el => el = { name: el.Name._text, value: el.Value._text === "" ? el.Value._text : el.Value._text || el.Value.map(el => el._text).join(", ") })
-        :
-        (props.item.ItemSpecifics.NameValueList ?
-            [{ name: props.item.ItemSpecifics.NameValueList.Name._text, value: props.item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
-            : null)
+    // const localizedAspects = Array.isArray(props.item.ItemSpecifics.NameValueList) ?
+    // props.item.ItemSpecifics.NameValueList.map(el => el = { name: el.Name._text, value: el.Value._text === "" ? el.Value._text : el.Value._text || el.Value.map(el => el._text).join(", ") })
+    // :
+    // (props.item.ItemSpecifics.NameValueList ?
+    // [{ name: props.item.ItemSpecifics.NameValueList.Name._text, value: props.item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
+    // : null)
+    const localizedAspects = props.allAspects;
     const sellerDisplay = props.articleOptions.sellerName || props.item.Seller.UserID._text
     const seller = props.item.Seller.UserID._text
     const paymentOptions = props.articleOptions.paymentOptions.filter(el => el.selected);
     const shippingOptions = props.articleOptions.shippingOptions.filter(el => el.selected);
     const shipping = props.item.ShippingCostSummary.ShippingServiceCost._text
-    const legalInformation = props.articleOptions.legalInformation;
     const aspectHeadline = props.articleOptions.aspectHeadline;
     const id = props.item.ItemID._text;
     const variations = props.item.Variations ? props.item.Variations.VariationSpecificsSet.NameValueList.map(el => el = { name: el.Name._text, value: el.Value.map(el => el._text) }) : null;
+    const additionalTexts = props.articleOptions.additionalTexts;
 
     const style = {
         title: {
@@ -58,10 +59,10 @@ const dem_it_yellow = (props) => {
                 </label>
             </div>
             <div className="template-nav-links">
-                <a href={`https://www.ebay.de/usr/${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Shop</a>
-                <a href={` https://www.ebay.de/sch/${seller}/m.html?_nkw=&_armrs=1&_ipg=&_from=`} rel="noopener noreferrer" target="_blank" style={style.title}>Artikel</a>
-                <a href={`https://www.ebay.de/fdbk/feedback_profile/${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Bewertungen</a>
-                <a href={`https://contact.ebay.de/ws/eBayISAPI.dll?FindAnswers&iid=${id}&requested=${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Kontakt</a>
+                <a className="solstorm" href={`https://www.ebay.de/usr/${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Shop</a>
+                <a className="solstorm" href={` https://www.ebay.de/sch/${seller}/m.html?_nkw=&_armrs=1&_ipg=&_from=`} rel="noopener noreferrer" target="_blank" style={style.title}>Artikel</a>
+                <a className="solstorm" href={`https://www.ebay.de/fdbk/feedback_profile/${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Bewertungen</a>
+                <a className="solstorm" href={`https://contact.ebay.de/ws/eBayISAPI.dll?FindAnswers&iid=${id}&requested=${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Kontakt</a>
             </div>
         </div>
         <div style={{ ...style.secondary }} id="layout__layout-4">
@@ -103,7 +104,14 @@ const dem_it_yellow = (props) => {
                                     <h2 style={style.text} id="template-title">{aspectHeadline}</h2>
                                     <ul style={{ listStyleType: "none" }} className="bulletpoints__list" id="template-aspects">
                                         {localizedAspects.map((el, i) => {
-                                            return <li key={i} style={style.text} className="bulletpoints__item"><i aria-hidden="true" className="fa fa-chevron-right"></i><span style={{ fontWeight: 700 }}>{el.name}: </span>{el.value}</li>
+                                            return (
+                                                <div key={i} >
+                                                    <h3 style={style.text} id="template-legal-info">{el.name}</h3>
+                                                    {el.value.map((el, j) => {
+                                                        return <li key={`${i},${j}`} style={style.text} className="bulletpoints__item"><i aria-hidden="true" className="fa fa-chevron-right"></i><span style={{ fontWeight: 700 }}>{el.name}: </span>{el.value}</li>
+                                                    })}
+                                                </div>
+                                            )
                                         })}
                                     </ul>
                                 </div>
@@ -134,9 +142,17 @@ const dem_it_yellow = (props) => {
                                     </div>
                                 </div>
                                 <div className="template-shipping-container">
-                                    <h3 style={style.text} id="template-shipping">+ {shipping}</h3>
-                                    <h3 id="template-shipping-currency" style={{ paddingLeft: "2px", ...style.text }}>{price_currency}</h3>
-                                    <h3 style={{ padding: "0px 10px 0px 5px", ...style.text }}>Versandkosten</h3>
+                                    {
+                                        (parseFloat(shipping) > 0 ?
+                                            <div style={{ display: "flex", flexDirection: "row" }}>
+                                                <h3 style={style.text} id="template-shipping">+ {shipping}</h3>
+                                                <h3 id="template-shipping-currency" style={{ paddingLeft: "2px", ...style.text }}>{price_currency}</h3>
+                                                <h3 style={{ padding: "0px 10px 0px 5px", ...style.text }}>Versandkosten</h3>
+                                            </div>
+                                            :
+                                            <h3 style={style.text} id="template-shipping"><i class="fa fa-check"></i> Kostenloser Versand</h3>
+                                        )
+                                    }
                                 </div>
                                 <div className="template-shipping-icons">
                                     {shippingOptions.map((el, i) => {
@@ -155,11 +171,17 @@ const dem_it_yellow = (props) => {
                                     </div>
                                     : null
                                 }
-                                {legalInformation ?
+                                {additionalTexts ?
                                     <div>
-                                        <hr style={{ backgroundColor: secondaryColor }} />
-                                        <h3 style={style.text} id="template-legal-info">Rechtliche Informationen</h3>
-                                        <p style={style.text} id="template-legal-info-text">{legalInformation}</p>
+                                        {
+                                            additionalTexts.map(text => {
+                                                return <div>
+                                                    <hr style={{ backgroundColor: secondaryColor }} />
+                                                    <h3 style={style.text} id="template-legal-info">{text.headline}</h3>
+                                                    <p style={style.text} id="template-legal-info-text">{text.content.replace(/(?:\r\n|\r|\n)/g, '<br>')}</p>
+                                                </div>
+                                            })
+                                        }
                                     </div>
                                     : null}
                             </div>

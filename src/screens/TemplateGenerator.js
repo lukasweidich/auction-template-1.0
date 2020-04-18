@@ -8,6 +8,7 @@ import LoadingPage from "../screens/LoadingPage"
 import eBayApi from "../util/eBayApi";
 import config from "../config";
 import './TemplateGenerator.css';
+import { AlphaPicker } from 'react-color';
 const { ButtonGroup, InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
@@ -59,59 +60,9 @@ const templateGenerator = (props) => {
             ],
             legalInformation: null,
             sellerName: null,
+            additionalTexts: []
         });
         const [allAspects, setAllAspects] = new useState([]);
-        // const onAddAdditionalAspectGroup = () => {
-        //     var tmp = [...articleOptions.additionalAspects];
-        //     console.log(articleOptions.additionalAspects)
-        //     console.log("before ##################################################")
-        //     // tmp.push({ name: "", value: [] })
-        //     /*
-        //     let a = {b:[]}
-        //     let x = [...a.b]
-        //     console.log(x)
-        //     x.push({a:1,b:42})
-        //     console.log(x)
-        //     */
-        //     // setArticleOptions({ ...articleOptions, additionalAspects: tmp })
-        // }
-        // const onAddAdditionalAspectItem = (index) => {
-        //     var array = [...articleOptions.additionalAspects];
-        //     array[index].push({ name: "", value: "" });
-        //     setArticleOptions({ ...articleOptions, additionalAspects: array })
-        // }
-        // const onDeleteAdditionalAspectGroup = (index) => {
-        //     var array = [...articleOptions.additionalAspects];
-        //     array.splice(index, 1)
-        //     setArticleOptions({ ...articleOptions, additionalAspects: array })
-        // }
-        // const onDeleteAdditionalAspectItem = (indexGroup, indexItem) => {
-        //     var tmp = [...articleOptions.additionalAspects];
-        //     tmp[indexGroup].splice(indexItem, 1)
-        //     setArticleOptions({ ...articleOptions, additionalAspects: tmp })
-        // }
-        // const onChangeAdditionalAspectTitle = (event, indexGroup) => {
-        //     var tmp = [...articleOptions.additionalAspects][indexGroup];
-        //     tmp = { ...tmp, name: event.target.value }
-        //     setArticleOptions({ ...articleOptions, additionalAspects: tmp })
-        // }
-        // const onChangeAdditionalAspectName = (event, indexGroup, indexItem) => {
-        //     var group = [...articleOptions.additionalAspects][indexGroup];
-        //     var item = group.value[indexItem]
-        //     var tmp = { ...item, name: event.target.value }
-        //     group[indexItem] = tmp;
-        //     setArticleOptions({ ...articleOptions, additionalAspects: group })
-        // }
-        // const onChangeAdditionalAspectValue = (event, indexGroup, indexItem) => {
-        //     var group = [...articleOptions.additionalAspects][indexGroup];
-        //     var item = group.value[indexItem]
-        //     var tmp = { ...item, value: event.target.value }
-        //     group[indexItem] = tmp;
-        // }
-
-        // const onChangeAspectHeadlineHandler = event => {
-        //     setArticleOptions({ ...articleOptions, aspectHeadline: event.target.value })
-        // }
 
         const onChangePrimaryColorPickerHandler = (color) => {
             setTemplateColorScheme({ ...templateColorScheme, primary: color });
@@ -172,6 +123,7 @@ const templateGenerator = (props) => {
         const onClickGenerateDescriptionHandler = async (itemId, templateId) => {
             setLoadingItemTemplate(true)
             const { GetSingleItemResponse } = await eBayApi.getItemFromItemId(itemId);
+            console.log(GetSingleItemResponse.Item)
             const { Ack } = GetSingleItemResponse;
             if (Ack._text === config.ACK_SUCCESS) {
                 setItem(GetSingleItemResponse.Item)
@@ -185,7 +137,16 @@ const templateGenerator = (props) => {
                                 [{ name: GetSingleItemResponse.Item.ItemSpecifics.NameValueList.Name._text, value: GetSingleItemResponse.Item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
                                 : [])
                 }]);
-                setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={templateId} item={GetSingleItemResponse.Item} articleOptions={articleOptions} />);
+                setProductDescription(<ReactGenerator
+                    allAspects={[{
+                        name: "Artikelmerkmale", value:
+                            Array.isArray(GetSingleItemResponse.Item.ItemSpecifics.NameValueList) ?
+                                GetSingleItemResponse.Item.ItemSpecifics.NameValueList.map(el => el = { name: el.Name._text, value: el.Value._text === "" ? el.Value._text : el.Value._text || el.Value.map(el => el._text).join(", ") })
+                                :
+                                (GetSingleItemResponse.Item.ItemSpecifics.NameValueList ?
+                                    [{ name: GetSingleItemResponse.Item.ItemSpecifics.NameValueList.Name._text, value: GetSingleItemResponse.Item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
+                                    : [])
+                    }]} colors={templateColorScheme} templateId={templateId} item={GetSingleItemResponse.Item} articleOptions={articleOptions} />);
                 // alert(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`)
                 props.enqueueSnackbar(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`, "success");
             } else if (Ack._text === config.ACK_FAILURE) {
@@ -198,54 +159,6 @@ const templateGenerator = (props) => {
         const toggleCheckedHandler = (event) => {
             setChecked(!checked);
             console.log(allAspects)
-        }
-
-        const onClickDeleteLocalizedAspectHandler = (index) => {
-            if (Array.isArray(item.ItemSpecifics.NameValueList)) {
-                let tmp = [...item.ItemSpecifics.NameValueList]
-                tmp.splice(index, 1)
-                setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: tmp } })
-            } else {
-                setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: [] } })
-            }
-        }
-
-        const onClickAddLocalizedAspect = () => {
-            if (Array.isArray(item.ItemSpecifics.NameValueList)) {
-                let tmp = [...item.ItemSpecifics.NameValueList]
-                tmp.push({ Name: { _text: "" }, Value: { _text: "" } })
-                setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: tmp } })
-            } else {
-                let tmp = item.ItemSpecifics.NameValueList;
-                let x = [];
-                x.push(tmp);
-                x.push({ Name: { _text: "" }, Value: { _text: "" } })
-                setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: x } })
-            }
-        }
-
-        const onChangeLocalizedAspectNameHandler = (event, i) => {
-            if (Array.isArray(item.ItemSpecifics.NameValueList)) {
-                let tmp = [...item.ItemSpecifics.NameValueList]
-                tmp[i] = { ...tmp[i], Name: { _text: event.target.value } }
-                setItem({ ...item, ItemSpecifics: { NameValueList: tmp } })
-            } else {
-                let tmp = item.ItemSpecifics.NameValueList;
-                tmp = { ...tmp, Name: { _text: event.target.value } }
-                setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: tmp } })
-            }
-        }
-
-        const onChangeLocalizedAspectValueHandler = (event, i) => {
-            if (Array.isArray(item.ItemSpecifics.NameValueList)) {
-                let tmp = [...item.ItemSpecifics.NameValueList]
-                tmp[i] = { ...tmp[i], Value: { _text: event.target.value } }
-                setItem({ ...item, ItemSpecifics: { NameValueList: tmp } })
-            } else {
-                let tmp = item.ItemSpecifics.NameValueList;
-                tmp = { ...tmp, Value: { _text: event.target.value } }
-                setItem({ ...item, ItemSpecifics: { ...item.ItemSpecifics, NameValueList: tmp } })
-            }
         }
 
         const onChangeTitleHandler = (event) => {
@@ -265,7 +178,7 @@ const templateGenerator = (props) => {
         }
 
         const onClickSaveChangesHandler = () => {
-            setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
+            setProductDescription(<ReactGenerator allAspects={allAspects} colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
         }
 
         const onClickDeleteDescriptionHandler = () => {
@@ -340,6 +253,134 @@ const templateGenerator = (props) => {
                 setArticleOptions({ ...articleOptions, paymentOptions: tmpPayment, shippingOptions: tmpShipping })
             }
         }
+
+        const onChangeAdditionalTextContent = (event, index) => {
+            let texts = [...articleOptions.additionalTexts]
+            let text = texts[index]
+            text = { ...text, content: event.target.value }
+            texts[index] = text;
+            setArticleOptions({ ...articleOptions, additionalTexts: texts })
+        }
+
+        const onChangeAdditionalTextHeadline = (event, index) => {
+            let texts = [...articleOptions.additionalTexts]
+            let text = texts[index]
+            text = { ...text, headline: event.target.value }
+            texts[index] = text;
+            setArticleOptions({ ...articleOptions, additionalTexts: texts })
+        }
+
+        const onDeleteAdditionalText = (index) => {
+            let texts = [...articleOptions.additionalTexts]
+            texts.splice(index, 1)
+            setArticleOptions({ ...articleOptions, additionalTexts: texts })
+        }
+
+        const onAddAdditionalText = () => {
+            let texts = [...articleOptions.additionalTexts]
+            texts.push({ headline: "", content: "" })
+            console.log(texts)
+            setArticleOptions({ ...articleOptions, additionalTexts: texts })
+        }
+
+        const onMoveAdditionalText = (index, direction) => {
+            let oldIndex = index;
+            let newIndex = index + direction;
+            let texts = [...articleOptions.additionalTexts]
+
+            if (newIndex >= 0 && newIndex < texts.length) {
+                let swapElement = texts[newIndex];
+                let selectedElement = texts[oldIndex];
+                texts[newIndex] = selectedElement;
+                texts[oldIndex] = swapElement;
+                setArticleOptions({ ...articleOptions, additionalTexts: texts })
+            }
+        }
+
+        const onChangeGroupNameHandler = (event, groupIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.name = event.target.value;
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
+
+        const onDeleteGroupHandler = (groupIndex) => {
+            let array = [...allAspects]
+            array.splice(groupIndex, 1);
+            setAllAspects(array)
+        }
+
+        const onAddGroupHandler = () => {
+            let array = [...allAspects]
+            array.push({ name: "", value: [{ name: "", value: "" }] });
+            setAllAspects(array)
+        }
+
+        const onAddItemHandler = (groupIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.value.push({ name: "", value: "" })
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
+
+        const onDeleteItemHandler = (groupIndex, itemIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.value.splice(itemIndex, 1)
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
+
+        const onChangeItemNameHandler = (event, groupIndex, itemIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.value[itemIndex].name = event.target.value;
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
+
+        const onChangeItemValueHandler = (event, groupIndex, itemIndex) => {
+            let array = [...allAspects]
+            let tmp = array[groupIndex];
+            tmp.value[itemIndex].value = event.target.value;
+            array[groupIndex] = tmp;
+            setAllAspects(array)
+        }
+
+        const onMoveItemHandler = (groupIndex, itemIndex, direction) => {
+            let oldIndex = itemIndex;
+            let newIndex = itemIndex + direction;
+            let allAspectsCopy = [...allAspects]
+            let group = allAspectsCopy[groupIndex];
+            let groupItems = group.value;
+
+            if (newIndex >= 0 && newIndex < groupItems.length) {
+                let swapElement = groupItems[newIndex];
+                let selectedElement = groupItems[oldIndex];
+                groupItems[newIndex] = selectedElement;
+                groupItems[oldIndex] = swapElement;
+                group = { ...group, value: groupItems }
+                allAspectsCopy[groupIndex] = group;
+                setAllAspects(allAspectsCopy)
+            }
+        }
+
+        const onMoveGroupHandler = (groupIndex, direction) => {
+            let oldIndex = groupIndex;
+            let newIndex = groupIndex + direction;
+            let allAspectsCopy = [...allAspects]
+
+            if (newIndex >= 0 && newIndex < allAspectsCopy.length) {
+                let swapElement = allAspectsCopy[newIndex];
+                let selectedElement = allAspectsCopy[oldIndex];
+                allAspectsCopy[newIndex] = selectedElement;
+                allAspectsCopy[oldIndex] = swapElement;
+                setAllAspects(allAspectsCopy)
+            }
+        }
+
         //###############################################################################################################################################################
 
         let templateViewer = (
@@ -420,7 +461,10 @@ const templateGenerator = (props) => {
                         text="Textfarbe 2" />
                 </Grid>
                 <Grid item style={{ float: "right" }}>
-                    <Button style={{ margin: "2px", float: "left" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => setProductDescription(<ReactGenerator colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />)}>produktbeschreibung aktualisieren</Button>
+                    <Button style={{ margin: "2px", float: "left" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => {
+                        setProductDescription(<ReactGenerator colors={templateColorScheme} allAspects={allAspects} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
+                        console.log(item)
+                    }}>produktbeschreibung aktualisieren</Button>
                 </Grid>
             </Grid >
         )
@@ -551,7 +595,7 @@ const templateGenerator = (props) => {
             item ? (
                 item.Description._text !== null ?
                     <div>
-                        <TextField multiline rows="5" onChange={(event) => onChangeDescriptionHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Beschreibung" value={item.Description._text} variant="outlined" />
+                        <TextField id="outlined-multiline-flexible" multiline rows="5" onChange={(event) => onChangeDescriptionHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Beschreibung" value={item.Description._text} variant="outlined" />
                         <Button onClick={() => onClickDeleteDescriptionHandler()} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
                     </div>
                     :
@@ -561,90 +605,6 @@ const templateGenerator = (props) => {
             )
                 : null
         )
-
-        const onChangeGroupNameHandler = (event, groupIndex) => {
-            let array = [...allAspects]
-            let tmp = array[groupIndex];
-            tmp.name = event.target.value;
-            array[groupIndex] = tmp;
-            setAllAspects(array)
-        }
-
-        const onDeleteGroupHandler = (groupIndex) => {
-            let array = [...allAspects]
-            array.splice(groupIndex, 1);
-            setAllAspects(array)
-        }
-
-        const onAddGroupHandler = () => {
-            let array = [...allAspects]
-            array.push({ name: "", value: [{ name: "", value: "" }] });
-            setAllAspects(array)
-        }
-
-        const onAddItemHandler = (groupIndex) => {
-            let array = [...allAspects]
-            let tmp = array[groupIndex];
-            tmp.value.push({ name: "", value: "" })
-            array[groupIndex] = tmp;
-            setAllAspects(array)
-        }
-
-        const onDeleteItemHandler = (groupIndex, itemIndex) => {
-            let array = [...allAspects]
-            let tmp = array[groupIndex];
-            tmp.value.splice(itemIndex, 1)
-            array[groupIndex] = tmp;
-            setAllAspects(array)
-        }
-
-        const onChangeItemNameHandler = (event, groupIndex, itemIndex) => {
-            let array = [...allAspects]
-            let tmp = array[groupIndex];
-            tmp.value[itemIndex].name = event.target.value;
-            array[groupIndex] = tmp;
-            setAllAspects(array)
-        }
-
-        const onChangeItemValueHandler = (event, groupIndex, itemIndex) => {
-            let array = [...allAspects]
-            let tmp = array[groupIndex];
-            tmp.value[itemIndex].value = event.target.value;
-            array[groupIndex] = tmp;
-            setAllAspects(array)
-        }
-
-        const onMoveItemHandler = (groupIndex, itemIndex, direction) => {
-            let oldIndex = itemIndex;
-            let newIndex = itemIndex + direction;
-            let allAspectsCopy = [...allAspects]
-            let group = allAspectsCopy[groupIndex];
-            let groupItems = group.value;
-
-            if (newIndex >= 0 && newIndex < groupItems.length) {
-                let swapElement = groupItems[newIndex];
-                let selectedElement = groupItems[oldIndex];
-                groupItems[newIndex] = selectedElement;
-                groupItems[oldIndex] = swapElement;
-                group = { ...group, value: groupItems }
-                allAspectsCopy[groupIndex] = group;
-                setAllAspects(allAspectsCopy)
-            }
-        }
-
-        const onMoveGroupHandler = (groupIndex, direction) => {
-            let oldIndex = groupIndex;
-            let newIndex = groupIndex + direction;
-            let allAspectsCopy = [...allAspects]
-
-            if (newIndex >= 0 && newIndex < allAspectsCopy.length) {
-                let swapElement = allAspectsCopy[newIndex];
-                let selectedElement = allAspectsCopy[oldIndex];
-                allAspectsCopy[newIndex] = selectedElement;
-                allAspectsCopy[oldIndex] = swapElement;
-                setAllAspects(allAspectsCopy)
-            }
-        }
 
         let localizedAspects = (
             item ?
@@ -739,7 +699,7 @@ const templateGenerator = (props) => {
             item ? (
                 articleOptions.legalInformation !== null ?
                     <div>
-                        <TextField multiline rows="5" onChange={(event) => onChangeLegalInformationHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Rechtliche Angaben" value={articleOptions.legalInformation} variant="outlined" />
+                        <TextField id="outlined-multiline-flexible" multiline rows="5" onChange={(event) => onChangeLegalInformationHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Rechtliche Angaben" value={articleOptions.legalInformation} variant="outlined" />
                         <Button className="template-generator-remove" variant="outlined" onClick={() => onClickDeleteLegalInformationHandler()} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
                     </div>
                     :
@@ -754,6 +714,36 @@ const templateGenerator = (props) => {
             item ?
                 <TextField onChange={(event) => onChangeSellerNameHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Shopname" value={articleOptions.sellerName || item.Seller.UserID._text} variant="outlined" />
                 : null
+
+        let additionalTexts = (
+            <div>
+                {articleOptions.additionalTexts.map((additionalText, index) => {
+                    return (
+                        <div>
+                            <div style={{ margin: "10px", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                                <ButtonGroup
+                                    orientation="vertical"
+                                    color="default"
+                                    aria-label="vertical outlined default button group"
+                                >
+                                    <Button disabled={index === 0} onClick={() => onMoveAdditionalText(index, -1)} color="default"  ><span class="material-icons">arrow_drop_up</span></Button>
+                                    <Button disabled={index === articleOptions.additionalTexts.length - 1} onClick={() => onMoveAdditionalText(index, 1)} color="default" ><span class="material-icons">arrow_drop_down</span></Button>
+                                </ButtonGroup>
+                                <TextField onChange={(event) => onChangeAdditionalTextHeadline(event, index)} style={{ margin: "10px 2% 10px 2%" }} size="small" id="outlined-basic" label="Überschrift" value={additionalText.headline} variant="outlined" />
+                                <Button onClick={() => onDeleteAdditionalText(index)} className="template-generator-remove" variant="outlined" style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                            </div>
+                            <div>
+                                <TextField id="outlined-multiline-flexible" onChange={(event) => onChangeAdditionalTextContent(event, index)} multiline rows="5" style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Inhalt" value={additionalText.content} variant="outlined" />
+                            </div>
+                        </div>
+                    )
+                }
+                )}
+                <div>
+                    <Button onClick={() => onAddAdditionalText()} className="template-generator-add" variant="outlined" style={{ margin: "10px 2% 10px 2%" }}>HINZUFÜGEN</Button>
+                </div>
+            </div>
+        )
 
         let form = (
             item ? (
@@ -783,8 +773,8 @@ const templateGenerator = (props) => {
                             </Grid>
                         </Grid>
                         <Grid item xs={11}>
-                            <h1>Rechtliche Angaben</h1>
-                            {legalInformation}
+                            <h1>Weitere Abschnitte</h1>
+                            {additionalTexts}
                         </Grid>
                         <Grid item xs={11}>
                             <div>
@@ -825,9 +815,6 @@ const templateGenerator = (props) => {
                         {searchBar}
                     </div>
                 </div>
-                {/* <div item xs={3}>
-                    {templateInputContainer}
-                </div> */}
                 <div className="template-generator-section" style={{ width: "33.33%", display: "flex", flexDirection: "row", justifySelf: "flex-start" }}>
                     <div>
                         {templateViewer}
@@ -866,7 +853,10 @@ const templateGenerator = (props) => {
                                     {descriptionContainer}
                                 </div>
                                 <div style={{ margin: "10px 2% 10px 2%", position: "fixed", bottom: "0", right: "0", padding: "35px", boxShadow: "", zIndex: "99999" }}>
-                                    <Button onClick={() => Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription))} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="secondary">
+                                    <Button onClick={() => {
+                                        Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription));
+                                        props.enqueueSnackbar("Produktbeschreibung kopiert", "success");
+                                    }} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="secondary">
                                         Produktbeschreibung kopieren
   </Button>
                                 </div>

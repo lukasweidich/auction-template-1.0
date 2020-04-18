@@ -1,19 +1,19 @@
 /* unvisited link */
-a:link {
+a:link:not(.solstorm)  {
     color: #E7EFF6!important;
   }
   
   /* visited link */
-  a:visited {
+  a:visited:not(.solstorm)  {
     color: #E7EFF6!important;
   }
   
   /* mouse over link */
-  a:hover {
+  a:hover:not(.solstorm)  {
     color: #F2B255!important;
   }
   
   /* selected link */
-  a:active {
+  a:active:not(.solstorm)  {
     color: #F2B255!important;
   }

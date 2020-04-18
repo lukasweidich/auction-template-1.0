@@ -13,7 +13,7 @@ const Hero = props => {
                 </div>
             </div>
         </div>
-        <div style={{ width: "50%", backgroundImage: "url(" + "https://dem-it.de/auction-template/starting-rocket-blurred.png" + ")", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}>
+        <div style={{ width: "50%", backgroundColor: "#e6e6e6", backgroundImage: "url(" + "https://dem-it.de/auction-template/starting-rocket-transparent.png" + ")", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}>
         </div>
     </div>
 }
