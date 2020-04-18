@@ -4,6 +4,7 @@ import LogInPage from "./screens/LogInPage"
 import LandingPage from "./screens/LandingPage"
 import FAQScreen from "./screens/FAQScreen"
 import TemplatesScreen from "./screens/TemplatesScreen"
+import TemplateDetail from "./screens/TemplateDetail"
 import HowToScreen from "./screens/HowToScreen"
 import config from "./config";
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
@@ -68,14 +69,9 @@ const App = (props) => {
       <BrowserRouter>
         <Switch>
           <Route path="/" exact render={() => <LandingPage />} />
-          <Route path="/Templates" exact render={() => signedIn ?
+          <Route path="/Templates" exact render={() =>
             <TemplatesScreen
               user={user}
-            />
-            :
-            <LogInPage
-              setSignedIn={setSignedIn}
-              setUser={setUser}
             />} />
           <Route path="/FAQ" exact render={() => <FAQScreen />} />
           <Route path="/How-To" exact render={() => <HowToScreen />} />
@@ -91,6 +87,15 @@ const App = (props) => {
               setUser={setUser}
               enqueueSnackbar={addSnackbar}
             />} />
+          <Route path="/template/:id" exact render={(props) => signedIn ?
+            <TemplateDetail {...props} user={user} enqueueSnackbar={addSnackbar} />
+            :
+            <LogInPage
+              setSignedIn={setSignedIn}
+              setUser={setUser}
+              enqueueSnackbar={addSnackbar}
+            />} />
+          <Route render={() => <h1>sorry 404 ¯\_(ツ)_/¯</h1>} />
         </Switch>
       </BrowserRouter>
     </MuiThemeProvider>

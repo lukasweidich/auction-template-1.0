@@ -235,7 +235,7 @@ const templateGenerator = (props) => {
         }
 
         const mapItemPaymentToArticleOptionPayment = (itemInput) => {
-            if (itemInput) {
+            if (itemInput && itemInput.PaymentMethods) {
                 let paymentOptions = itemInput.PaymentMethods.map(el => el._text)
                 let tmpPayment = [...articleOptions.paymentOptions]
                 tmpPayment.forEach(el => { if (paymentOptions.includes(el.ebayName)) { el.selected = true } })

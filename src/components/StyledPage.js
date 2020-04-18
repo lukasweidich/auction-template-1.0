@@ -6,7 +6,7 @@ const StyledPage = props => {
     return (
         <div >
             <Header />
-            <div style={{ paddingTop: "69px" }}>
+            <div style={{ paddingTop: "64px" }}>
                 {props.children}
             </div>
             <div style={{ zIndex: 98, position: "fixed", bottom: 0 }}>

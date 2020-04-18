@@ -8,12 +8,6 @@ const dem_it_yellow = (props) => {
     const price_currency = props.item.CurrentPrice._attributes.currencyID
     const description = props.item.Description._text.replace(/(?:\r\n|\r|\n)/g, '<br>');
     const images = Array.isArray(props.item.PictureURL) ? [...props.item.PictureURL.map(el => el._text)] : [props.item.PictureURL._text]
-    // const localizedAspects = Array.isArray(props.item.ItemSpecifics.NameValueList) ?
-    // props.item.ItemSpecifics.NameValueList.map(el => el = { name: el.Name._text, value: el.Value._text === "" ? el.Value._text : el.Value._text || el.Value.map(el => el._text).join(", ") })
-    // :
-    // (props.item.ItemSpecifics.NameValueList ?
-    // [{ name: props.item.ItemSpecifics.NameValueList.Name._text, value: props.item.ItemSpecifics.NameValueList.Value._text }].map(el => el)
-    // : null)
     const localizedAspects = props.allAspects;
     const sellerDisplay = props.articleOptions.sellerName || props.item.Seller.UserID._text
     const seller = props.item.Seller.UserID._text
@@ -42,9 +36,8 @@ const dem_it_yellow = (props) => {
 
     return (<div id="template">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <link rel="stylesheet" href="https://dem-it.de/uploads/template.css" />
-        <link rel="stylesheet" href="https://dem-it.de/uploads/bootstrap.css" />
+        <link rel="stylesheet" href="https://dem-it.de/auction-template/fontawesome.css" />
+        <link rel="stylesheet" href="https://dem-it.de/auction-template/solstorm/solstorm.css" />
 
         <div style={{ ...style.title, ...style.primary }} className="template-nav" >
             <input type="checkbox" id="template-nav-check" />
