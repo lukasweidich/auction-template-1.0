@@ -1,19 +1,27 @@
 /* unvisited link */
-a:link:not(.solstorm)  {
-    color: #E7EFF6!important;
-  }
-  
-  /* visited link */
-  a:visited:not(.solstorm)  {
-    color: #E7EFF6!important;
-  }
-  
-  /* mouse over link */
-  a:hover:not(.solstorm)  {
-    color: #F2B255!important;
-  }
-  
-  /* selected link */
-  a:active:not(.solstorm)  {
-    color: #F2B255!important;
-  }
+
+a:link:not(.solstorm, .auction-template-navbar-mobile-drawer-content) {
+  color: #E7EFF6!important;
+  text-decoration: none!important;
+}
+
+/* visited link */
+
+a:visited:not(.solstorm, .auction-template-navbar-mobile-drawer-content) {
+  color: #E7EFF6!important;
+  text-decoration: none!important;
+}
+
+/* mouse over link */
+
+a:hover:not(.solstorm) {
+  color: #F2B255!important;
+  text-decoration: none!important;
+}
+
+/* selected link */
+
+a:active:not(.solstorm, .auction-template-navbar-mobile-drawer-content) {
+  color: #F2B255!important;
+  text-decoration: none!important;
+}

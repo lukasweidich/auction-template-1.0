@@ -2,7 +2,6 @@ import React from "react"
 
 const dem_it_yellow = (props) => {
     const { primary: primaryColor, secondary: secondaryColor, title: titleColor, text: textColor } = props.colors;
-    console.log(props)
     const title = props.item.Title._text;
     const price_value = props.item.CurrentPrice._text
     const price_currency = props.item.CurrentPrice._attributes.currencyID

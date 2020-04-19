@@ -1,9 +1,15 @@
 import React from "react";
+const { Breadcrumbs, Typography } = require('@material-ui/core');
+const { NavLink } = require("react-router-dom")
 
 const TemplateDetail = (props) => {
-    console.log(props)
     return (
         <main style={{ width: "100vw", paddingTop: "-64px" }} class="container">
+            <Breadcrumbs aria-label="breadcrumb">
+                <NavLink color="inherit" to="/Templates">
+                    Templates</NavLink>
+                <Typography color="textPrimary">{props.title}</Typography>
+            </Breadcrumbs>
             <div style={{ display: "flex", flexDirection: "row", alignItems: "center", paddingTop: "-64px" }}>
                 <div style={{ width: "50%" }}>
                     <img class="active" src={props.img} alt="" />

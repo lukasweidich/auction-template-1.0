@@ -69,14 +69,12 @@ const getItemsFromSeller = async (seller, attemptNumber) => {
 // }
 
 // const sanitizeDigits = async (json) => {
-//     // console.log(json)
 //     let tmp = { ...json };
 //     let item = tmp.GetSingleItemResponse.Item
 //     let currentPrice = "2222222" //item.CurrentPrice._text
 //     let convertedCurrentPrice = "2222222" //item.ConvertedCurrentPrice._text
 //     let listedShippingServiceCost = "2222222" //item.ShippingCostSummary.ListedShippingServiceCost._text
 //     let shippingServiceCost = "2222222" //item.ShippingCostSummary.ShippingServiceCost._text
-//     // console.log(currentPrice, convertedCurrentPrice, listedShippingServiceCost, shippingServiceCost)
 
 //     item = {
 //         ...item,
@@ -90,7 +88,6 @@ const getItemsFromSeller = async (seller, attemptNumber) => {
 //     }
 
 //     tmp = { ...tmp, GetSingleItemResponse: { ...tmp.GetSingleItemResponse, item: item } }
-//     // console.log(tmp)
 //     return tmp;
 // }
 
@@ -102,7 +99,6 @@ const getItemFromItemId = async (itemId) => {
         json = JSON.parse(json)
         // // sanitize prices in case they are missing a digit
         // json = await sanitizeDigits(json);
-        // // console.log(json)
         return json
     }
     catch (err) {

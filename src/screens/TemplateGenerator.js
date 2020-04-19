@@ -123,7 +123,6 @@ const templateGenerator = (props) => {
         const onClickGenerateDescriptionHandler = async (itemId, templateId) => {
             setLoadingItemTemplate(true)
             const { GetSingleItemResponse } = await eBayApi.getItemFromItemId(itemId);
-            console.log(GetSingleItemResponse.Item)
             const { Ack } = GetSingleItemResponse;
             if (Ack._text === config.ACK_SUCCESS) {
                 setItem(GetSingleItemResponse.Item)
@@ -158,7 +157,6 @@ const templateGenerator = (props) => {
 
         const toggleCheckedHandler = (event) => {
             setChecked(!checked);
-            console.log(allAspects)
         }
 
         const onChangeTitleHandler = (event) => {
@@ -279,7 +277,6 @@ const templateGenerator = (props) => {
         const onAddAdditionalText = () => {
             let texts = [...articleOptions.additionalTexts]
             texts.push({ headline: "", content: "" })
-            console.log(texts)
             setArticleOptions({ ...articleOptions, additionalTexts: texts })
         }
 
@@ -463,7 +460,6 @@ const templateGenerator = (props) => {
                 <Grid item style={{ float: "right" }}>
                     <Button style={{ margin: "2px", float: "left" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => {
                         setProductDescription(<ReactGenerator colors={templateColorScheme} allAspects={allAspects} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
-                        console.log(item)
                     }}>produktbeschreibung aktualisieren</Button>
                 </Grid>
             </Grid >
