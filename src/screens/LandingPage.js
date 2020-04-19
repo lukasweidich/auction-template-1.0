@@ -56,10 +56,10 @@ const LandingPage = (props) => {
                             text="Heben Sie Ihren eBay Shop auf die nächste Stufe - mit Auction Template."
                         />
                     </InfoBlockGroup>
+                    <FeatureContainer>
+                        {feature}
+                    </FeatureContainer>
                 </StyledPage>
-                <FeatureContainer>
-                    {feature}
-                </FeatureContainer>
             </body >
         </html >
     )

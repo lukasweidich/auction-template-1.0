@@ -2,22 +2,22 @@ import React from "react"
 
 const InfoBlock = (props) => {
     return (
-        <div id="auction-template-background-lines" style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "flex-start", backgroundColor: "#e6e6e6" }}>
-            <div style={{ width: "50%" }}>
+        <div class="auction-template-background-lines auction-template-landing-info">
+            <div class="auction-template-landing-info-content">
                 <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
-                    <div style={{ width: "50%" }}>
+                    <div class="auction-template-landing-spacer">
                     </div>
-                    <div style={{ width: "50%" }}>
-                        <h1 style={{ paddingRight: "2.5em", marginTop: 0, fontSize: "2em", textAlign: "right" }}>{props.title}</h1>
+                    <div class="auction-template-landing-info-content">
+                        <h1 class="auction-template-landing-info-content-headline">{props.title}</h1>
                     </div>
                 </div>
             </div>
-            <div style={{ width: "50%" }}>
+            <div class="auction-template-landing-info-content">
                 <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-start" }}>
-                    <div style={{ width: "50%" }}>
-                        <p style={{ marginTop: 0 }}>{props.text}</p>
+                    <div class="auction-template-landing-info-content">
+                        <p class="auction-template-landing-info-content-text">{props.text}</p>
                     </div>
-                    <div style={{ width: "50%" }}>
+                    <div class="auction-template-landing-spacer">
                     </div>
                 </div>
             </div>

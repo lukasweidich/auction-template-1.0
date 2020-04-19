@@ -6,11 +6,11 @@ const StyledPage = props => {
     return (
         <div >
             <Header />
-            <div style={{ paddingTop: "64px" }}>
+            <div style={{ paddingTop: "64px", paddingBottom: "24.3px" }}>
                 {props.children}
             </div>
             <div style={{ zIndex: 98, position: "fixed", bottom: 0 }}>
-                <Footer />
+                <Footer style={{ marginTop: "40px" }} />
             </div>
         </div>
     )
