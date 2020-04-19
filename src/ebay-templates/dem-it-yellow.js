@@ -17,7 +17,7 @@ const dem_it_yellow = (props) => {
     const aspectHeadline = props.articleOptions.aspectHeadline;
     const id = props.item.ItemID._text;
     const variations = props.item.Variations ? props.item.Variations.VariationSpecificsSet.NameValueList.map(el => el = { name: el.Name._text, value: el.Value.map(el => el._text) }) : null;
-    const additionalTexts = props.articleOptions.additionalTexts;
+    const additionalTexts = props.articleOptions.additionalTexts.map(el => el = { ...el, content: el.content.replace(/(?:\r\n|\r|\n)/g, '<br>') });
 
     const style = {
         title: {
@@ -89,7 +89,7 @@ const dem_it_yellow = (props) => {
                                 <div className="content__description mb0">
                                     <h2 style={style.text} id="template-title">{title}</h2>
                                     <hr style={{ backgroundColor: secondaryColor }} />
-                                    <p style={style.text} id="template-description">{description}</p>
+                                    <p style={style.text} id="template-description">{<div dangerouslySetInnerHTML={{ __html: description }} />}</p>
                                 </div>
                             </div>
                             <div className="col col-md-12 order-2">
@@ -171,7 +171,7 @@ const dem_it_yellow = (props) => {
                                                 return <div>
                                                     <hr style={{ backgroundColor: secondaryColor }} />
                                                     <h3 style={style.text} id="template-legal-info">{text.headline}</h3>
-                                                    <p style={style.text} id="template-legal-info-text">{text.content.replace(/(?:\r\n|\r|\n)/g, '<br>')}</p>
+                                                    <p style={style.text} id="template-legal-info-text">{<div dangerouslySetInnerHTML={{ __html: text.content }} />}</p>
                                                 </div>
                                             })
                                         }
