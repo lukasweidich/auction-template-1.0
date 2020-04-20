@@ -5,7 +5,7 @@ const dem_it_yellow = (props) => {
     const title = props.item.Title._text;
     const price_value = props.item.CurrentPrice._text
     const price_currency = props.item.CurrentPrice._attributes.currencyID
-    const description = props.item.Description._text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    const description = props.item.Description._text ? props.item.Description._text.replace(/(?:\r\n|\r|\n)/g, '<br>') : null;
     const images = Array.isArray(props.item.PictureURL) ? [...props.item.PictureURL.map(el => el._text)] : [props.item.PictureURL._text]
     const localizedAspects = props.allAspects;
     const sellerDisplay = props.articleOptions.sellerName || props.item.Seller.UserID._text
@@ -51,8 +51,8 @@ const dem_it_yellow = (props) => {
                 </label>
             </div>
             <div className="template-nav-links">
-                <a className="solstorm" href={`https://www.ebay.de/usr/${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Shop</a>
-                <a className="solstorm" href={` https://www.ebay.de/sch/${seller}/m.html?_nkw=&_armrs=1&_ipg=&_from=`} rel="noopener noreferrer" target="_blank" style={style.title}>Artikel</a>
+                <a className="solstorm" href={`https://www.ebay.de/usr/${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Verkäuferprofil</a>
+                <a className="solstorm" href={`https://www.ebay.de/sch/${seller}/m.html`} rel="noopener noreferrer" target="_blank" style={style.title}>Shop</a>
                 <a className="solstorm" href={`https://www.ebay.de/fdbk/feedback_profile/${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Bewertungen</a>
                 <a className="solstorm" href={`https://contact.ebay.de/ws/eBayISAPI.dll?FindAnswers&iid=${id}&requested=${seller}`} rel="noopener noreferrer" target="_blank" style={style.title}>Kontakt</a>
             </div>
@@ -135,7 +135,7 @@ const dem_it_yellow = (props) => {
                                 </div>
                                 <div className="template-shipping-container">
                                     {
-                                        (parseFloat(shipping) > 0 ?
+                                        (parseFloat(shipping.replace(",", ".")) > 0 ?
                                             <div style={{ display: "flex", flexDirection: "row" }}>
                                                 <h3 style={style.text} id="template-shipping">+ {shipping}</h3>
                                                 <h3 id="template-shipping-currency" style={{ paddingLeft: "2px", ...style.text }}>{price_currency}</h3>

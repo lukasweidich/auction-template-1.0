@@ -13,7 +13,7 @@ const { Autocomplete } = require('@material-ui/lab');
 
 const templateGenerator = (props) => {
     if (props.templates && props.templates != null && props.templates.length > 0) {
-        const colors = ['#EAEAEA', '#483D3F', '#B78E4B', '#F25C54', '#628395']
+        const colors = ['#EAEAEA', '#333333', '#718e3f', '#F25C54', '#628395']
         const [seller, setSeller] = new useState("");
         const [sellersItems, setSellersItems] = new useState();
         const [productDescription, setProductDescription] = new useState();
@@ -463,7 +463,7 @@ const templateGenerator = (props) => {
                         text="Textfarbe 2" />
                 </Grid>
                 <Grid item style={{ float: "right" }}>
-                    <Button style={{ margin: "2px", float: "left" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => {
+                    <Button href="/Generator#template" style={{ margin: "2px", float: "left" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => {
                         setProductDescription(<ReactGenerator colors={templateColorScheme} allAspects={allAspects} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
                         props.enqueueSnackbar(`Auktionsvorlage erfolgreich aktualisiert!`, "success");
                     }}>produktbeschreibung aktualisieren</Button>
@@ -598,11 +598,11 @@ const templateGenerator = (props) => {
                 item.Description._text !== null ?
                     <div>
                         <TextField id="outlined-multiline-flexible" multiline rows="5" onChange={(event) => onChangeDescriptionHandler(event)} style={{ margin: "10px 2% 10px 2%" }} size="small" fullWidth id="outlined-basic" label="Beschreibung" value={item.Description._text} variant="outlined" />
-                        <Button onClick={() => onClickDeleteDescriptionHandler()} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
+                        <Button variant="outlined" className="template-generator-remove" onClick={() => onClickDeleteDescriptionHandler()} style={{ margin: "10px 2% 10px 2%" }}>LÖSCHEN</Button>
                     </div>
                     :
                     <div>
-                        <Button onClick={() => onClickAddDescriptionHandler()} style={{ margin: "10px 2% 10px 2%" }}>HINZUFÜGEN</Button>
+                        <Button variant="outlined" className="template-generator-add" onClick={() => onClickAddDescriptionHandler()} style={{ margin: "10px 2% 10px 2%" }}>HINZUFÜGEN</Button>
                     </div>
             )
                 : null

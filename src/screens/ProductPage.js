@@ -126,9 +126,10 @@ const productPage = props => {
                             <div class="auction-template-product-details-container">
                                 <div class="auction-template-product-price-container">
                                     <div class="auction-template-price">
-                                        <del>
-                                            <span class="amount">{parseFloat(template.price) + 25} {template.currency === "EUR" ? "€" : "$"}</span>
-                                        </del>
+                                        {!(template.discountedFrom === template.price) &&
+                                            <del>
+                                                <span class="amount">{template.discountedFrom} {template.currency === "EUR" ? "€" : "$"}</span>
+                                            </del>}
                                         <ins>
                                             <span class="amount">{template.price} {template.currency === "EUR" ? "€" : "$"}</span>
                                         </ins>

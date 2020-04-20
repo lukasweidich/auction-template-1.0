@@ -114,8 +114,6 @@ const App = (props) => {
   )
 }
 
-// export default app;
-
 export default function IntegrationNotistack() {
   return (
     <SnackbarProvider maxSnack={3}>

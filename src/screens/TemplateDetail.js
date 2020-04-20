@@ -59,6 +59,7 @@ const TemplateDetail = props => {
                                 description={template.description}
                                 price={template.price}
                                 currency={template.currency}
+                                discountedFrom={template.discountedFrom}
                             >
                                 {paypal}
                             </Detail>
