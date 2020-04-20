@@ -75,7 +75,7 @@ const kuststorm = (props) => {
                         <div id="layout__gallery">
                             <div>
                                 <div>
-                                    <div style={style.secondary} className="content__gallery content__gallery--flex-column content__gallery--right ">
+                                    <div style={{ backgroundColor: "#fff" }} className="content__gallery content__gallery--flex-column content__gallery--right ">
                                         {images.map((el, i) => {
                                             return (<div key={i} style={{ border: `1px solid ${primaryColor}` }} className={`thumb__float thumb${i + 1}`} id={`template-thumb${i + 1}`}>
                                                 <div className="thumb__wrapper vertical-align-middle"><span className="vertical-align-helper"></span><img alt={`${sellerDisplay}: ${title} (${i})`} src={el} style={{ maxHeight: "74px" }} /></div>
@@ -84,7 +84,7 @@ const kuststorm = (props) => {
                                         <div className="slider__wrapper">
                                             <div className="slider">
                                                 {images.map((el, i) => {
-                                                    return (<div key={i} style={{ backgroundImage: `url(${el})`, backgroundColor: secondaryColor }}></div>)
+                                                    return (<div key={i} style={{ backgroundImage: `url(${el})`, backgroundColor: "#fff" }}></div>)
                                                 })}
                                             </div>
                                         </div>
