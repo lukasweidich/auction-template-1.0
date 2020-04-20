@@ -11,7 +11,7 @@ const HowToScreen = props => {
         <StyledPage style={{ backgroundColor: "#e6e6e6", minHeight: "100vh" }}>
             <WalkthroughComponentGroup class="auction-template-howto-component-group">
                 <WalkthroughComponent
-                    title={"Einen Artikel einladen"}
+                    title={"Artikel Einladen"}
                     subheader={"Ohne Artikelnummer"}
                     src={"https://dem-it.de/auction-template/walkthrough/seller_filled.png"}
                     text={"Geben Sie Ihren eBay-Nutzernamen ein, um Ihre inserierten Produkte zu laden. Aus diesen können Sie nun den gewünschten Artikel auswählen. Drücken Sie auf den Knopf 'PRODUKTBESCHREIBUNG GENERIEREN', um die Auktionsvorlage automatisch generieren zu lassen."}
@@ -19,10 +19,28 @@ const HowToScreen = props => {
                     maxWidth={"500px"}
                 />
                 <WalkthroughComponent
-                    title={"Einen Artikel einladen"}
+                    title={"Artikel Einladen"}
                     subheader={"Mit Artikelnummer"}
                     src={"https://dem-it.de/auction-template/walkthrough/itemid_filled.png"}
                     text={"Geben Sie die eBay-Artikelnummer des gewünschten Inserats ein. Drücken Sie auf den Knopf 'PRODUKTBESCHREIBUNG GENERIEREN', um die Auktionsvorlage automatisch generieren zu lassen."}
+                    ratio={"70%"}
+                    maxWidth={"500px"}
+                />
+            </WalkthroughComponentGroup>
+            <WalkthroughComponentGroup class="auction-template-howto-component-group">
+                <WalkthroughComponent
+                    title={"Personalisieren"}
+                    subheader={"Layout und Design"}
+                    src={"https://dem-it.de/auction-template/walkthrough/template-selection.png"}
+                    text={"Wählen Sie hier das Layout und Design der Auktionsvorlage aus. Neben zahlreichen kostenlosen Designs haben Sie ebenfalls die Möglichkeit, auf weitere Vorlagen aus dem Shop zurückzugreifen."}
+                    ratio={"70%"}
+                    maxWidth={"500px"}
+                />
+                <WalkthroughComponent
+                    title={"Personalisieren"}
+                    subheader={"Farbschema"}
+                    src={"https://dem-it.de/auction-template/walkthrough/color-selection.png"}
+                    text={"Wählen Sie hier das Farbschema der Auktionsvorlage aus. Sie können zwischen fünf Grundfarben auswählen, oder eigene einfügen. Egal ob Lieblingsfarbe oder Firmenidentität, hier wird Ihre Vorlage einzigartig!"}
                     ratio={"70%"}
                     maxWidth={"500px"}
                 />
