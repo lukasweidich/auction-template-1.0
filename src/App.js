@@ -46,6 +46,12 @@ const App = (props) => {
         name: "Solstorm",
         img: "https://dem-it.de/uploads/solstorm_thumbnail.jpg",
         colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
+      },
+      {
+        id: "kuststorm",
+        name: "Kuststorm",
+        img: "https://dem-it.de/uploads/solstorm_thumbnail.jpg",
+        colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
       }
     ]
 

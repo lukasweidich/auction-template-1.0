@@ -7,6 +7,7 @@ import StyledPage from "../components/StyledPage"
 import LoadingPage from "../screens/LoadingPage"
 import eBayApi from "../util/eBayApi";
 import config from "../config";
+import fetch from 'node-fetch';
 const { Card, CardContent, CardActions, ButtonGroup, InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
@@ -147,7 +148,9 @@ const templateGenerator = (props) => {
                                     : [])
                     }]} colors={templateColorScheme} templateId={templateId} item={GetSingleItemResponse.Item} articleOptions={articleOptions} />);
                 // alert(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`)
-                props.enqueueSnackbar(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`, "success");
+                fetch(`${config.HEROKU_SERVER}/usage?userId=${props.user.uid}&itemId=${itemId}&templateId=${templateId}`, {
+                    method: 'post'
+                }).then(el => props.enqueueSnackbar(`Die Auktionsvorlage des Artikels konnte erfolgreich geladen werden`, "success"))
             } else if (Ack._text === config.ACK_FAILURE) {
                 // alert(`Fehler: ${GetSingleItemResponse.Errors.LongMessage._text}`)
                 props.enqueueSnackbar(`${GetSingleItemResponse.Errors.LongMessage._text}`, "error");
