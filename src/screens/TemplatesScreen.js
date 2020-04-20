@@ -7,7 +7,7 @@ import fetch from "node-fetch";
 import config from "../config";
 
 const TemplatesScreen = props => {
-
+    document.title = "Shop | Auction Template"
     // let templates = //fetch all templates
     const [loaded, setLoaded] = new useState(false);
     const [templates, setTemplates] = new useState([]);

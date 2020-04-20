@@ -10,6 +10,7 @@ import "./LandingPage.css"
 import FeatureContainer from '../components/LandingPageFeatureContainer'
 
 const LandingPage = (props) => {
+    document.title = "Home | Auction Template"
     const feature = <div>
         <Flex style={{ height: "25%" }} flexWrap="wrap" justifyContent="center">
             <Feature icon={<span class="material-icons">sentiment_satisfied_alt</span>} description={<span>Eine <strong>einfache & intuitive</strong> Nutzung erlaubt einen schnellen Einstieg</span>}>Verständlich</Feature>
@@ -37,6 +38,7 @@ const LandingPage = (props) => {
     return (
         <StyledPage>
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+            <meta name="Description" content="Erstellen Sie eBay Auktionsvorlagen kostenlos und in Sekundenschnelle. 100% Responsive, SSL-Verschlüsselt und einfach zu bedienen. Vollständig konfigurierbar: Verändern Sie nach Wunsch Farbe, Inhalt und Layout. Auction Template ist innovativ und fügt Bilder, Texte und weitere Inhalte automatisch hinzu." />
             <Hero />
             <InfoBlockGroup>
                 <InfoBlock

@@ -12,6 +12,7 @@ const { Card, CardContent, CardActions, ButtonGroup, InputLabel, FormControl, Pa
 const { Autocomplete } = require('@material-ui/lab');
 
 const templateGenerator = (props) => {
+    document.title = "Auktionsvorlage generieren | Auction Template"
     if (props.templates && props.templates != null && props.templates.length > 0) {
         const colors = ['#EAEAEA', '#333333', '#718e3f', '#F25C54', '#628395']
         const [seller, setSeller] = new useState("");
@@ -24,7 +25,8 @@ const templateGenerator = (props) => {
         const [loadingSellersItems, setLoadingSellersItems] = new useState(false);
         const [loadingItemTemplate, setLoadingItemTemplate] = new useState(false);
         const [selectedItemTemplate, setSelectedItemTemplate] = new useState(props.templates[0] ? props.templates[0].id : "");
-        const [templateColorScheme, setTemplateColorScheme] = new useState(props.templates[0] ? props.templates[0].colors : null);
+        const [templateColorScheme, setTemplateColorScheme] = new useState(props.templates[0] ? { primary: props.templates[0].primary, secondary: props.templates[0].secondary, title: props.templates[0].title, text: props.templates[0].text } : null);
+
         const [openEdit, setOpenEdit] = new useState(true);
         const [articleOptions, setArticleOptions] = new useState({
             paymentOptions: [
@@ -229,12 +231,16 @@ const templateGenerator = (props) => {
             let selected = props.templates.find((el) => {
                 return el.id === event.target.value;
             })
-            setTemplateColorScheme(selected.colors);
+            // setTemplateColorScheme(selected.colors);
+            setTemplateColorScheme({ primary: selected.primary, secondary: selected.secondary, title: selected.title, text: selected.text });
+            console.log("set template color scheme to " + JSON.stringify({ primary: selected.primary, secondary: selected.secondary, title: selected.title, text: selected.text }))
         }
 
         const onClickSelectItemTemplateHandler = (index) => {
             setSelectedItemTemplate(props.templates[index].id)
-            setTemplateColorScheme(props.templates[index].colors);
+            let selected = props.templates[index]
+            setTemplateColorScheme({ primary: selected.primary, secondary: selected.secondary, title: selected.title, text: selected.text });
+            console.log("set template color scheme to " + JSON.stringify({ primary: selected.primary, secondary: selected.secondary, title: selected.title, text: selected.text }))
         }
 
         const mapItemPaymentToArticleOptionPayment = (itemInput) => {
@@ -841,6 +847,7 @@ const templateGenerator = (props) => {
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
                     <StyledPage>
+                        <meta name="Description" content="Kostenlos, einfach und schnell: 100% Responsive, SSL-Verschlüsselt. Der Auction Template eBay Auktionsvorlagen Generator. Vollständig personalisierbar." />
                         <div id="auction-template-generator-access">
                             <div style={{ margin: "10px 2% 10px 2%" }}>
                                 {inputContainer}

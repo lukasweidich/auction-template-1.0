@@ -19,8 +19,10 @@ const fetch = require("node-fetch");
 
 const App = (props) => {
   const [signedIn, setSignedIn] = new useState(false);
+  const [loaded, setLoaded] = new useState(false);
   const [user, setUser] = new useState();
-  const [templates, setTemplates] = new useState();
+  const [templates, setTemplates] = new useState(null);
+  const [allTemplates, setAllTemplates] = new useState(null);
   const { enqueueSnackbar } = useSnackbar();
 
   const addSnackbar = (text, variant) => {
@@ -32,35 +34,44 @@ const App = (props) => {
     });
   }
 
-  const itemTemplates =
-    [
-      {
-        id: "dem-it-classic",
-        name: "Free",
-        img: "https://dem-it.de/uploads/basic_thumbnail.jpg",
-        colors: { primary: "#026670", secondary: "#F6F6F6", title: "#FFFFFF", text: "#494949" }
-      }
-      ,
-      {
-        id: "dem-it-yellow",
-        name: "Solstorm",
-        img: "https://dem-it.de/uploads/solstorm_thumbnail.jpg",
-        colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
-      },
-      {
-        id: "kuststorm",
-        name: "Kuststorm",
-        img: "https://dem-it.de/uploads/solstorm_thumbnail.jpg",
-        colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
-      }
-    ]
+  fetch("https://secure-peak-00819.herokuapp.com/templates", {
+    method: 'get'
+  }).then(res => res.json())
+    .then(body => {
+      setAllTemplates(body[0]);
+      setLoaded(true)
+    });
 
-  if (user) {
+
+  // const itemTemplates =
+  //   [
+  //     {
+  //       id: "dem-it-classic",
+  //       name: "Free",
+  //       img: "https://dem-it.de/uploads/basic_thumbnail.jpg",
+  //       colors: { primary: "#026670", secondary: "#F6F6F6", title: "#FFFFFF", text: "#494949" }
+  //     }
+  //     ,
+  //     {
+  //       id: "dem-it-yellow",
+  //       name: "Solstorm",
+  //       img: "https://dem-it.de/uploads/solstorm_thumbnail.jpg",
+  //       colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
+  //     },
+  //     {
+  //       id: "kuststorm",
+  //       name: "Kuststorm",
+  //       img: "https://dem-it.de/uploads/solstorm_thumbnail.jpg",
+  //       colors: { primary: "#F9B61E", secondary: "#FFFFFF", title: "#FFFFFF", text: "#333333" }
+  //     }
+  //   ]
+
+  if (user && loaded) {
     fetch(`${config.HEROKU_SERVER}/userid/${user.uid}`, {
       method: 'post'
     }).then(
       fetch(`${config.HEROKU_SERVER}/userid/${user.uid}`).then(res => res.text()).then(accessibleTemplates => {
-        setTemplates(itemTemplates.filter(template => accessibleTemplates.includes(template.id)));
+        setTemplates(allTemplates.filter(template => accessibleTemplates.includes(template.id)));
       })
     );
   }

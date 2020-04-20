@@ -6,6 +6,7 @@ import "../App.css"
 import "./HowToScreen.css"
 
 const HowToScreen = props => {
+    document.title = "How To | Auction Template"
     return (
         <StyledPage style={{ backgroundColor: "#e6e6e6", minHeight: "100vh" }}>
             <WalkthroughComponentGroup class="auction-template-howto-component-group">

@@ -3,6 +3,7 @@ import StyledPage from "../components/StyledPage"
 import "./Imprint.css"
 
 const Imprint = props => {
+  document.title = "Impressum | Auction Template"
     return (
         <StyledPage class="auction-template-imprint-container">
           <div class="auction-template-imprint-wrapper">

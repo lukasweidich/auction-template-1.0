@@ -5,6 +5,8 @@ import "../App.css"
 const { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails } = require('@material-ui/core');
 
 const FAQScreen = props => {
+    document.title = "FAQ | Auction Template"
+
     const faq = [
         { q: "Warum Auction Template?", a: "Auction Template ist das erste Online-Tool zur vollständigen Generierung einer HTML-Vorlage aus Ihren bereits existierenden eBay-Inseraten. Sparen Sie sich die aufwändige Doppelpflege Ihrer Inserate durch die mühsame Übertragung von Daten & Bildern Ihrer eBay-Inserate auf herkömmliche Auktionsvorlagen. Nur bei Auction Template ist eine fertige Auktionsvorlage inklusive kompletter Bildergalerie, Titel, Beschreibung, Preis, Bezahlmethoden und vieles mehr in nur wenigen Sekunden verfügbar und direkt einsatzbereit." },
         { q: "Gibt es eine Begrenzung/Limit bei der Generierung von Auktionsvorlagen?", a: "Die Antwort ist ein klares NEIN. Egal, ob Sie eine Auktionsvorlage bei uns gekauft haben oder unsere kostenlosen Auktionsvorlagen nutzen, Sie können so viele Auktionsvorlagen generieren wie Sie möchten und können." },

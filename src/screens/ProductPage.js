@@ -7,7 +7,6 @@ import { PayPalButton } from "react-paypal-button-v2"
 import config from "../config"
 
 const productPage = props => {
-
     const [loaded, setLoaded] = new useState(false);
     const [template, setTemplate] = new useState();
     const [error, setError] = new useState(false);
@@ -19,12 +18,13 @@ const productPage = props => {
             if (body[0][0]) {
                 setTemplate(body[0][0]);
                 setLoaded(true)
+                document.title = `${body[0][0].name} | Auction Template`
             } else {
                 setError(true)
             }
         });
 
-    const paypal = loaded ? (<PayPalButton
+    const paypal = (loaded && parseFloat(template.price) > 0) ? (<PayPalButton
         amount={template.price}
         shippingPreference="NO_SHIPPING"
         onSuccess={(details, data) => {

@@ -10,8 +10,8 @@ const Footer = props => {
                 <span style={{ margin: "1em", fontSize: ".75em" }}>© 2020 - Auction Template</span>
             </div>
             <div >
-                <NavLink class="auction-template-footer-link" style={{ fontSize: ".75em", textDecoration: "none", color: "#e6e6e6!important", margin: "1em" }} to="/Imprint">Impressum</NavLink>
-                <NavLink class="auction-template-footer-link" style={{ fontSize: ".75em", textDecoration: "none", color: "#e6e6e6!important", margin: "1em" }} to="/TermsAndConditions">AGB</NavLink>
+                <NavLink exact class="auction-template-footer-link" style={{ fontSize: ".75em", textDecoration: "none", color: "#e6e6e6!important", margin: "1em" }} activeStyle={{ color: "#f2b255!important" }} to="/Imprint">Impressum</NavLink>
+                <NavLink exact class="auction-template-footer-link" style={{ fontSize: ".75em", textDecoration: "none", color: "#e6e6e6!important", margin: "1em" }} activeStyle={{ color: "#f2b255!important" }} to="/TermsAndConditions">AGB</NavLink>
             </div >
         </div >
     )

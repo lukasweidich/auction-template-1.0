@@ -6,7 +6,7 @@ import Kuststorm from "../ebay-templates/kuststorm"
 const createReactFromItem = (props) => {
     if (props.templateId === "dem-it-classic") {
         return <DemITclassic {...props} />
-    } else if (props.templateId === "dem-it-yellow") {
+    } else if (props.templateId === "solstorm") {
         return <DemITyellow {...props} />
     } else if (props.templateId === "kuststorm") {
         return <Kuststorm {...props} />

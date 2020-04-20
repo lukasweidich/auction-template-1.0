@@ -151,9 +151,18 @@ const LandingScreen = (props) => {
             )
     )
 
+    if (currentScreen === "0") {
+        document.title = `Anmeldung erforderlich | Auction Template`
+    } else if (currentScreen === "1") {
+        document.title = `Anmelden | Auction Template`
+    } else if (currentScreen === "2") {
+        document.title = `Registrieren | Auction Template`
+    }
+
     return (
 
         <div style={{ minHeight: "100vh", backgroundColor: "#e8e8eb" }} >
+
             <StyledPage>
                 {content}
             </StyledPage>
