@@ -9,22 +9,22 @@ import config from "../config";
 const TemplatesScreen = props => {
     document.title = "Shop | Auction Template"
     // let templates = //fetch all templates
-    const [loaded, setLoaded] = new useState(false);
-    const [templates, setTemplates] = new useState([]);
-    fetch("https://secure-peak-00819.herokuapp.com/templates", {
-        method: 'get'
-    }).then(res => res.json())
-        .then(body => {
-            setTemplates(body[0]);
-            setLoaded(true)
-        });
+    // const [loaded, setLoaded] = new useState(false);
+    // const [templates, setTemplates] = new useState([]);
+    // fetch("https://secure-peak-00819.herokuapp.com/templates", {
+    //     method: 'get'
+    // }).then(res => res.json())
+    //     .then(body => {
+    //         setTemplates(body[0]);
+    //         setLoaded(true)
+    //     });
 
     return (
         <StyledPage >
             <div style={{ minHeight: "100vh", backgroundColor: "#e6e6e6" }}>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
-                    {loaded ?
-                        templates.map(template => {
+                    {props.templates ?
+                        props.templates.map(template => {
                             return (
                                 <div style={{ margin: "1em" }}>
                                     < TemplatePreview

@@ -4,6 +4,9 @@ import { Link } from "react-router-dom"
 const { Paper, Grid, Button, Typography } = require('@material-ui/core');
 
 const TemplatePreview = props => {
+
+    const price = parseFloat(props.price) > 0 ? `${props.price} ${props.currency}` : "kostenlos";
+
     return (
         <div style={{ backgroundColor: "#e6e6e6" }}>
             <Paper
@@ -36,7 +39,7 @@ const TemplatePreview = props => {
                             </Grid>
                         </Grid>
                         <Grid item>
-                            <Typography style={{ margin: "1em" }} variant="subtitle1">{props.price} {props.currency}</Typography>
+                            <Typography style={{ margin: "1em" }} variant="subtitle1">{price}</Typography>
                         </Grid>
                     </Grid>
                 </Grid>

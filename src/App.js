@@ -93,6 +93,7 @@ const App = (props) => {
           <Route path="/Templates" exact render={() =>
             <TemplatesScreen
               user={user}
+              templates={allTemplates}
             />} />
           <Route path="/FAQ" exact render={() => <FAQScreen />} />
           <Route path="/How-To" exact render={() => <HowToScreen />} />
