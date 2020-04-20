@@ -112,7 +112,7 @@ const productPage = props => {
 
     return (
         loaded ?
-            <StyledPage>
+            <StyledPage style={{ backgroundColor: "#e6e6e6" }}>
                 <div class="auction-template-product-wrapper" >
                     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
                         rel="stylesheet"></link>
