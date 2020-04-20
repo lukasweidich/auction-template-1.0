@@ -5,7 +5,7 @@ const { Paper, Grid, Button, Typography } = require('@material-ui/core');
 
 const TemplatePreview = props => {
 
-    const price = parseFloat(props.price) > 0 ? `${props.price} ${props.currency}` : "kostenlos";
+    const price = parseFloat(props.price) > 0 ? `${props.price} ${props.currency}` : "Kostenlos";
 
     return (
         <div style={{ backgroundColor: "#e6e6e6" }}>
