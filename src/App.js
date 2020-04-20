@@ -6,6 +6,9 @@ import FAQScreen from "./screens/FAQScreen"
 import TemplatesScreen from "./screens/TemplatesScreen"
 import TemplateDetail from "./screens/TemplateDetail"
 import HowToScreen from "./screens/HowToScreen"
+import NotFound from "./screens/404"
+import AGB from "./screens/TermsAndConditions"
+import Imprint from "./screens/Imprint"
 import config from "./config";
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider, useSnackbar } from 'notistack';
@@ -75,6 +78,8 @@ const App = (props) => {
             />} />
           <Route path="/FAQ" exact render={() => <FAQScreen />} />
           <Route path="/How-To" exact render={() => <HowToScreen />} />
+          <Route path="/Imprint" exact render={() => <Imprint />} />
+          <Route path="/TermsAndConditions" exact render={() => <AGB />} />
           <Route path="/Generator" exact render={() => signedIn ?
             <TemplateGenerator
               user={user}
@@ -95,7 +100,7 @@ const App = (props) => {
               setUser={setUser}
               enqueueSnackbar={addSnackbar}
             />} />
-          <Route render={() => <h1>sorry 404 ¯\_(ツ)_/¯</h1>} />
+          <Route render={(props) => <NotFound />} />
         </Switch>
       </BrowserRouter>
     </MuiThemeProvider>

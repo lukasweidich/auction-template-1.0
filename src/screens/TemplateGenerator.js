@@ -7,8 +7,6 @@ import StyledPage from "../components/StyledPage"
 import LoadingPage from "../screens/LoadingPage"
 import eBayApi from "../util/eBayApi";
 import config from "../config";
-import './TemplateGenerator.css';
-import { AlphaPicker } from 'react-color';
 const { ButtonGroup, InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
@@ -26,6 +24,7 @@ const templateGenerator = (props) => {
         const [loadingItemTemplate, setLoadingItemTemplate] = new useState(false);
         const [selectedItemTemplate, setSelectedItemTemplate] = new useState(props.templates[0] ? props.templates[0].id : "");
         const [templateColorScheme, setTemplateColorScheme] = new useState(props.templates[0] ? props.templates[0].colors : null);
+        const [openEdit, setOpenEdit] = new useState(true);
         const [articleOptions, setArticleOptions] = new useState({
             paymentOptions: [
                 { ebayName: "MoneyXferAccepted", selected: false, name: "Banktransfer", img: "https://template-builder.de/icons/payment/banktransfer.png" },
@@ -177,6 +176,8 @@ const templateGenerator = (props) => {
 
         const onClickSaveChangesHandler = () => {
             setProductDescription(<ReactGenerator allAspects={allAspects} colors={templateColorScheme} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
+            props.enqueueSnackbar(`Auktionsvorlage erfolgreich gespeichert!`, "success");
+            setOpenEdit(false)
         }
 
         const onClickDeleteDescriptionHandler = () => {
@@ -460,6 +461,7 @@ const templateGenerator = (props) => {
                 <Grid item style={{ float: "right" }}>
                     <Button style={{ margin: "2px", float: "left" }} variant="contained" color="primary" disabled={!productDescription || loadingItemTemplate} onClick={() => {
                         setProductDescription(<ReactGenerator colors={templateColorScheme} allAspects={allAspects} templateId={selectedItemTemplate} item={item} articleOptions={articleOptions} />);
+                        props.enqueueSnackbar(`Auktionsvorlage erfolgreich aktualisiert!`, "success");
                     }}>produktbeschreibung aktualisieren</Button>
                 </Grid>
             </Grid >
@@ -785,13 +787,14 @@ const templateGenerator = (props) => {
         )
 
         let expansionPanel = (
-            <ExpansionPanel disabled={!productDescription || loadingItemTemplate}>
+            <ExpansionPanel expanded={openEdit}>
                 <ExpansionPanelSummary
                     expandIcon={<span className="material-icons">
                         expand_more
           </span>}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
+                    onClick={() => setOpenEdit(!openEdit)}
                 >
                     <Typography variant="h6">
                         BEARBEITEN
@@ -804,19 +807,19 @@ const templateGenerator = (props) => {
         )
 
         let inputContainer = (
-            <div className="template-generator-wrapper" style={{ width: "fit-content", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                <div className="template-generator-section" style={{ width: "33.33%", display: "flex", flexDirection: "row", justifySelf: "flex-start" }}>
+            <div className="template-generator-wrapper">
+                <div className="template-generator-section">
                     <div>
                         {toggleSearchbar}
                         {searchBar}
                     </div>
                 </div>
-                <div className="template-generator-section" style={{ width: "33.33%", display: "flex", flexDirection: "row", justifySelf: "flex-start" }}>
+                <div className="template-generator-section">
                     <div>
                         {templateViewer}
                     </div>
                 </div>
-                <div className="template-generator-section" style={{ width: "33.33%", display: "flex", flexDirection: "row", justifySelf: "flex-start" }}>
+                <div className="template-generator-section">
                     <div>
                         {colorPickers}
                     </div>
@@ -834,29 +837,33 @@ const templateGenerator = (props) => {
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/template.css" />
                     <link rel="stylesheet" type="text/css" href="https://template-builder.de/css/slider.css" />
                     <StyledPage>
-                        <div style={{ margin: "10px 2% 10px 2%" }}>
-                            {inputContainer}
-                        </div>
-                        {/* <div style={{ margin: "10px 2% 10px 2%" }}>
-                {templateExpansion}
-            </div> */}
-                        {productDescription &&
-                            <div>
-                                <div style={{ margin: "10px 2% 10px 2%" }}>
-                                    {expansionPanel}
-                                </div>
-                                <div style={{ margin: "10px 2% 10px 2%" }}>
-                                    {descriptionContainer}
-                                </div>
-                                <div style={{ margin: "10px 2% 10px 2%", position: "fixed", bottom: "0", right: "0", padding: "35px", boxShadow: "", zIndex: "99999" }}>
-                                    <Button onClick={() => {
-                                        Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription));
-                                        props.enqueueSnackbar("Produktbeschreibung kopiert", "success");
-                                    }} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="secondary">
-                                        Produktbeschreibung kopieren
+                        <div id="auction-template-generator-access">
+                            <div style={{ margin: "10px 2% 10px 2%" }}>
+                                {inputContainer}
+                            </div>
+                            {productDescription &&
+                                <div>
+                                    <div style={{ margin: "10px 2% 10px 2%" }}>
+                                        {expansionPanel}
+                                    </div>
+                                    <div style={{ margin: "10px 2% 10px 2%" }}>
+                                        {descriptionContainer}
+                                    </div>
+                                    <div style={{ margin: "10px 2% 10px 2%", position: "fixed", bottom: "0", right: "0", padding: "35px", boxShadow: "", zIndex: "99999" }}>
+                                        <Button onClick={() => {
+                                            Miscellaneous.copyToClipboard(ReactDOMServer.renderToStaticMarkup(productDescription));
+                                            props.enqueueSnackbar("Produktbeschreibung kopiert", "success");
+                                        }} disabled={!productDescription} style={{ marginTop: "5px" }} variant="contained" color="secondary">
+                                            Produktbeschreibung kopieren
   </Button>
-                                </div>
-                            </div>}
+                                    </div>
+                                </div>}
+                        </div>
+                        <div id="auction-template-generator-no-access">
+                            <h1>
+                                hier gibts nichts zu sehen
+                            </h1>
+                        </div>
                     </StyledPage>
                 </div>
                 :

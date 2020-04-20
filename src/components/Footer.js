@@ -1,5 +1,5 @@
 import React from "react"
-import "./Links.css"
+import "./Footer.css"
 const { AppBar, Toolbar, Button, ButtonGroup } = require('@material-ui/core');
 const { NavLink } = require("react-router-dom")
 
@@ -10,8 +10,8 @@ const Footer = props => {
                 <span style={{ margin: "1em", fontSize: ".75em" }}>© 2020 - Auction Template</span>
             </div>
             <div >
-                <NavLink style={{ fontSize: ".75em", textDecoration: "none", margin: "1em" }} to="/Imprint">Impressum</NavLink>
-                <NavLink style={{ fontSize: ".75em", textDecoration: "none", margin: "1em" }} to="/TermsAndConditions">AGB</NavLink>
+                <NavLink class="auction-template-footer-link" style={{ fontSize: ".75em", textDecoration: "none", color: "#e6e6e6!important", margin: "1em" }} to="/Imprint">Impressum</NavLink>
+                <NavLink class="auction-template-footer-link" style={{ fontSize: ".75em", textDecoration: "none", color: "#e6e6e6!important", margin: "1em" }} to="/TermsAndConditions">AGB</NavLink>
             </div >
         </div >
     )

@@ -1,12 +1,12 @@
 import React from "react"
 import StyledPage from "../components/StyledPage"
 
-const FAQScreen = props => {
+const TAC = props => {
     return (
         <StyledPage>
-            <h1>FAQ</h1>
+            <h1>Allgemeine Geschäftsbedingungen</h1>
         </StyledPage>
     )
 }
 
-export default FAQScreen;
+export default TAC;

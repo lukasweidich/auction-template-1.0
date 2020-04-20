@@ -1,12 +1,11 @@
 import React from "react"
-import Header from "../components/Header"
+import StyledPage from "../components/StyledPage"
 
 const HowToScreen = props => {
     return (
-        <div>
-            <Header />
+        <StyledPage>
             <h1>How To</h1>
-        </div>
+        </StyledPage>
     )
 }
 

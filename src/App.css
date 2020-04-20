@@ -1,3 +1,7 @@
+*:not(.material-icons, .fa) {
+  font-family: "Source Sans Pro", Helvetica, sans-serif !important;
+}
+
 .App {
   text-align: center;
 }
@@ -145,6 +149,12 @@
   display: none
 }
 
+.auction-template-footer-link {
+  color: #e6e6e6!important;
+}
+
+/* responsiveness for mobile landing and header */
+
 @media only screen and (max-width: 1300px) {
   .auction-template-landing-container {
     flex-direction: column;
@@ -202,5 +212,46 @@
   }
   #auction-template-navbar-mobile {
     display: flex;
+  }
+}
+
+/* responsiveness for mobile generator */
+
+#auction-template-generator-no-access {
+  display: none
+}
+
+.template-generator-wrapper {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between
+}
+
+.template-generator-section {
+  width: 33.33%;
+  display: flex;
+  flex-direction: row;
+  justify-self: flex-start
+}
+
+@media only screen and (max-width: 1350px) {
+  /* flexDirectiuon column of input parent element */
+  .template-generator-wrapper {
+    flex-direction: column;
+  }
+  .template-generator-section {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  /* display none - generator*/
+  /* display flex - fehlermeldung */
+  #auction-template-generator-no-access {
+    display: block
+  }
+  #auction-template-generator-access {
+    display: none
   }
 }

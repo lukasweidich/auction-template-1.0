@@ -92,12 +92,11 @@ const LandingScreen = (props) => {
     let landingPage = (
         <center style={{ marginTop: "25vh" }}>
             <div>
-                <img alt="dem-it Logo" style={{ margin: "10px auto 10px auto" }} width={"25%"} src="https://dem-it.de/auction-template/auction-template-logo-dark.png" />
+                <img alt="dem-it Logo" style={{ margin: "10px auto 10px auto", minWidth: "200px" }} width={"25%"} src="https://dem-it.de/auction-template/auction-template-logo-dark.png" />
             </div>
             <div>
                 <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="secondary" onClick={() => setCurrentScreen("2")}>REGISTRIEREN</Button>
                 <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="primary" onClick={() => setCurrentScreen("1")}>ANMELDEN</Button>
-                {/* <Button style={{ margin: "10px", minWidth: "10%" }} variant="contained" color="primary" onClick={signInWithGoogle}>ANMELDEN MIT GOOGLE</Button> */}
             </div>
         </center>
     )

@@ -1,14 +1,14 @@
 /* unvisited link */
 
 a:link:not(.solstorm, .auction-template-navbar-mobile-drawer-content) {
-  color: #E7EFF6!important;
+  color: #E6E6E6!important;
   text-decoration: none!important;
 }
 
 /* visited link */
 
 a:visited:not(.solstorm, .auction-template-navbar-mobile-drawer-content) {
-  color: #E7EFF6!important;
+  color: #E6E6E6!important;
   text-decoration: none!important;
 }
 
