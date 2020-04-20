@@ -7,7 +7,7 @@ import StyledPage from "../components/StyledPage"
 import LoadingPage from "../screens/LoadingPage"
 import eBayApi from "../util/eBayApi";
 import config from "../config";
-const { ButtonGroup, InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
+const { Card, CardContent, CardActions, ButtonGroup, InputLabel, FormControl, Paper, CircularProgress, Switch, Grid, TextField, Select, MenuItem, Button, FormControlLabel, AppBar, Toolbar, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } = require('@material-ui/core');
 const { Autocomplete } = require('@material-ui/lab');
 
 const templateGenerator = (props) => {
@@ -125,6 +125,7 @@ const templateGenerator = (props) => {
             const { Ack } = GetSingleItemResponse;
             if (Ack._text === config.ACK_SUCCESS) {
                 setItem(GetSingleItemResponse.Item)
+                console.log(GetSingleItemResponse.Item)
                 mapItemPaymentToArticleOptionPayment(GetSingleItemResponse.Item);
                 setAllAspects([{
                     name: "Artikelmerkmale", value:
@@ -776,7 +777,7 @@ const templateGenerator = (props) => {
                         </Grid>
                         <Grid item xs={11}>
                             <div>
-                                <Button onClick={() => { onClickSaveChangesHandler() }} style={{ margin: "10px 2% 10px 2%" }} variant="contained" color="primary">
+                                <Button href="/Generator#template" onClick={() => { onClickSaveChangesHandler() }} style={{ margin: "10px 2% 10px 2%" }} variant="contained" color="primary">
                                     SPEICHERN</Button>
                             </div>
                         </Grid>
@@ -846,7 +847,7 @@ const templateGenerator = (props) => {
                                     <div style={{ margin: "10px 2% 10px 2%" }}>
                                         {expansionPanel}
                                     </div>
-                                    <div style={{ margin: "10px 2% 10px 2%" }}>
+                                    <div id="template" style={{ margin: "10px 2% 10px 2%" }}>
                                         {descriptionContainer}
                                     </div>
                                     <div style={{ margin: "10px 2% 10px 2%", position: "fixed", bottom: "0", right: "0", padding: "35px", boxShadow: "", zIndex: "99999" }}>
@@ -860,12 +861,25 @@ const templateGenerator = (props) => {
                                 </div>}
                         </div>
                         <div id="auction-template-generator-no-access">
-                            <h1>
-                                hier gibts nichts zu sehen
-                            </h1>
+                            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+
+                                <Card style={{
+                                    minWidth: 275,
+                                    width: "90%"
+                                }}>
+                                    <CardContent style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                                        <Typography color="textSecondary" gutterBottom>
+                                            {"Der Generator ist in der mobilen Ansicht nicht verfügbar. Nutzen Sie bitte ein anderes Gerät."}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                                        <Button href="/" color="secondary" variant="contained" size="small">Züruck zur Startseite</Button>
+                                    </CardActions>
+                                </Card>
+                            </div>
                         </div>
                     </StyledPage>
-                </div>
+                </div >
                 :
                 <LoadingPage />
         );

@@ -34,7 +34,6 @@ const getItemsFromSeller = async (seller, attemptNumber) => {
                 return json.findItemsAdvancedResponse.errorMessage
             } else {
                 let allItems = json.findItemsAdvancedResponse.searchResult.item;
-                // fix for cases in which seller only has one active listing
                 if (!Array.isArray(allItems)) {
                     allItems = [allItems]
                 }
@@ -55,41 +54,36 @@ const getItemsFromSeller = async (seller, attemptNumber) => {
     }
 }
 
-// const getItemFromItemId = async (itemId) => {
-//     itemId = "v1|" + itemId + "|0"
-//     var url = `${config.EBAY_BROWSE}${itemId}`;
-//     let token = await getAuthToken();
-//     var auth = "Bearer " + tokenF
-//     let item = await fetch(url, {
-//         headers: {
-//             "Authorization": auth
-//         }
-//     })
-//     return item.json();
-// }
+const sanititePrice = (priceString) => {
+    return (priceString.split(".")[1].length < 2 ? priceString + "0" : priceString).replace(".", ",")
+}
 
-// const sanitizeDigits = async (json) => {
-//     let tmp = { ...json };
-//     let item = tmp.GetSingleItemResponse.Item
-//     let currentPrice = "2222222" //item.CurrentPrice._text
-//     let convertedCurrentPrice = "2222222" //item.ConvertedCurrentPrice._text
-//     let listedShippingServiceCost = "2222222" //item.ShippingCostSummary.ListedShippingServiceCost._text
-//     let shippingServiceCost = "2222222" //item.ShippingCostSummary.ShippingServiceCost._text
+const sanitizeDigits = async (json) => {
+    console.log(json)
+    let tmp = { ...json };
+    let item = tmp.GetSingleItemResponse.Item
 
-//     item = {
-//         ...item,
-//         CurrentPrice: { ...item.CurrentPrice, _text: currentPrice },
-//         ConvertedCurrentPrice: { ...item.ConvertedCurrentPrice, _text: convertedCurrentPrice },
-//         ShippingCostSummary: {
-//             ...item.ShippingCostSummary,
-//             ShippingServiceCost: { ...item.ShippingCostSummary.ShippingServiceCost, __text: shippingServiceCost },
-//             ListedShippingServiceCost: { ...item.ShippingCostSummary.ListedShippingServiceCost, _text: listedShippingServiceCost }
-//         }
-//     }
+    let currentPrice = sanititePrice(item.CurrentPrice._text)
+    let convertedCurrentPrice = sanititePrice(item.ConvertedCurrentPrice._text)
+    let listedShippingServiceCost = sanititePrice(item.ShippingCostSummary.ListedShippingServiceCost._text)
+    let shippingServiceCost = sanititePrice(item.ShippingCostSummary.ShippingServiceCost._text)
 
-//     tmp = { ...tmp, GetSingleItemResponse: { ...tmp.GetSingleItemResponse, item: item } }
-//     return tmp;
-// }
+    item = {
+        ...item,
+        CurrentPrice: { ...item.CurrentPrice, _text: currentPrice },
+        ConvertedCurrentPrice: { ...item.ConvertedCurrentPrice, _text: convertedCurrentPrice },
+        ShippingCostSummary: {
+            ...item.ShippingCostSummary,
+            ShippingServiceCost: { ...item.ShippingCostSummary.ShippingServiceCost, _text: shippingServiceCost },
+            ListedShippingServiceCost: { ...item.ShippingCostSummary.ListedShippingServiceCost, _text: listedShippingServiceCost }
+        }
+    }
+
+    console.log(item)
+
+    tmp = { ...tmp, GetSingleItemResponse: { ...tmp.GetSingleItemResponse, Item: item } }
+    return tmp;
+}
 
 const getItemFromItemId = async (itemId) => {
     let url = `${config.EBAY_GETSINGLEITEM}&ItemID=${itemId}`
@@ -98,7 +92,7 @@ const getItemFromItemId = async (itemId) => {
         let json = convert.xml2json(xml, { compact: true, spaces: 4 });
         json = JSON.parse(json)
         // // sanitize prices in case they are missing a digit
-        // json = await sanitizeDigits(json);
+        json = await sanitizeDigits(json);
         return json
     }
     catch (err) {

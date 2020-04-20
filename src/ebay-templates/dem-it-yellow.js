@@ -35,7 +35,7 @@ const dem_it_yellow = (props) => {
 
     return (<div id="template">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="https://dem-it.de/auction-template/fontawesome.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
         <link rel="stylesheet" href="https://dem-it.de/auction-template/solstorm/solstorm.css" />
 
         <div style={{ ...style.title, ...style.primary }} className="template-nav" >

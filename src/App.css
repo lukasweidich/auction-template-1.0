@@ -1,4 +1,4 @@
-*:not(.material-icons, .fa) {
+*:not(.material-icons, .fa, .fas) {
   font-family: "Source Sans Pro", Helvetica, sans-serif !important;
 }
 

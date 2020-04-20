@@ -5,6 +5,7 @@ import LandingPage from "./screens/LandingPage"
 import FAQScreen from "./screens/FAQScreen"
 import TemplatesScreen from "./screens/TemplatesScreen"
 import TemplateDetail from "./screens/TemplateDetail"
+import ProductPage from "./screens/ProductPage"
 import HowToScreen from "./screens/HowToScreen"
 import NotFound from "./screens/404"
 import AGB from "./screens/TermsAndConditions"
@@ -93,7 +94,7 @@ const App = (props) => {
               enqueueSnackbar={addSnackbar}
             />} />
           <Route path="/template/:id" exact render={(props) => signedIn ?
-            <TemplateDetail {...props} user={user} enqueueSnackbar={addSnackbar} />
+            <ProductPage {...props} user={user} enqueueSnackbar={addSnackbar} />
             :
             <LogInPage
               setSignedIn={setSignedIn}
