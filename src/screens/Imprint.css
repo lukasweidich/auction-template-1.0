@@ -1,0 +1,39 @@
+.auction-template-imprint-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #e6e6e6;
+}
+
+.auction-template-imprint-wrapper {
+  width: 100%;
+  height: 100vh;
+  margin-top: -64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.auction-template-imprint-legal-info-wrapper {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.auction-template-imprint-legal-info-50{
+  width: 50%;
+}
+
+.auction-template-imprint-legal-info-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.auction-template-imprint-legal-info-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
