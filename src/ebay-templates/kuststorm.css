@@ -193,7 +193,7 @@
   animation-duration: 0.8s;
 }
 
-#template-burgerbutton:~ul {
+#template-burgerbutton ~ul {
   display: block;
   animation-name: open;
   animation-duration: 0.8s;
