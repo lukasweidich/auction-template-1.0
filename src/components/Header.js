@@ -54,23 +54,23 @@ const Header = props => {
             }}>
             <ListItem button component={NavLink} exact activeStyle={{ color: "#f2b255" }} to="/">
                 <ListItemIcon><HomeIcon style={{ color: "#263740 " }} /></ListItemIcon>
-                <ListItemText primary={"Home"} />
+                <ListItemText primary={"Home"} style={{ color: "#263740 " }} />
             </ListItem>
             <ListItem button component={NavLink} exact activeStyle={{ color: "#f2b255" }} to="/Generator">
                 <ListItemIcon><AddToQueueIcon style={{ color: "#263740 " }} /></ListItemIcon>
-                <ListItemText primary={"Auktionsvorlage generieren"} />
+                <ListItemText primary={"Auktionsvorlage generieren"} style={{ color: "#263740 " }} />
             </ListItem>
             <ListItem button component={NavLink} exact activeStyle={{ color: "#f2b255" }} to="/Templates">
                 <ListItemIcon><WebIcon style={{ color: "#263740 " }} /></ListItemIcon>
-                <ListItemText primary={"Vorlagen"} />
+                <ListItemText primary={"Vorlagen"} style={{ color: "#263740 " }} />
             </ListItem>
             <ListItem button component={NavLink} exact activeStyle={{ color: "#f2b255" }} to="/How-To">
                 <ListItemIcon><FormatListNumberedIcon style={{ color: "#263740 " }} /></ListItemIcon>
-                <ListItemText primary={"How To"} />
+                <ListItemText primary={"How To"} style={{ color: "#263740 " }} />
             </ListItem>
             <ListItem button component={NavLink} exact activeStyle={{ color: "#f2b255" }} to="/FAQ">
                 <ListItemIcon><QuestionAnswerIcon style={{ color: "#263740 " }} /></ListItemIcon>
-                <ListItemText primary={"FAQ"} />
+                <ListItemText primary={"FAQ"} style={{ color: "#263740 " }} />
             </ListItem>
         </List >
     )
