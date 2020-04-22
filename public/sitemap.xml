@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>https://auction-template.com/</loc>
+  <lastmod>2020-04-21T09:19:01+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://auction-template.com/Generator</loc>
+  <lastmod>2020-04-21T09:19:01+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://auction-template.com/Templates</loc>
+  <lastmod>2020-04-21T09:19:01+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://auction-template.com/How-To</loc>
+  <lastmod>2020-04-21T09:19:01+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://auction-template.com/FAQ</loc>
+  <lastmod>2020-04-21T09:19:01+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://auction-template.com/Imprint</loc>
+  <lastmod>2020-04-21T09:19:01+00:00</lastmod>
+  <changefreq>never</changefreq>
+</url>
+<url>
+  <loc>https://auction-template.com/TermsAndConditions</loc>
+  <lastmod>2020-04-21T09:19:01+00:00</lastmod>
+  <changefreq>never</changefreq>
+</url>
+</urlset>
