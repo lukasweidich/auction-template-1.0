@@ -37,8 +37,6 @@ const LandingPage = (props) => {
 
     return (
         <StyledPage>
-            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-            <meta name="Description" content="Erstellen Sie eBay Auktionsvorlagen kostenlos und in Sekundenschnelle. 100% Responsive, SSL-Verschlüsselt und einfach zu bedienen. Vollständig konfigurierbar: Verändern Sie nach Wunsch Farbe, Inhalt und Layout. Auction Template ist innovativ und fügt Bilder, Texte und weitere Inhalte automatisch hinzu." />
             <Hero />
             <InfoBlockGroup>
                 <InfoBlock
@@ -61,4 +59,4 @@ const LandingPage = (props) => {
     )
 }
 
-export default LandingPage 
+export default LandingPage

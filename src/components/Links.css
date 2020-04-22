@@ -1,6 +1,6 @@
 /* unvisited link */
 
-a:link:not(.solstorm, .auction-template-navbar-mobile-drawer-content) {
+a:link:not(.solstorm, .auction-template-navbar-mobile-drawer-content, .auction-template-hamburger-link) {
   color: #E6E6E6!important;
   text-decoration: none!important;
 }
@@ -22,6 +22,28 @@ a:hover:not(.solstorm) {
 /* selected link */
 
 a:active:not(.solstorm, .auction-template-navbar-mobile-drawer-content) {
+  color: #F2B255!important;
+  text-decoration: none!important;
+}
+
+/* Fix for link on iPhone */
+
+.auction-template-hamburger-link {
+  color: #263740;
+  text-decoration: none!important;
+}
+
+.auction-template-hamburger-link:visited {
+  color: #F2B255!important;
+  text-decoration: none!important;
+}
+
+.auction-template-hamburger-link:hover {
+  color: #F2B255!important;
+  text-decoration: none!important;
+}
+
+.auction-template-hamburger-link:active {
   color: #F2B255!important;
   text-decoration: none!important;
 }
